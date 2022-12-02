@@ -1,3 +1,4 @@
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.U2D;
 
@@ -10,6 +11,7 @@ public class Gun : MonoBehaviour
     Guns current_gun = Guns.shotgun;
     ShootMode shootMode = ShootMode.semiAuto;
     Bullet bullet;
+    WarriorMovement correction;
 
     float delayBetweenShots;
     float lastShotTime = Mathf.NegativeInfinity;
@@ -20,9 +22,29 @@ public class Gun : MonoBehaviour
     public float pelletsDeviation = 3;
     public float pelletsSpread = 5;
 
+    //Минимальная дистанция для стрельбы
+    private float MinFireDist = 0.2f;
+
+    //Поля для луча, определяющего дистанцию до цели
+
+    private RaycastHit2D HitLookDir;
+    private GameObject Warrior;
+    private Transform WarriorPos;
+    private WarriorMovement PlayerMovement;
+    private CircleCollider2D PlayerCollider;
+
+    //По дефолту = 1. Без DV первого выстрела не будет 
+    private float DistToTarget = 1f;
+
+    public float GetDistToTarget => DistToTarget;
+
     void Awake()
     {
         bullet = bulletPrefab.GetComponent<Bullet>();
+        Warrior = GameObject.FindWithTag("Player");
+        WarriorPos = Warrior.GetComponent<Transform>();
+        PlayerMovement = Warrior.GetComponent<WarriorMovement>();
+        PlayerCollider = Warrior.GetComponent<CircleCollider2D>();
     }
 
     public void PullTheTrigger()
@@ -30,7 +52,8 @@ public class Gun : MonoBehaviour
         isTriggerPulled = !isTriggerPulled;
         if (isTriggerPulled)
         {
-            if (shootMode == ShootMode.semiAuto) { Shoot(); }
+            //Выстрел
+            if ((shootMode == ShootMode.semiAuto) & (DistToTarget > MinFireDist)) { Shoot(); }
         }
     }
 
@@ -43,7 +66,7 @@ public class Gun : MonoBehaviour
         {
             case Guns.shotgun:
                 Vector2 direction = transform.right;
-                float normalAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                float normalAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + correction.WRC;
                 for (int i = -4; i < 4; ++i)
                 {
                     if (i != 0)
@@ -66,7 +89,7 @@ public class Gun : MonoBehaviour
                     current_gun = Guns.pistol;
                     delayBetweenShots = 0.3f;
                     bullet.damage = 34;
-                    bullet.bulletSpeed = 20f;
+                    bullet.bulletSpeed = 10f;
                     shootMode = ShootMode.semiAuto;
                     lastShotTime = Mathf.NegativeInfinity;
                 }
@@ -77,7 +100,7 @@ public class Gun : MonoBehaviour
                     current_gun = Guns.shotgun;
                     delayBetweenShots = 1.0f;
                     bullet.damage = 11;
-                    bullet.bulletSpeed = 20f;
+                    bullet.bulletSpeed = 10f;
                     shootMode = ShootMode.semiAuto;
                     lastShotTime = Mathf.NegativeInfinity;
                 }
@@ -88,7 +111,7 @@ public class Gun : MonoBehaviour
                     current_gun = Guns.assaultRifle;
                     delayBetweenShots = 0.1f;
                     bullet.damage = 18;
-                    bullet.bulletSpeed = 20f;
+                    bullet.bulletSpeed = 10f;
                     shootMode = ShootMode.auto;
                     lastShotTime = Mathf.NegativeInfinity;
                 }
@@ -99,7 +122,7 @@ public class Gun : MonoBehaviour
                     current_gun = Guns.sniper;
                     delayBetweenShots = 1.5f;
                     bullet.damage = 63;
-                    bullet.bulletSpeed = 40f;
+                    bullet.bulletSpeed = 10f;
                     shootMode = ShootMode.semiAuto;
                     lastShotTime = Mathf.NegativeInfinity;
                 }
@@ -109,9 +132,15 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
+        //Луч до цели который нужен для определения дистанции до цели
+        HitLookDir = Physics2D.Raycast(WarriorPos.position, new Vector2(PlayerMovement.WarriorLookDir.x, PlayerMovement.WarriorLookDir.y), PlayerCollider.radius * 100, LayerMask.GetMask("Player", "Creatures"));
+
         if (isTriggerPulled)
         {
-            if(shootMode == ShootMode.auto) { Shoot(); }
+            //Дистанция до цели 
+            DistToTarget = Vector2.Distance(new Vector2(WarriorPos.position.x, WarriorPos.position.y), HitLookDir.point);
+            //Выстрел
+            if ( (shootMode == ShootMode.auto) & (DistToTarget > MinFireDist) ) { Shoot(); }
         }
     }
 }

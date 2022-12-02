@@ -9,6 +9,10 @@ public class WarriorMovement : MonoBehaviour
 
     //140 градусов на доворот
     private const float WarriorRotateCorrection = 128f;
+    public float WRC => WarriorRotateCorrection;
+
+    private Vector2 LookDirection;
+    public Vector2 WarriorLookDir => LookDirection;
 
     //Знак направления
     private sbyte DirectionSignX = 0;
@@ -92,8 +96,8 @@ public class WarriorMovement : MonoBehaviour
     {
 
         //Поворот персонажа
-        Vector2 LookDirection = MousePosition - Warrior.position;
-        Warrior.rotation = (Mathf.Atan2(LookDirection.x, LookDirection.y) * -Mathf.Rad2Deg) + WarriorRotateCorrection;
+        LookDirection = MousePosition - Warrior.position;
+        Warrior.rotation = (Mathf.Atan2(LookDirection.x, LookDirection.y) * -Mathf.Rad2Deg + WarriorRotateCorrection);
 
 
 

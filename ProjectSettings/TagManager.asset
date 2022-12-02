@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -11,11 +12,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - Blocking
   - Player
-  - 
-  - 
+  - Blocking
+  - Creatures
+  - Bullet
+  - Enemy
   - 
   - 
   - 
@@ -46,6 +47,9 @@ TagManager:
     locked: 0
   - name: Floor
     uniqueID: 1248659279
+    locked: 0
+  - name: Bullets
+    uniqueID: 1701397481
     locked: 0
   - name: Creatures
     uniqueID: 1791603063
