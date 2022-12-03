@@ -9,12 +9,10 @@ public class Bullet : MonoBehaviour
 {
  
     public BoxCollider2D collider;
-    private GameObject Terrorist;
 
     private RaycastHit2D HitTheWall;
-    private RaycastHit2D HitEnemy;
 
-
+    private float DeathTime;
 
 
     Rigidbody2D rb2d;
@@ -36,7 +34,6 @@ public class Bullet : MonoBehaviour
         rb2d.velocity = new Vector2(bulletSpeed * rb2d.transform.right.x, bulletSpeed * rb2d.transform.right.y);
         Warrior = GameObject.FindWithTag("Player");
         UserGun = Warrior.GetComponent<Gun>();
-        Terrorist = GameObject.FindGameObjectWithTag("Enemy");
         correction = Warrior.GetComponent<WarriorMovement>();
     }
 
@@ -48,38 +45,31 @@ public class Bullet : MonoBehaviour
 
         float CastAngle = Mathf.Atan2(rb2d.transform.right.x, rb2d.transform.right.y) * Mathf.Rad2Deg + correction.WRC;
 
-        //Баг тут
-
         HitTheWall = Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x, LayerMask.GetMask("Bullet", "Creatures"));
 
-        HitEnemy = Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x, LayerMask.GetMask("Bullet", "Enemy"));
-
-        //Скорее всего это решается через BoxCast, так как только в нем можно корректировать угол.
-        //HitEnemy = Physics2D.BoxCast(rb2d.position, collider.size , CastAngle, rb2d.transform.right, collider.size.x * 2, LayerMask.GetMask("Bullet", "Enemy"));
-
-
         float DistNum = HitTheWall.distance * Time.deltaTime;
+        DeathTime = Time.fixedDeltaTime + DistNum;
 
-        
+
+
         if (HitTheWall)
         {
 
             if (UserGun.GetDistToTarget < 0.3f) { Destroy(gameObject); }
-            else { Destroy(gameObject, Time.fixedDeltaTime + DistNum); }
+            else { Destroy(gameObject, DeathTime); }
 
 
         }
 
-        if (HitEnemy)
-        { 
-            Enemy enemy = Terrorist.GetComponent<Enemy>();
-            enemy.TakeDamage(damage);
-            Destroy(gameObject);
-            Debug.Log($"Its here");
-        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        Enemy enemy = collider.GetComponent<Enemy>();
+        if (enemy != null) { enemy.TakeDamage(damage); Destroy(gameObject, DeathTime); }
     }
 
 
 
-    
+
 }
