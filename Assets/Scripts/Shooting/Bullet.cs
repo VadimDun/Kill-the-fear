@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour
     public float bulletSpeed = 10f;
     public int damage = 10;
 
-    void Awake()
+    void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
         rb2d.velocity = new Vector2(bulletSpeed * rb2d.transform.right.x, bulletSpeed * rb2d.transform.right.y);
