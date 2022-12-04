@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 100;
+    private int health = 100;
+    public int enemyHealth { get { return health; } set { health = value; } }
+
+    private bool IsKillable = true;
+    public bool enemyIsKillable { get { return IsKillable ; } set { IsKillable = value; } }
 
     public void TakeDamage(int damage)
     {

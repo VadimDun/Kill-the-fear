@@ -7,9 +7,14 @@ using UnityEngine;
 public class WarriorMovement : MonoBehaviour
 {
 
-    //140 градусов на доворот
-    private const float WarriorRotateCorrection = 128f;
-    public float WRC => WarriorRotateCorrection;
+    //Разность в направлениях ствола и LookDirection персонажа
+    private float AngleDifference;
+    public float angleDifference => AngleDifference;
+
+    //Начальное направление LookDirection
+    private float StartWarriorDir;
+    //Начальное направление ствола
+    private float StartGunDir;
 
     private Vector2 LookDirection;
     public Vector2 WarriorLookDir => LookDirection;
@@ -31,6 +36,10 @@ public class WarriorMovement : MonoBehaviour
     private Rigidbody2D Warrior;
     [SerializeField]
     private Camera cam;
+    [SerializeField]
+    private Transform GunAxis;
+    [SerializeField]
+    private Transform WarriorAxis;
 
     //Векторы
     Vector2 MovementDirection;
@@ -75,6 +84,14 @@ public class WarriorMovement : MonoBehaviour
 
 
 
+    private void Start()
+    {
+        StartWarriorDir = WarriorAxis.rotation.z * Mathf.Rad2Deg;
+        StartGunDir = GunAxis.rotation.z * Mathf.Rad2Deg;
+        AngleDifference = StartWarriorDir + StartGunDir;
+    }
+
+
 
 
 
@@ -90,6 +107,8 @@ public class WarriorMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift)) MaxSpeed = 1;
         else if (Input.GetKey(KeyCode.LeftControl)) MaxSpeed = 0.5f;
         else MaxSpeed = 0.7f;
+
+
     }
 
     private void FixedUpdate()
@@ -97,10 +116,11 @@ public class WarriorMovement : MonoBehaviour
 
         //Поворот персонажа
         LookDirection = MousePosition - Warrior.position;
-        Warrior.rotation = (Mathf.Atan2(LookDirection.x, LookDirection.y) * -Mathf.Rad2Deg + WarriorRotateCorrection);
+        
+        float Distance = Vector2.Distance(WarriorAxis.position, MousePosition);
 
-
-
+        Warrior.rotation = (Mathf.Atan2(LookDirection.y, LookDirection.x) * Mathf.Rad2Deg + AngleDifference);
+            
 
         //Ускорение (импульс) игрока по оси Х в пределах максимальной скорости
         if ( Mathf.Abs( SpeedOnX() ) < MaxSpeed) Warrior.AddForce(new Vector2(MovementDirection.x, 0) * WarriorSpeed, ForceMode2D.Impulse);

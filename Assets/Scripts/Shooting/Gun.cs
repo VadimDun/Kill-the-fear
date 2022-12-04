@@ -1,10 +1,13 @@
 using UnityEditor.Build.Content;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
+using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
 
 
 public class Gun : MonoBehaviour
 {
+
     enum Guns { pistol, shotgun, assaultRifle, sniper };
     enum ShootMode { auto, semiAuto, off };
 
@@ -17,13 +20,14 @@ public class Gun : MonoBehaviour
     float lastShotTime = Mathf.NegativeInfinity;
     bool isTriggerPulled = false;
 
+
     public Transform firePoint;
     public GameObject bulletPrefab;
     public float pelletsDeviation = 3;
     public float pelletsSpread = 5;
 
     //Минимальная дистанция для стрельбы
-    private float MinFireDist = 0.2f;
+    private float MinFireDist = 0.35f;
 
     //Поля для луча, определяющего дистанцию до цели
 
@@ -62,11 +66,12 @@ public class Gun : MonoBehaviour
         if (Time.time - lastShotTime < delayBetweenShots) { return; }
         lastShotTime = Time.time;
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
         switch (current_gun)
         {
             case Guns.shotgun:
                 Vector2 direction = transform.right;
-                float normalAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + correction.WRC;
+                float normalAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + correction.angleDifference;
                 for (int i = -4; i < 4; ++i)
                 {
                     if (i != 0)
@@ -130,10 +135,12 @@ public class Gun : MonoBehaviour
         }    
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //Луч до цели который нужен для определения дистанции до цели
         HitLookDir = Physics2D.Raycast(WarriorPos.position, new Vector2(PlayerMovement.WarriorLookDir.x, PlayerMovement.WarriorLookDir.y), PlayerCollider.radius * 100, LayerMask.GetMask("Player", "Creatures"));
+
+        
 
         if (isTriggerPulled)
         {

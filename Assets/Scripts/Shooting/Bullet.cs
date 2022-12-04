@@ -43,19 +43,23 @@ public class Bullet : MonoBehaviour
         LifeTimer += Time.deltaTime;
         if (LifeTimer >= LifeTime) { Destroy(gameObject); LifeTimer = 0; }
 
-        float CastAngle = Mathf.Atan2(rb2d.transform.right.x, rb2d.transform.right.y) * Mathf.Rad2Deg + correction.WRC;
+        float CastAngle = Mathf.Atan2(rb2d.transform.right.y, rb2d.transform.right.x) * Mathf.Rad2Deg + correction.angleDifference;
 
         HitTheWall = Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x, LayerMask.GetMask("Bullet", "Creatures"));
 
-        float DistNum = HitTheWall.distance * Time.deltaTime;
-        DeathTime = Time.fixedDeltaTime + DistNum;
+        
+        
+        DeathTime = Time.fixedDeltaTime + HitTheWall.distance * Time.deltaTime;
 
 
 
         if (HitTheWall)
         {
 
-            if (UserGun.GetDistToTarget < 0.3f) { Destroy(gameObject); }
+            if (UserGun.GetDistToTarget < 0.55f) 
+            { 
+                Destroy(gameObject, DeathTime / 3);
+            }
             else { Destroy(gameObject, DeathTime); }
 
 
