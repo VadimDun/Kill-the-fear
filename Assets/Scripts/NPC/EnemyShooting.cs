@@ -7,12 +7,14 @@ public class EnemyShooting : MonoBehaviour
     Visibility visibility;
     public Gun gun;
 
+    /*
     void Start()
     {
         visibility = GetComponent<Visibility>();
         gun.ChangeGun(numOfGun);
     }
 
+    
     void Update()
     {
         if (visibility.isVisible)
@@ -21,5 +23,5 @@ public class EnemyShooting : MonoBehaviour
             transform.rotation = Quaternion.AngleAxis(Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg, Vector3.forward);
             gun.Shoot();
         }
-    }
+    }*/
 }

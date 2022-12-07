@@ -14,4 +14,9 @@ public class WarriorParams : MonoBehaviour
     {
         SelfCollider= GetComponent<CircleCollider2D>();
     }
+
+    private void Update()
+    {
+
+    }
 }
