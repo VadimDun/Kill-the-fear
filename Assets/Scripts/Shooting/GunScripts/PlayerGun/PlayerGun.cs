@@ -26,18 +26,11 @@ public class PlayerGun : Gun
 
 
 
-    public void PlayerShoot() => Shoot(bullet, bulletPrefab, firePoint);
+    public void PlayerShoot() => Shoot();
 
-    //Состояние курка
-    private bool isTriggerPulled = false;
-    public bool GetIsTriggered() => isTriggerPulled;
 
-    public void PullTheTrigger()
-    {
-        isTriggerPulled = !isTriggerPulled;
-    }
 
-    protected override void Shoot(Bullet bullet, GameObject bulletPrefab, Transform firePoint)
+    protected override void Shoot()
     {
         if (Time.time - lastShotTime < delayBetweenShots) { return; }
         lastShotTime = Time.time;

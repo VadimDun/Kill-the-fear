@@ -27,10 +27,25 @@ public class Gun : MonoBehaviour
     protected float pelletsDeviation = 3;
     protected float pelletsSpread = 5;
 
+    //Состояние курка
+    private bool isTriggerPulled = false;
+    public bool GetIsTriggered() => isTriggerPulled;
 
-    
+    public void PullTheTrigger()
+    {
+        isTriggerPulled = !isTriggerPulled;
+        if (isTriggerPulled)
+        {
+            //Для одииночной стрельбы
+            if ((shootMode == ShootMode.semiAuto) ) { Shoot(); }
+        }
+    }
 
-    protected virtual void Shoot(Bullet bullet, GameObject bulletPrefab, Transform firePoint)
+    Bullet bullet;
+    GameObject bulletPrefab;
+    Transform firePoint;
+
+    protected virtual void Shoot()
     {
         if (Time.time - lastShotTime < delayBetweenShots) { return; }
         lastShotTime = Time.time;
