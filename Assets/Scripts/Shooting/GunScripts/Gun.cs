@@ -1,4 +1,3 @@
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.Tilemaps;
@@ -7,75 +6,52 @@ using UnityEngine.U2D;
 
 public class Gun : MonoBehaviour
 {
+    //Стволы
+    protected enum Guns { pistol, shotgun, assaultRifle, sniper, none };
 
-    enum Guns { pistol, shotgun, assaultRifle, sniper, none };
+    //Режимы огня
     public enum ShootMode { auto, semiAuto, off };
 
-    Guns current_gun = Guns.none;
-    ShootMode shootMode = ShootMode.off;
+    //Выбранное оружие
+    protected Guns current_gun = Guns.none;
+    //Режим стрельбы 
+    protected ShootMode shootMode = ShootMode.off;
     public ShootMode GetShootMode() => shootMode;
-    Bullet bullet;
-    WarriorMovement correction;
 
-    float delayBetweenShots;
-    float lastShotTime = Mathf.NegativeInfinity;
-    int damage;
-    float bulletSpeed;
-    bool isTriggerPulled = false;
+
+    //Параметры ствола
+    protected float delayBetweenShots;
+    protected float lastShotTime = Mathf.NegativeInfinity;
+    protected int damage;
+    protected float bulletSpeed;
+    protected float pelletsDeviation = 3;
+    protected float pelletsSpread = 5;
+
+    //Состояние курка
+    private bool isTriggerPulled = false;
     public bool GetIsTriggered() => isTriggerPulled;
-
-    public Transform firePoint;
-    public GameObject bulletPrefab;
-    public float pelletsDeviation = 3;
-    public float pelletsSpread = 5;
-
-    //Минимальная дистанция для стрельбы
-    private float MinFireDist = 0.35f;
-
-
-    //По дефолту = 1. Без DV первого выстрела не будет 
-    private float DistToTarget = 1f;
-    public float GetDistToTarget => DistToTarget;
-
-    void Start()
-    {
-        correction = GetComponent<WarriorMovement>();    
-    }
 
     public void PullTheTrigger()
     {
         isTriggerPulled = !isTriggerPulled;
         if (isTriggerPulled)
         {
-            //Выстрел
-            if ((shootMode == ShootMode.semiAuto) & (DistToTarget > MinFireDist)) { Shoot(); }
+            //Для одииночной стрельбы
+            if ((shootMode == ShootMode.semiAuto) ) { Shoot(); }
         }
     }
 
-    public void Shoot()
+    Bullet bullet;
+    GameObject bulletPrefab;
+    Transform firePoint;
+
+    protected virtual void Shoot()
     {
         if (Time.time - lastShotTime < delayBetweenShots) { return; }
         lastShotTime = Time.time;
         bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation).GetComponent<Bullet>();
         bullet.damage = damage;
         bullet.bulletSpeed = bulletSpeed;
-        switch (current_gun)
-        {
-            case Guns.shotgun:
-                Vector2 direction = transform.right;
-                float normalAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + (360f - correction.angleDifference);
-                for (int i = -4; i < 4; ++i)
-                {
-                    if (i != 0)
-                    {
-                        float angle = normalAngle + pelletsSpread * i + Random.Range(-pelletsDeviation, pelletsDeviation);
-                        bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward)).GetComponent<Bullet>();
-                        bullet.damage = damage;
-                        bullet.bulletSpeed = bulletSpeed;
-                    }
-                }
-                break;
-        }
     }
 
     public void ChangeGun(int numberOfGun)
@@ -126,6 +102,12 @@ public class Gun : MonoBehaviour
                     lastShotTime = Mathf.NegativeInfinity;
                 }
                 break;
-        }    
+        }
     }
+
+    private void Update()
+    {
+        Debug.Log($"Fire mode = {shootMode}");
+    }
+
 }

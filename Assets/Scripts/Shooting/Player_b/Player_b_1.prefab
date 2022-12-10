@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4249297625813999923}
   - component: {fileID: 133415233877175964}
-  - component: {fileID: 7927239261832465232}
   - component: {fileID: 5010001527924140046}
   - component: {fileID: 5807865975645907451}
+  - component: {fileID: 1984916215317645157}
   m_Layer: 9
-  m_Name: yellow_bullet_0
+  m_Name: Player_b_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,21 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!114 &7927239261832465232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2563289282412000716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f247a4c6ce0d6e54aabc739365db74f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collider: {fileID: 5010001527924140046}
-  bulletSpeed: 10
-  damage: 34
 --- !u!61 &5010001527924140046
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -149,3 +134,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &1984916215317645157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2563289282412000716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b6360c44d24f94b860b24c20b0a5ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletSpeed: 10
+  damage: 10
+  PlayerBulletRB: {fileID: 5807865975645907451}
+  PlayerBulletCollider: {fileID: 5010001527924140046}

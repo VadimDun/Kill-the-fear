@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class EnemyShooting : MonoBehaviour
 {
-    public int numOfGun = 1;
+    public int numOfGun = 2;
 
     Visibility visibility;
-    public Gun gun;
+    public EnemyGun enemyGun;
+
+
 
     void Start()
     {
         visibility = GetComponent<Visibility>();
-        gun.ChangeGun(numOfGun);
+        enemyGun.ChangeGun(numOfGun);
     }
 
     void Update()
@@ -19,7 +21,7 @@ public class EnemyShooting : MonoBehaviour
         {
             Vector3 lookDirection = visibility.player.position - transform.position;
             transform.rotation = Quaternion.AngleAxis(Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg, Vector3.forward);
-            gun.Shoot();
+            enemyGun.EnemyShoot();
         }
     }
 }

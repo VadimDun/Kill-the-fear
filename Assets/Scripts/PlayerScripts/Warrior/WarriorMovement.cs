@@ -55,6 +55,9 @@ public class WarriorMovement : MonoBehaviour
     //Скорость по оси Y
     private float SpeedOnY() => Warrior.velocity.y;
 
+
+    //Остановка персонажа если кнопки отпущены
+
     private void ReverseImpulseX(float Speed)
     {
         Warrior.AddForce(new Vector2(DirectionSignX * (-1), 0) * Speed, ForceMode2D.Impulse);
@@ -67,6 +70,8 @@ public class WarriorMovement : MonoBehaviour
         Warrior.AddForce(new Vector2(0, DirectionSignY * (-1)) * Speed, ForceMode2D.Impulse);
         if (Mathf.Abs(SpeedOnY()) <= Brakes) Warrior.velocity = new Vector2(SpeedOnX(), 0);
     }
+
+    //Остановка персонажа если кнопки зажаты в обратном направлении (Быстрее чем при опущенных)
 
     private void ReverseImpulseX(float Speed, float BrakeSpeed)
     {
@@ -116,8 +121,6 @@ public class WarriorMovement : MonoBehaviour
 
         //Поворот персонажа
         LookDirection = MousePosition - Warrior.position;
-        
-        float Distance = Vector2.Distance(WarriorAxis.position, MousePosition);
 
         Warrior.rotation = (Mathf.Atan2(LookDirection.y, LookDirection.x) * Mathf.Rad2Deg + AngleDifference);
             
