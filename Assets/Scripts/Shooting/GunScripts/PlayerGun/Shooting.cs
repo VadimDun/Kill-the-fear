@@ -38,7 +38,7 @@ public class Shooting : MonoBehaviour
         if (playerGun.GetIsTriggered())
         {
             //Выстрел
-            if ((playerGun.GetShootMode() == Gun.ShootMode.auto) & (rangeFinder.GetDistToTarget > MinFireDist)) { playerGun.PlayerShoot(); playerSounds.PlaySound(); }
+            if ((playerGun.GetShootMode() == Gun.ShootMode.auto) & (rangeFinder.GetDistToTarget > MinFireDist)) { playerGun.PlayerShoot(); }
         }
         
     }

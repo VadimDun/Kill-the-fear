@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerGun : Gun
 {
+    //Для звука выстрела
+    [SerializeField]
+    private PlayerGunSounds playerSounds;
+
     //Дальномер с позиции игрока
     [SerializeField]
     private RangeFinder rangeFinder;
@@ -35,6 +39,7 @@ public class PlayerGun : Gun
         if (Time.time - lastShotTime < delayBetweenShots) { return; }
         lastShotTime = Time.time;
         bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation).GetComponent<PlayerBullet>();
+        playerSounds.PlaySound();
         bullet.damage = damage;
         bullet.bulletSpeed = bulletSpeed;
         switch (current_gun)
@@ -52,6 +57,7 @@ public class PlayerGun : Gun
                         bullet.bulletSpeed = bulletSpeed;
                     }
                 }
+                
                 break;
         }
     }
