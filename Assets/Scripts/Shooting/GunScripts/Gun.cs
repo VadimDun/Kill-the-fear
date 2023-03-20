@@ -105,9 +105,4 @@ public class Gun : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        Debug.Log($"Fire mode = {shootMode}");
-    }
-
 }
