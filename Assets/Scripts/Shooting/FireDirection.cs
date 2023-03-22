@@ -1,9 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class FireDirection : MonoBehaviour
 {
+    //Для получения актуального угла разницы AngleDifference 
+    [SerializeField]
+    WarriorMovement wm;
+    
     //Игрок
     private GameObject player;
     //Ствол игрока 
@@ -26,7 +32,18 @@ public class FireDirection : MonoBehaviour
 
     void Update()
     {
-        //Получаю направление стрельбы (Красную ось, или же ось Х)
-        fireDirection = firePoint.right;
+        
+        //Угол разницы между стволом и спрайтом 
+        float RotateAngle = wm.angleDifference;
+        
+        //Поворот
+        Quaternion q = Quaternion.AngleAxis(-RotateAngle, Vector3.forward);
+
+        //Направление красной оси
+        Vector3 StartDirection = firePoint.right;
+        
+
+        //Это уже повернутый куда надо fireDir
+        fireDirection = q * StartDirection;
     }
 }

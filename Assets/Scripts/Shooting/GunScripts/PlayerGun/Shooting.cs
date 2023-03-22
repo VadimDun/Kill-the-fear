@@ -9,19 +9,12 @@ public class Shooting : MonoBehaviour
     [SerializeField]
     private PlayerGunSounds playerSounds; 
 
-    //Дальномер, от положения которого измеряется дальность
-    private RangeFinder rangeFinder;
-
-    //Минимальная дистанция для стрельбы (Чтобы не простреливать коллизию)
-    private float MinFireDist = 0.35f;
-
     void Awake()
     {
         playerGun.ChangeGun(1);
 
         playerSounds.ChangePlayerSound(1);
 
-        rangeFinder = playerGun.GetComponent<RangeFinder>();
     }
 
     void Update()
@@ -38,7 +31,7 @@ public class Shooting : MonoBehaviour
         if (playerGun.GetIsTriggered())
         {
             //Выстрел
-            if ((playerGun.GetShootMode() == Gun.ShootMode.auto) & (rangeFinder.GetDistToTarget > MinFireDist)) { playerGun.PlayerShoot(); }
+            if ((playerGun.GetShootMode() == Gun.ShootMode.auto)) { playerGun.PlayerShoot(); }
         }
         
     }
