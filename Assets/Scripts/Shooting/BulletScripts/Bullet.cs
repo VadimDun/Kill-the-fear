@@ -15,6 +15,7 @@ public class Bullet : MonoBehaviour
     public float bulletSpeed = 10f;
     public int damage = 10;
 
+
     public RaycastHit2D hitTheWall(Rigidbody2D rb2d, BoxCollider2D collider)
     {
         //Столкновение со стеной или другим объектом

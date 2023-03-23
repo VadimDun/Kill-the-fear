@@ -15,11 +15,6 @@ public class LaserBeam : MonoBehaviour
     [SerializeField]
     LineRenderer lineRenderer;
 
-    private void Start()
-    {
-
-    }
-
     private void FixedUpdate()
     {
         Vector3[] positions = new Vector3[2];

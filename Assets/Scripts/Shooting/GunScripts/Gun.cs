@@ -41,9 +41,10 @@ public class Gun : MonoBehaviour
         }
     }
 
-    Bullet bullet;
-    GameObject bulletPrefab;
-    Transform firePoint;
+    
+    private Bullet bullet;
+    private GameObject bulletPrefab;
+    private Transform firePoint;
 
     protected virtual void Shoot()
     {
