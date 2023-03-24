@@ -7348,6 +7348,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ec2f33d1c627f74ca608a1c1bd099eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &969302913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84494737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f23552409e3ca840b1cedc3418de124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteWithPistol: {fileID: -1711302124, guid: 5188106e7ca39ed49afef63a73797422, type: 3}
+  spriteWithShotGun: {fileID: 21300000, guid: 6f821183d79d483419de5523138509db, type: 3}
+  spriteWithRiffle: {fileID: 21300000, guid: 1570f560c59b20e488bb09d6ca14f414, type: 3}
+  spriteNearWall: {fileID: 21300000, guid: 5294b4b4689fa6d43a30ce3776ca5156, type: 3}
 --- !u!1 &1048475322
 GameObject:
   m_ObjectHideFlags: 0
