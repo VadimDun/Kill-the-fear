@@ -15,8 +15,11 @@ public class PlayerGun : Gun
     [SerializeField]
     private Transform firePoint;
     //Выбранная пуля (Тут должна быть PlayerBullet)
+
     [SerializeField]
     private GameObject bulletPrefab;
+
+    public GameObject GetBulletPrefab => bulletPrefab;
 
     //Коррекция для дробовика (связано с LookDirection спрайта)
     private WarriorMovement correction;
@@ -25,12 +28,15 @@ public class PlayerGun : Gun
     private GameObject player;
     private PlayerBullet bullet;
 
+
+
     //Минимальная дистанция для стрельбы
     private float MinFireDist = 0.3f;
 
 
 
     public void PlayerShoot() => Shoot();
+
 
 
 

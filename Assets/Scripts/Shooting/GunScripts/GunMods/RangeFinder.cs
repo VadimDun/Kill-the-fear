@@ -41,6 +41,6 @@ public class RangeFinder : MonoBehaviour
         HitLookDir = Physics2D.Raycast(ShooterAxis.position, new Vector2(fireDirection.GetFireDir.x, fireDirection.GetFireDir.y), OneHundredMeters, LayerMask.GetMask("Player", "Creatures"));
         //Дистанция до цели 
         DistToTarget = Vector2.Distance(new Vector2(ShooterAxis.position.x, ShooterAxis.position.y), HitLookDir.point);
-        Debug.Log(DistToTarget);
+      
     }
 }
