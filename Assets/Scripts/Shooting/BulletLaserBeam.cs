@@ -4,25 +4,22 @@ using UnityEngine;
 
 public class BulletLaserBeam : MonoBehaviour
 {
-    private PlayerGun playerGun;
 
     private BoxCollider2D bulletCollider;
 
-    private Rigidbody2D bulletRigidbody;
+    private Transform bulletTransform;
     
     private LineRenderer lineRenderer;
 
     void Start()
     {
-        playerGun = GetComponent<PlayerGun>();
-        //Получаю префаб пули из компонента PlayerGun
-        GameObject bullet = playerGun.bulletPrefab;
-        //Получаю RigidBody префаба пули
-        bulletRigidbody = bullet.GetComponent<Rigidbody2D>();
+        bulletTransform = GetComponent<Transform>();
         //Получаю Collider префаба пули
-        bulletCollider = bullet.GetComponent<BoxCollider2D>();
+        bulletCollider = GetComponent<BoxCollider2D>();
         //Получаю LineRender префаба пули
-        lineRenderer = bullet.GetComponent<LineRenderer>();
+        lineRenderer = GetComponent<LineRenderer>();
+
+
 
     }
 
@@ -30,12 +27,14 @@ public class BulletLaserBeam : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3[] positions = new Vector3[2];
-        positions[0] = bulletRigidbody.position;
 
-        positions[1] = bulletRigidbody.position + (Vector2)bulletRigidbody.transform.right * bulletCollider.bounds.size.x;
+        positions[0] = bulletTransform.position;
+
+        positions[1] = (Vector2)positions[0] + (Vector2)bulletTransform.right * bulletCollider.size.x * 1.9f;
 
         lineRenderer.positionCount = 2;
         lineRenderer.SetPositions(positions);
+
 
     }
 

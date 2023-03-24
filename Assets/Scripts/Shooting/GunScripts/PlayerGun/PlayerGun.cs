@@ -17,7 +17,7 @@ public class PlayerGun : Gun
     //Выбранная пуля (Тут должна быть PlayerBullet)
 
     [SerializeField]
-    public GameObject bulletPrefab;
+    private GameObject bulletPrefab;
 
     public GameObject GetBulletPrefab => bulletPrefab;
 
@@ -27,6 +27,8 @@ public class PlayerGun : Gun
     //Игрок и скрипт пули
     private GameObject player;
     private PlayerBullet bullet;
+
+
 
     //Минимальная дистанция для стрельбы
     private float MinFireDist = 0.3f;

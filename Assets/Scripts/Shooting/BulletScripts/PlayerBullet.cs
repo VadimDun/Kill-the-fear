@@ -49,6 +49,7 @@ public class PlayerBullet : Bullet
             if (rangeFinder.GetDistToTarget < 0.55f)
             {
                 Destroy(gameObject, deathTime);
+                Time.timeScale = 1.0f;
             }
             else { Destroy(gameObject, deathTime); }
 
