@@ -7,7 +7,7 @@ public class PlayerChangeSprites : MonoBehaviour
 
     //спрайт на персе в данный момент
     private SpriteRenderer current_sprite;
-
+//
     //все спрайты
     [SerializeField]
     private Sprite spriteWithPistol;
