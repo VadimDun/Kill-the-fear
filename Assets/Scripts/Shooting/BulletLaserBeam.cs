@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class BulletLaserBeam : MonoBehaviour
 {
-    private Collider2D bulletCollider;
+    private PlayerGun playerGun;
+
+    private BoxCollider2D bulletCollider;
 
     private Rigidbody2D bulletRigidbody;
     
@@ -12,12 +14,15 @@ public class BulletLaserBeam : MonoBehaviour
 
     void Start()
     {
-        //Получаю RigidBody
-        bulletRigidbody = GetComponentInChildren<Rigidbody2D>();
-        //Получаю Collider
-        bulletCollider = GetComponentInChildren<Collider2D>();
-        //Получаю LineRender
-        lineRenderer = GetComponentInChildren<LineRenderer>();
+        playerGun = GetComponent<PlayerGun>();
+        //Получаю префаб пули из компонента PlayerGun
+        GameObject bullet = playerGun.bulletPrefab;
+        //Получаю RigidBody префаба пули
+        bulletRigidbody = bullet.GetComponent<Rigidbody2D>();
+        //Получаю Collider префаба пули
+        bulletCollider = bullet.GetComponent<BoxCollider2D>();
+        //Получаю LineRender префаба пули
+        lineRenderer = bullet.GetComponent<LineRenderer>();
 
     }
 
