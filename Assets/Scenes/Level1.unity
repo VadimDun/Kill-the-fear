@@ -7482,8 +7482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ec2f33d1c627f74ca608a1c1bd099eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< Updated upstream
-=======
 --- !u!114 &969302913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7514,7 +7512,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PistolPoint: {fileID: 327094034}
   RiflePoint: {fileID: 1054705958}
->>>>>>> Stashed changes
 --- !u!1 &1048475322
 GameObject:
   m_ObjectHideFlags: 0
