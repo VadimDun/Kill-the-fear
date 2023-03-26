@@ -38,6 +38,14 @@ public class PlayerChangeSprites : MonoBehaviour
     private void Update()
     {
 
+        current_sprite = GetComponent<SpriteRenderer>();
+        current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
+        rangeFinder = GetComponent<RangeFinder>();
+        
+    }
+
+    private void FixedUpdate()
+    {
         //спрайт меняется, когда подходишь к стене, и возвращается, когда отходишь
         if (rangeFinder.GetDistToTarget <= DistForSpriteNearWall) 
         {
@@ -69,6 +77,14 @@ public class PlayerChangeSprites : MonoBehaviour
 
 
 
+        //смена спрайта от нажатия кнопки(смены оружия)
+        if (Input.GetKey("1") && current_sprite.sprite != spriteWithPistol)
+            current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
+        if (Input.GetKey("2") && current_sprite.sprite != spriteWithShotGun)
+            current_sprite.sprite = spriteBeforeWall = spriteWithShotGun;
+        if (Input.GetKey("3") && current_sprite.sprite != spriteWithRiffle)
+            current_sprite.sprite = spriteBeforeWall = spriteWithRiffle;
+        
     }
     
 
