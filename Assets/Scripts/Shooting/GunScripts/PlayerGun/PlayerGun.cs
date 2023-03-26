@@ -9,11 +9,8 @@ public class PlayerGun : Gun
     private PlayerGunSounds playerSounds;
 
     //Дальномер с позиции игрока
-    [SerializeField]
     private RangeFinder rangeFinder;
-    //Точка ведения огня (на стволе)
-    [SerializeField]
-    private Transform firePoint;
+
     //Выбранная пуля (Тут должна быть PlayerBullet)
 
     [SerializeField]
@@ -34,6 +31,13 @@ public class PlayerGun : Gun
     private float MinFireDist = 0.3f;
 
 
+    //Получаю огневую точку с необходимым компонентом transform  (currentPoint)
+    private FirePoint firePoints;
+
+    private GameObject firePoint;
+
+    private Transform firePointAxis;
+
 
     public void PlayerShoot() => Shoot();
 
@@ -44,7 +48,7 @@ public class PlayerGun : Gun
     {
         if ((Time.time - lastShotTime < delayBetweenShots) || (rangeFinder.GetDistToTarget <= MinFireDist) ) { return; }
         lastShotTime = Time.time;
-        bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation).GetComponent<PlayerBullet>();
+        bullet = Instantiate(bulletPrefab, firePointAxis.position, firePointAxis.rotation).GetComponent<PlayerBullet>();
         playerSounds.PlaySound();
         bullet.damage = damage;
         bullet.bulletSpeed = bulletSpeed;
@@ -58,7 +62,7 @@ public class PlayerGun : Gun
                     if (i != 0)
                     {
                         float angle = normalAngle + pelletsSpread * i + Random.Range(-pelletsDeviation, pelletsDeviation);
-                        bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.AngleAxis(angle, Vector3.forward)).GetComponent<PlayerBullet>();
+                        bullet = Instantiate(bulletPrefab, firePointAxis.position, Quaternion.AngleAxis(angle, Vector3.forward)).GetComponent<PlayerBullet>();
                         bullet.damage = damage;
                         bullet.bulletSpeed = bulletSpeed;
                     }
@@ -72,6 +76,11 @@ public class PlayerGun : Gun
 
     void Start()
     {
+        firePoints = GetComponent<FirePoint>();
+        firePoint = firePoints.GetCurrentPoint;
+        firePointAxis = firePoint.transform;
+
+        rangeFinder = GetComponentInChildren<RangeFinder>();
         correction = GetComponent<WarriorMovement>();
         player = GameObject.FindGameObjectWithTag("Player");
         bullet = player.GetComponent<PlayerBullet>();

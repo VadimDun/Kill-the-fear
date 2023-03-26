@@ -9,8 +9,12 @@ public class PlayerBullet : Bullet
     private GameObject player;
     //Дальномер от позиции стрелка
     private RangeFinder rangeFinder;
-    //Player bullet is hit
-    private RaycastHit2D PlayerHit;
+    
+    //Столкновение со стеной
+    private RaycastHit2D WallHit;
+    //Столкновение с существом
+    private RaycastHit2D EnemyHit;
+
     //Время смерти пули (игрока)
     private float deathTime;
 
@@ -29,38 +33,62 @@ public class PlayerBullet : Bullet
 
     public BoxCollider2D GetPlayerBulletCollider => PlayerBulletCollider;
 
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        rangeFinder = player.GetComponent<RangeFinder>();
+        rangeFinder = player.GetComponentInChildren<RangeFinder>();
 
         BulletSpeed(PlayerBulletRB);
     }
 
     void FixedUpdate()
     {
-        PlayerHit = hitTheWall(PlayerBulletRB, PlayerBulletCollider);
-        deathTime = DeathTime(PlayerHit);
 
-        //Если столкновение со стеной или другим объектом
-        if (PlayerHit)
+        WallHit = hitTheWall(PlayerBulletRB, PlayerBulletCollider);
+        EnemyHit = hitTheEnemy(PlayerBulletRB, PlayerBulletCollider);
+
+        //Если столкновение со стеной
+        if (WallHit)
         {
-
+            Debug.Log("Wall hit");
+            deathTime = DeathTime(WallHit);
             if (rangeFinder.GetDistToTarget < 0.55f)
             {
                 Destroy(gameObject, deathTime);
-                Time.timeScale = 1.0f;
+                
             }
             else { Destroy(gameObject, deathTime); }
+            
 
+        }
+        else if (EnemyHit)
+        {
+            deathTime = DeathTime(EnemyHit);
+
+            Enemy enemy = EnemyHit.collider.GetComponent<Enemy>();
+
+            Debug.Log("Enemy hit");
+
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage);
+                Destroy(gameObject, deathTime);
+            }
 
         }
     }
 
+    /*
     void OnTriggerEnter2D(Collider2D collider)
     {
+        Debug.Log(IsKillable);
+        if (!IsKillable) return;
+
         Enemy enemy = collider.GetComponent<Enemy>();
-        if (enemy != null) { enemy.TakeDamage(damage); Destroy(gameObject, deathTime); }
+        if ( (enemy != null) && (IsKillable) ) { enemy.TakeDamage(damage); Destroy(gameObject, deathTime); }
     }
+
+    */
 
 }

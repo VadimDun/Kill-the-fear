@@ -9,7 +9,11 @@ public class WarriorMovement : MonoBehaviour
 
     //Разность в направлениях ствола и LookDirection персонажа
     private float AngleDifference;
-    public float angleDifference => AngleDifference;
+    public float angleDifference
+    { 
+        get { return AngleDifference; }
+        set { AngleDifference = value; }
+    }
 
     //Начальное направление LookDirection
     private float StartWarriorDir;
@@ -37,14 +41,15 @@ public class WarriorMovement : MonoBehaviour
     [SerializeField]
     private Camera cam;
     [SerializeField]
-    private Transform GunAxis;
-    [SerializeField]
     private Transform WarriorAxis;
 
     //Векторы
     Vector2 MovementDirection;
     Vector2 MousePosition;
 
+    private FirePoint firePoints;
+    
+    private GameObject FirePoint;
 
 
 
@@ -91,8 +96,11 @@ public class WarriorMovement : MonoBehaviour
 
     private void Start()
     {
+        firePoints = GetComponent<FirePoint>();
+        FirePoint = firePoints.GetCurrentPoint;
+
         StartWarriorDir = WarriorAxis.rotation.z * Mathf.Rad2Deg;
-        StartGunDir = GunAxis.rotation.z * Mathf.Rad2Deg;
+        StartGunDir = FirePoint.transform.rotation.z * Mathf.Rad2Deg;
         AngleDifference = StartWarriorDir + StartGunDir;
     }
 
