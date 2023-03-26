@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Wall
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Bullet
   - Enemy
   - Pause
-  - 
+  - Environment
   - 
   - 
   - 
@@ -51,6 +52,9 @@ TagManager:
     locked: 0
   - name: Bullets
     uniqueID: 1701397481
+    locked: 0
+  - name: Environment
+    uniqueID: 3260489029
     locked: 0
   - name: Creatures
     uniqueID: 1791603063

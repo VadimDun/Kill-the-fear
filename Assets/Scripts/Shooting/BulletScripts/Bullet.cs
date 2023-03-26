@@ -20,7 +20,13 @@ public class Bullet : MonoBehaviour
     public RaycastHit2D hitTheWall(Rigidbody2D rb2d, BoxCollider2D collider)
     {
         //Столкновение со стеной или другим объектом
-        return Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x * 1.9f, LayerMask.GetMask("Bullet", "Creatures"));
+        return Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x * 6.66f, LayerMask.GetMask("Bullet", "Environment"));
+    }
+
+    public RaycastHit2D hitTheEnemy(Rigidbody2D rb2d, BoxCollider2D collider)
+    {
+        //Столкновение со стеной или другим объектом
+        return Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x * 0.9f, LayerMask.GetMask("Bullet", "Enemy"));
     }
 
     public float DeathTime(RaycastHit2D hit)

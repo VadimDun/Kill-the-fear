@@ -14,8 +14,6 @@ public class FireDirection : MonoBehaviour
     private GameObject player;
     //Ствол игрока 
     private PlayerGun gun;
-    //Откуда будет ведётся стрельба
-    private Transform firePoint;
 
     //Направление стрельбы
     private Vector2 fireDirection;
@@ -23,11 +21,23 @@ public class FireDirection : MonoBehaviour
     //Направление стрельбы, значение которого, можно присвоить в других скриптах
     public Vector2 GetFireDir => fireDirection;
 
+
+    //Получаю огневую точку с необходимым компонентом transform  (currentPoint)
+    private FirePoint firePoints;
+
+    private GameObject firePoint;
+
+    private Transform firePointAxis;
+
+
     private void Start()
     {
+        firePoints = GetComponent<FirePoint>();
+        firePoint = firePoints.GetCurrentPoint;
+        firePointAxis = firePoint.transform;
+
         player = GameObject.FindGameObjectWithTag("Player"); 
-        gun = player.GetComponent<PlayerGun>();
-        firePoint = gun.GetComponent<Transform>();
+
     }
 
     void Update()
@@ -40,7 +50,7 @@ public class FireDirection : MonoBehaviour
         Quaternion q = Quaternion.AngleAxis(-RotateAngle, Vector3.forward);
 
         //Направление красной оси
-        Vector3 StartDirection = firePoint.right;
+        Vector3 StartDirection = firePointAxis.right;
         
 
         //Это уже повернутый куда надо fireDir

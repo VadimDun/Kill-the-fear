@@ -28,6 +28,16 @@ public class PlayerChangeSprites : MonoBehaviour
 
     private void Start() 
     {
+
+        current_sprite = GetComponent<SpriteRenderer>();
+        current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
+        rangeFinder = GetComponentInChildren<RangeFinder>();
+        
+    }
+
+    private void Update()
+    {
+
         current_sprite = GetComponent<SpriteRenderer>();
         current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
         rangeFinder = GetComponent<RangeFinder>();
@@ -42,6 +52,31 @@ public class PlayerChangeSprites : MonoBehaviour
             current_sprite.sprite = spriteNearWall;
         }
         else {current_sprite.sprite = spriteBeforeWall; }
+
+
+        //смена спрайта от нажатия кнопки(смены оружия)
+
+        if (Input.GetKey("1") && current_sprite.sprite != spriteWithPistol) 
+        { 
+            current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
+
+
+        }
+
+        if (Input.GetKey("2") && current_sprite.sprite != spriteWithShotGun) 
+        { 
+            current_sprite.sprite = spriteBeforeWall = spriteWithShotGun;
+
+        }
+
+        if (Input.GetKey("3") && current_sprite.sprite != spriteWithRiffle) 
+        { 
+            current_sprite.sprite = spriteBeforeWall = spriteWithRiffle;
+
+        }
+
+
+
         //смена спрайта от нажатия кнопки(смены оружия)
         if (Input.GetKey("1") && current_sprite.sprite != spriteWithPistol)
             current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
@@ -49,7 +84,6 @@ public class PlayerChangeSprites : MonoBehaviour
             current_sprite.sprite = spriteBeforeWall = spriteWithShotGun;
         if (Input.GetKey("3") && current_sprite.sprite != spriteWithRiffle)
             current_sprite.sprite = spriteBeforeWall = spriteWithRiffle;
-        
         
     }
     
