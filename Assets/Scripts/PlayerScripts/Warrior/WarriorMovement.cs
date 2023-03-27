@@ -7,14 +7,8 @@ using UnityEngine;
 public class WarriorMovement : MonoBehaviour
 {
 
-    //Разность в направлениях ствола и LookDirection персонажа
-    private float AngleDifference;
-    public float angleDifference => AngleDifference;
-
     //Начальное направление LookDirection
     private float StartWarriorDir;
-    //Начальное направление ствола
-    private float StartGunDir;
 
     private Vector2 LookDirection;
     public Vector2 WarriorLookDir => LookDirection;
@@ -37,14 +31,11 @@ public class WarriorMovement : MonoBehaviour
     [SerializeField]
     private Camera cam;
     [SerializeField]
-    private Transform GunAxis;
-    [SerializeField]
     private Transform WarriorAxis;
 
     //Векторы
     Vector2 MovementDirection;
     Vector2 MousePosition;
-
 
 
 
@@ -87,13 +78,95 @@ public class WarriorMovement : MonoBehaviour
 
 
 
+    private FirePoint firePoints;
 
-
-    private void Start()
+    private void Awake()
     {
+        // Я не знаю как это работает, не читайте это, я просто оставлю это здесь
+
+
+        firePoints = GetComponent<FirePoint>();
+
+        // Parent Object diference = 21
         StartWarriorDir = WarriorAxis.rotation.z * Mathf.Rad2Deg;
-        StartGunDir = GunAxis.rotation.z * Mathf.Rad2Deg;
-        AngleDifference = StartWarriorDir + StartGunDir;
+
+        // Rifle, shotgun diference = 30
+        StartRifleDir = firePoints.GetRP.transform.rotation.z * Mathf.Rad2Deg;
+        RifleDifference = StartWarriorDir + StartRifleDir;
+
+        Vector3 PointA = firePoints.GetRP.transform.position;
+        Vector3 PointB = firePoints.GetPP.transform.position;
+
+        Vector3 DifVectorA = PointB - PointA;
+        
+
+        float DifAngle = Vector3.Angle(DifVectorA, firePoints.GetRP.transform.right);
+
+        // Pistol Diference == 27
+        StartPistolDir = firePoints.GetPP.transform.rotation.z * Mathf.Rad2Deg;
+
+        PistolDifference = DifAngle - StartPistolDir + (StartRifleDir - StartPistolDir)/2;
+
+    }
+
+
+
+    
+    private enum GunsAD {PistolAD, RifleAD, None};
+
+    private GunsAD currentADchecker = GunsAD.None;
+
+    // Получаемые на старте направления огневых точек
+    private float StartRifleDir;
+
+    private float StartPistolDir;
+
+    // Получаемые на старте погрешности ствола
+    private float RifleDifference;
+
+    private float PistolDifference;
+
+    // Нужно для исправления погрешности пистолета
+
+    private float ModPistolDir;
+
+
+    // Актуальная погрешность
+
+    private float CurrentAngleDifference;
+
+    public float currentAngleDifference
+    {
+        get { return CurrentAngleDifference; }
+    }
+
+
+    public void SwitchAD(int NumberOfGun)
+    {
+        switch (NumberOfGun)
+        {
+            case 1:
+                if (currentADchecker != GunsAD.PistolAD)
+                { 
+                    currentADchecker = GunsAD.PistolAD;
+                    CurrentAngleDifference = PistolDifference;
+                }
+                break;
+            case 2:
+                if (currentADchecker != GunsAD.RifleAD)
+                {
+                    currentADchecker = GunsAD.RifleAD;
+                    CurrentAngleDifference = RifleDifference;
+                }
+                break;
+            case 3:
+                if (currentADchecker != GunsAD.RifleAD)
+                {
+                    currentADchecker = GunsAD.RifleAD;
+                    CurrentAngleDifference = RifleDifference;
+                }
+                break;
+        }
     }
 
 
@@ -122,8 +195,7 @@ public class WarriorMovement : MonoBehaviour
         //Поворот персонажа
         LookDirection = MousePosition - Warrior.position;
 
-        Warrior.rotation = (Mathf.Atan2(LookDirection.y, LookDirection.x) * Mathf.Rad2Deg + AngleDifference);
-            
+        Warrior.rotation = (Mathf.Atan2(LookDirection.y, LookDirection.x) * Mathf.Rad2Deg + CurrentAngleDifference);
 
         //Ускорение (импульс) игрока по оси Х в пределах максимальной скорости
         if ( Mathf.Abs( SpeedOnX() ) < MaxSpeed) Warrior.AddForce(new Vector2(MovementDirection.x, 0) * WarriorSpeed, ForceMode2D.Impulse);

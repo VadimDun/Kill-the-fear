@@ -1,3 +1,4 @@
+using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -15,15 +16,22 @@ public class Bullet : MonoBehaviour
     public float bulletSpeed = 10f;
     public int damage = 10;
 
+
     public RaycastHit2D hitTheWall(Rigidbody2D rb2d, BoxCollider2D collider)
     {
         //Столкновение со стеной или другим объектом
-        return Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x, LayerMask.GetMask("Bullet", "Creatures"));
+        return Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x * 6.66f, LayerMask.GetMask("Environment"));
+    }
+
+    public RaycastHit2D hitTheEnemy(Rigidbody2D rb2d, BoxCollider2D collider)
+    {
+        //Столкновение со стеной или другим объектом
+        return Physics2D.Raycast(rb2d.position, rb2d.transform.right, collider.size.x * 3.33f, LayerMask.GetMask("Enemy"));
     }
 
     public float DeathTime(RaycastHit2D hit)
     {
-        //Время смерти пули, после столкновения с коллизией (Для того чтобы пуля исчезла ближе к объекту). Коллайдер у пули больше самого спрайта 
+        //Время смерти пули, после столкновения с коллизией 
         return Time.fixedDeltaTime + hit.distance * Time.deltaTime;
     }
 

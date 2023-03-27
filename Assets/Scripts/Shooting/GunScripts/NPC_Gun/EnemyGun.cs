@@ -18,6 +18,9 @@ public class EnemyGun : Gun
     [SerializeField]
     private Transform EnemyFirePoint;
 
+    [SerializeField]
+    private AudioClip EnemySound;
+
     public void EnemyShoot() => Shoot();
 
     void Start()
@@ -32,6 +35,7 @@ public class EnemyGun : Gun
         
         if (Time.time - lastShotTime < delayBetweenShots) { return; }
         lastShotTime = Time.time;
+        GetComponent<AudioSource>().PlayOneShot(EnemySound);
         bullet = Instantiate(EnemybulletPrefab, EnemyFirePoint.position, EnemyFirePoint.rotation).GetComponent<EnemyBullet>();
         bullet.damage = damage;
         bullet.bulletSpeed = bulletSpeed;
