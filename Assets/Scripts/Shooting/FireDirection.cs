@@ -25,32 +25,32 @@ public class FireDirection : MonoBehaviour
     //Получаю огневую точку с необходимым компонентом transform  (currentPoint)
     private FirePoint firePoints;
 
-    private GameObject firePoint;
+    private Transform firePointTransform;
 
-    private Transform firePointAxis;
 
 
     private void Start()
     {
         firePoints = GetComponent<FirePoint>();
-        firePoint = firePoints.GetCurrentPoint;
-        firePointAxis = firePoint.transform;
+        firePointTransform = firePoints.GetCurrentTransform;
 
         player = GameObject.FindGameObjectWithTag("Player"); 
 
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        
-        //Угол разницы между стволом и спрайтом 
-        float RotateAngle = wm.angleDifference;
-        
+        firePoints.UpdateCurrentPoint(ref firePointTransform);
+
+        //Угол разницы между стволом и спрайтом (раньше был нужен)
+        //float RotateAngle = wm.currentAngleDifference;
+        float RotateAngle = 0;
+
         //Поворот
-        Quaternion q = Quaternion.AngleAxis(-RotateAngle, Vector3.forward);
+        Quaternion q = Quaternion.AngleAxis(RotateAngle, Vector3.forward);
 
         //Направление красной оси
-        Vector3 StartDirection = firePointAxis.right;
+        Vector3 StartDirection = firePointTransform.right;
         
 
         //Это уже повернутый куда надо fireDir

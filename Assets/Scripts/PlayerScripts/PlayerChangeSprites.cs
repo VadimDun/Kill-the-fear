@@ -21,7 +21,7 @@ public class PlayerChangeSprites : MonoBehaviour
     //спрайт, используемый до момента приближения к стене
     private Sprite spriteBeforeWall;
     //расстояние, на котором скин будет меняться на spriteNearWall
-    float DistForSpriteNearWall = 0.35f;
+    float DistForSpriteNearWall = 0.15f;
     private RangeFinder rangeFinder;
 
 
@@ -54,18 +54,18 @@ public class PlayerChangeSprites : MonoBehaviour
 
         }
 
-        if (Input.GetKey("2") && current_sprite.sprite != spriteWithShotGun) 
-        { 
-            current_sprite.sprite = spriteBeforeWall = spriteWithShotGun;
-
-        }
-
-        if (Input.GetKey("3") && current_sprite.sprite != spriteWithRiffle) 
+        if (Input.GetKey("2") && current_sprite.sprite != spriteWithRiffle) 
         { 
             current_sprite.sprite = spriteBeforeWall = spriteWithRiffle;
 
         }
-        
+
+        if (Input.GetKey("3") && current_sprite.sprite != spriteWithShotGun)
+        {
+            current_sprite.sprite = spriteBeforeWall = spriteWithShotGun;
+
+        }
+
     }
     
 

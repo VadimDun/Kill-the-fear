@@ -16,9 +16,18 @@ public class FirePoint : MonoBehaviour
 
     private GameObject currentPoint = null;
 
-    public GameObject GetCurrentPoint => currentPoint;
+    public Transform GetCurrentTransform => currentPoint.transform;
+
+    public GameObject GetPP => PistolPoint;
+
+    public GameObject GetRP => RiflePoint;
 
 
+    public void UpdateCurrentPoint(ref Transform pointTransform)
+    {
+        pointTransform = currentPoint.transform;
+        
+    }
 
     public void ChoosePoint(int NumOfGun)
     { 
@@ -37,6 +46,7 @@ public class FirePoint : MonoBehaviour
                 {
                     currentFirePoint = FirePoints.RifleTypePoint;
                     currentPoint = RiflePoint;
+                    
                 }
                 break;
             case 3:
@@ -46,13 +56,11 @@ public class FirePoint : MonoBehaviour
                     currentPoint = RiflePoint;
                 }
                 break;
-            case 4:
-                if (currentFirePoint != FirePoints.RifleTypePoint)
-                {
-                    currentFirePoint = FirePoints.RifleTypePoint;
-                    currentPoint = RiflePoint;
-                }
-                break;
         }
+    }
+
+    private void FixedUpdate()
+    {
+       //Debug.Log(currentPoint.tag);
     }
 }
