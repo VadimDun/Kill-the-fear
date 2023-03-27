@@ -31,27 +31,27 @@ public class RangeFinder : MonoBehaviour
     //Получаю огневую точку с необходимым компонентом transform  (currentPoint)
     private FirePoint firePoints;
 
-    private GameObject firePoint;
-
-    private Transform firePointAxis;
+    private Transform firePointTransform;
 
 
     private void Start()
     {
-
         firePoints = GetComponent<FirePoint>();
-        firePoint = firePoints.GetCurrentPoint;
-        firePointAxis = firePoint.transform;
+        firePointTransform = firePoints.GetCurrentTransform;
     }
 
 
 
-    void Update()
+    void FixedUpdate()
     {
+        // Обновляю актуальную огневую точку 
+        firePoints.UpdateCurrentPoint(ref firePointTransform);
+
         //Луч до цели который нужен для определения дистанции до цели. Столкновение луча с объектом 
-        HitLookDir = Physics2D.Raycast(firePointAxis.position, new Vector2(fireDirection.GetFireDir.x, fireDirection.GetFireDir.y), OneHundredMeters, LayerMask.GetMask("Player", "Environment"));
+        HitLookDir = Physics2D.Raycast(firePointTransform.position, new Vector2(fireDirection.GetFireDir.x, fireDirection.GetFireDir.y), OneHundredMeters, LayerMask.GetMask("Player", "Environment"));
+        
         //Дистанция до цели 
-        DistToTarget = Vector2.Distance(new Vector2(firePointAxis.position.x, firePointAxis.position.y), HitLookDir.point);
+        DistToTarget = Vector2.Distance(new Vector2(firePointTransform.position.x, firePointTransform.position.y), HitLookDir.point);
       
     }
 }

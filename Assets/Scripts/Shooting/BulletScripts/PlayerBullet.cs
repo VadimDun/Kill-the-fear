@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerBullet : Bullet
@@ -9,7 +11,7 @@ public class PlayerBullet : Bullet
     private GameObject player;
     //Дальномер от позиции стрелка
     private RangeFinder rangeFinder;
-    
+
     //Столкновение со стеной
     private RaycastHit2D WallHit;
     //Столкновение с существом
@@ -42,42 +44,46 @@ public class PlayerBullet : Bullet
         BulletSpeed(PlayerBulletRB);
     }
 
+
+    private bool hasHitWall = false;
+
+
+
     void FixedUpdate()
     {
+        // Проверяет столкновение с врагом, только если не было столкновения со стеной
+        if (!hasHitWall)
+        {
+            EnemyHit = hitTheEnemy(PlayerBulletRB, PlayerBulletCollider);
+            if (EnemyHit)
+            {
+                Debug.Log("Enemy hit");
+                Enemy enemy = EnemyHit.collider.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(damage);
+                    Destroy(gameObject);
+                }
+            }
+        }
+
+        // Проверяет столкнулся ли RayCast со стеной
 
         WallHit = hitTheWall(PlayerBulletRB, PlayerBulletCollider);
-        EnemyHit = hitTheEnemy(PlayerBulletRB, PlayerBulletCollider);
-
-        //Если столкновение со стеной
         if (WallHit)
         {
             Debug.Log("Wall hit");
-            deathTime = DeathTime(WallHit);
+            hasHitWall = true;
+            float deathTime = DeathTime(WallHit);
             if (rangeFinder.GetDistToTarget < 0.55f)
             {
                 Destroy(gameObject, deathTime);
-                
             }
-            else { Destroy(gameObject, deathTime); }
-            
-
-        }
-        else if (EnemyHit)
-        {
-            deathTime = DeathTime(EnemyHit);
-
-            Enemy enemy = EnemyHit.collider.GetComponent<Enemy>();
-
-            Debug.Log("Enemy hit");
-
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage);
-                Destroy(gameObject, deathTime);
-            }
-
+            else
+                { Destroy(gameObject, deathTime); }
         }
     }
+
 
     /*
     void OnTriggerEnter2D(Collider2D collider)
