@@ -2,18 +2,19 @@ using UnityEngine;
 
 public class EnemyShooting : MonoBehaviour
 {
-    [SerializeField]
-    private int numOfGun = 2;
 
+    private EnemyGun enemyGun;
+    private EnemySound enemySound;
     Visibility visibility;
-    public EnemyGun enemyGun;
-
 
 
     void Start()
     {
+        enemySound = GetComponent<EnemySound>();    
+        enemyGun = GetComponent<EnemyGun>();
         visibility = GetComponent<Visibility>();
-        enemyGun.ChangeGun(numOfGun);
+        enemyGun.ChangeGun(enemyGun.GetNumOfGun);
+        enemySound.ChangeGunSound(enemyGun.GetNumOfGun);
     }
 
     void Update()
