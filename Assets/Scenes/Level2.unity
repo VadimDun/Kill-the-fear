@@ -62268,6 +62268,17 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &1799806353 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1436847617814366839, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+  m_PrefabInstance: {fileID: 539451104}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e406f5ad6a2fc4d4cae407ede4ef078d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1864891972
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62276,6 +62287,14 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1830646704744540654, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1799806353}
+    - target: {fileID: 1830646704744540654, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Resume
+      objectReference: {fileID: 0}
     - target: {fileID: 1830646705686204739, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -62363,6 +62382,14 @@ PrefabInstance:
     - target: {fileID: 1830646705686204767, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830646705912418910, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1799806353}
+    - target: {fileID: 1830646705912418910, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Home
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
