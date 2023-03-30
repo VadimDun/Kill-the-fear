@@ -74762,7 +74762,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
-<<<<<<< Updated upstream
 --- !u!20 &1684651909 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 1436847617814366858, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
@@ -74779,8 +74778,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e406f5ad6a2fc4d4cae407ede4ef078d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-=======
->>>>>>> Stashed changes
 --- !u!1 &1752291242
 GameObject:
   m_ObjectHideFlags: 0
