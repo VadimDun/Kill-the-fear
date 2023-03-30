@@ -57,7 +57,6 @@ public class PlayerBullet : Bullet
             EnemyHit = hitTheEnemy(PlayerBulletRB, PlayerBulletCollider);
             if (EnemyHit)
             {
-                Debug.Log("Enemy hit");
                 Enemy enemy = EnemyHit.collider.GetComponent<Enemy>();
                 if (enemy != null)
                 {
@@ -72,7 +71,6 @@ public class PlayerBullet : Bullet
         WallHit = hitTheWall(PlayerBulletRB, PlayerBulletCollider);
         if (WallHit)
         {
-            Debug.Log("Wall hit");
             hasHitWall = true;
             float deathTime = DeathTime(WallHit);
             if (rangeFinder.GetDistToTarget < 0.55f)
@@ -83,18 +81,5 @@ public class PlayerBullet : Bullet
                 { Destroy(gameObject, deathTime); }
         }
     }
-
-
-    /*
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        Debug.Log(IsKillable);
-        if (!IsKillable) return;
-
-        Enemy enemy = collider.GetComponent<Enemy>();
-        if ( (enemy != null) && (IsKillable) ) { enemy.TakeDamage(damage); Destroy(gameObject, deathTime); }
-    }
-
-    */
 
 }
