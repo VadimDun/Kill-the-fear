@@ -28,8 +28,9 @@ public class WarriorMovement : MonoBehaviour
     private float WarriorSpeed = 1f;
     [SerializeField]
     private Rigidbody2D Warrior;
-    [SerializeField]
+    
     private Camera cam;
+
     [SerializeField]
     private Transform WarriorAxis;
 
@@ -107,6 +108,8 @@ public class WarriorMovement : MonoBehaviour
 
         PistolDifference = DifAngle - StartPistolDir + (StartRifleDir - StartPistolDir)/2;
 
+        // Камера не будет уничтожаться при переходе на другую сцену
+        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
 

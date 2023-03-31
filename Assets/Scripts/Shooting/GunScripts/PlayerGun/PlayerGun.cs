@@ -35,20 +35,13 @@ public class PlayerGun : Gun
     private FirePoint firePoints;
 
     private Transform firePointTransform;
-
-
-
     public void PlayerShoot() => Shoot();
-
-    
 
 
     protected override void Shoot()
     {
         if ((Time.time - lastShotTime < delayBetweenShots) || (rangeFinder.GetDistToTarget <= MinFireDist) ) { return; }
         lastShotTime = Time.time;
-        
-        
 
         //ќбновл€ю позицию CurrentPoint 
         firePoints.UpdateCurrentPoint(ref firePointTransform);
