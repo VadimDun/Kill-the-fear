@@ -32,15 +32,27 @@ public class CanvasTransition : MonoBehaviour
         animator.Play("FadeOut");
     }
 
+    //После завершения эффекта затемнения (на 60-м кадре анимации вызывается этот метод)
     public void OnFadeComplite()
     {
         triggerScript = GameObject.FindGameObjectWithTag("ChangeSceneTrigger").GetComponent<TriggerScript>();
         SceneName = triggerScript.GetSceneName;
 
-        Debug.Log(SceneName);
-
         StartTransitionFade();
 
-        SceneManager.LoadScene(SceneName);
+        StartCoroutine(LoadSceneAsync());
+    }
+
+    // Загружаем сцену асинхронкой, метод ToHell гарантированно будет вызван в новой сцене
+    private IEnumerator LoadSceneAsync()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneName);
+
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        EnemyManager.instance.ToHell();
     }
 }
