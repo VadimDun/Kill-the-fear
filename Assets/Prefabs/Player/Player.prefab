@@ -54,6 +54,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6012711760293777067}
+  - component: {fileID: 5614941254540156989}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -75,8 +76,20 @@ Transform:
   m_Children:
   - {fileID: 6012711759975465564}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5614941254540156989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012711760293777064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3cee8a1a8467d64a93b4e0dbbc2feb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5222002678563523763
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -445,20 +458,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wm: {fileID: 6012711759975465563}
---- !u!114 &6012711759975465583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6012711759975465565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12c493925f1e8ae448608b7cab8916d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSounds: {fileID: 6012711759975465568}
-  bulletPrefab: {fileID: 2563289282412000716, guid: c5a96d8f67e60dc428f7f57f31f37f13, type: 3}
 --- !u!114 &6012711759975465568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,7 +474,7 @@ MonoBehaviour:
   RifleSound: {fileID: 8300000, guid: 2e17d8bd1a9ad4847bab55374d18982b, type: 3}
   ShotgunSound: {fileID: 8300000, guid: 92747abed79fa964cb3f311ed194193c, type: 3}
   none: {fileID: 8300000, guid: 79c276ac6dbe330459d9cc3f33eb9f15, type: 3}
---- !u!114 &6012711759975465612
+--- !u!114 &6012711759975465583
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -484,27 +483,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6012711759975465565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f23552409e3ca840b1cedc3418de124, type: 3}
+  m_Script: {fileID: 11500000, guid: 12c493925f1e8ae448608b7cab8916d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteWithPistol: {fileID: -1711302124, guid: 5188106e7ca39ed49afef63a73797422, type: 3}
-  spriteWithShotGun: {fileID: 21300000, guid: 6f821183d79d483419de5523138509db, type: 3}
-  spriteWithRiffle: {fileID: 21300000, guid: 1570f560c59b20e488bb09d6ca14f414, type: 3}
-  spriteNearWall: {fileID: 21300000, guid: 5294b4b4689fa6d43a30ce3776ca5156, type: 3}
---- !u!114 &6012711759975465610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6012711759975465565}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25c7f3babeb39e846a193578631e0f1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PistolPoint: {fileID: 6012711759278747167}
-  RiflePoint: {fileID: 6012711760487723608}
+  playerSounds: {fileID: 6012711759975465568}
+  bulletPrefab: {fileID: 2563289282412000716, guid: c5a96d8f67e60dc428f7f57f31f37f13, type: 3}
 --- !u!114 &6012711759975465605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,6 +515,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rf: {fileID: 6012711759975465605}
   lineRenderer: {fileID: 6012711759975465604}
+--- !u!114 &6012711759975465610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012711759975465565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25c7f3babeb39e846a193578631e0f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PistolPoint: {fileID: 6012711759278747167}
+  RiflePoint: {fileID: 6012711760487723608}
+--- !u!114 &6012711759975465612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012711759975465565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f23552409e3ca840b1cedc3418de124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteWithPistol: {fileID: -1711302124, guid: 5188106e7ca39ed49afef63a73797422, type: 3}
+  spriteWithShotGun: {fileID: 21300000, guid: 6f821183d79d483419de5523138509db, type: 3}
+  spriteWithRiffle: {fileID: 21300000, guid: 1570f560c59b20e488bb09d6ca14f414, type: 3}
+  spriteNearWall: {fileID: 21300000, guid: 5294b4b4689fa6d43a30ce3776ca5156, type: 3}
 --- !u!1 &6012711760487723608 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1948148484213702379, guid: e219f668b5775464695b3b50f4054a78, type: 3}

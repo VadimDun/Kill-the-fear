@@ -3,6 +3,7 @@ using UnityEngine;
 public class Visibility : MonoBehaviour
 {
     public Transform player;
+
     public bool isVisible = false;
     public SpriteRenderer spriteRenderer;
     CircleCollider2D circleCollider;
@@ -10,6 +11,8 @@ public class Visibility : MonoBehaviour
     void Awake()
     {
         circleCollider = GetComponent<CircleCollider2D>();
+
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>(); 
     }
 
     void FixedUpdate()
