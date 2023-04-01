@@ -56,7 +56,7 @@ public class EnemyGun : Gun
         {
             case Guns.shotgun:
                 Vector2 direction = transform.right;
-                float normalAngle = Mathf.Atan2(direction.y, direction.x) *  Mathf.Rad2Deg + (360f - correction.angleDifference);
+                float normalAngle = Mathf.Atan2(direction.y, direction.x) *  Mathf.Rad2Deg  + correction.angleDifference + 3f;
                 for (int i = -4; i < 4; ++i)
                 {
                     if (i != 0)
