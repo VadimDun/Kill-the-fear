@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Visibility : MonoBehaviour
 {
-    public Transform player;
+    private Transform player;
+
+    public Transform GetPlayerAxis => player;
 
     public bool isVisible = false;
     public SpriteRenderer spriteRenderer;
