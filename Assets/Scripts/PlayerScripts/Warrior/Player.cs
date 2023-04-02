@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameManagerScript gameManager;
+    private GameManagerScript gameManager;
 
     private int health = 100;
     public int playerHealth { get { return health; } set { health = value; } }
 
     private bool isDead;
+
+    private void Start()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
+    }
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -17,12 +22,6 @@ public class Player : MonoBehaviour
         {
             isDead = true;
             gameManager.gameOver();
-            Die();
         }
-    }
-
-    void Die()
-    {
-        Destroy(gameObject);
     }
 }

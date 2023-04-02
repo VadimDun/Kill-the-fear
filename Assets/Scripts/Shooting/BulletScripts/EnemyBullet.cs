@@ -39,7 +39,6 @@ public class EnemyBullet : Bullet
     void OnTriggerEnter2D(Collider2D collider)
     {
         Player player = collider.GetComponent<Player>();
-        if (player != null) { Destroy(gameObject, deathTime); }
-        player.TakeDamage(damage);
+        if (player != null) { Destroy(gameObject,  deathTime); player.TakeDamage(damage); }
     }
 }
