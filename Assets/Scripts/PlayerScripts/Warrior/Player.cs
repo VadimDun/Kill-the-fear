@@ -26,8 +26,8 @@ public class Player : MonoBehaviour
         health -= damage;
         if (health <= 0 && !isDead) 
         {
-            isDead = true;
-            gameManager.gameOver();
+            //isDead = true;
+            //gameManager.gameOver();
         }
     }
 
