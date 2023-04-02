@@ -57,4 +57,9 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    public void DestroyReaper()
+    {
+        Destroy(this.gameObject);
+    }
+
 }
