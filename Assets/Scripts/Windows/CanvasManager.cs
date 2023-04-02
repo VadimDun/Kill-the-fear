@@ -22,4 +22,9 @@ public class CanvasManager : MonoBehaviour
 
 
     }
+
+    public void DestroyCanvas()
+    {
+        Destroy(this.gameObject);
+    }
 }
