@@ -21,4 +21,9 @@ public class PauseManager : MonoBehaviour
 
 
     }
+
+    public void DestroyPause()
+    {
+        Destroy(this.gameObject);
+    }
 }

@@ -10,7 +10,7 @@ public class Visibility : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     CircleCollider2D circleCollider;
 
-    void Awake()
+    void Start()
     {
         circleCollider = GetComponent<CircleCollider2D>();
 

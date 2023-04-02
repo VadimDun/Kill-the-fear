@@ -24,4 +24,9 @@ public class CameraManager : MonoBehaviour
 
 
     }
+
+    public void DestroyCamera()
+    {
+        Destroy(this.gameObject);
+    }
 }

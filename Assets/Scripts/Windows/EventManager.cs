@@ -21,4 +21,9 @@ public class EventManager : MonoBehaviour
 
 
     }
+
+    public void DestroyEventSys()
+    {
+        Destroy(this.gameObject);
+    }
 }

@@ -24,4 +24,9 @@ public class PlayerManager : MonoBehaviour
         
 
     }
+
+    public void DestroyPlayer()
+    {
+        Destroy(this.gameObject);
+    }
 }
