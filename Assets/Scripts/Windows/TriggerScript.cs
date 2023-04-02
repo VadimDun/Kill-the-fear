@@ -18,12 +18,15 @@ public class TriggerScript : MonoBehaviour
     private void Start()
     {
         canvasTransition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+            canvasTransition.SceneName = this.sceneName;
+
             playerPosition = collision.transform.position;
 
             canvasTransition.StartTransitionFadein();

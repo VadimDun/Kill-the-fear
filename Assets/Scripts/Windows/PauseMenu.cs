@@ -22,6 +22,12 @@ public class PauseMenu : MonoBehaviour
     public void Home(int sceneID)
     {
         Time.timeScale = 1f;
+        PlayerManager.Instance.gameObject.SetActive(false);
+        CameraManager.Instance.gameObject.SetActive(false);
+        CanvasManager.Instance.gameObject.SetActive(false);
+        EnemyManager.Instance.gameObject.SetActive(false);
+        PauseManager.Instance.gameObject.SetActive(false);
+        EventManager.Instance.gameObject.SetActive(false);
         SceneManager.LoadScene(sceneID);
     }
 
