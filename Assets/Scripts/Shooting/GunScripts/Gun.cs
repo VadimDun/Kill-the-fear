@@ -24,8 +24,8 @@ public class Gun : MonoBehaviour
     protected float lastShotTime = Mathf.NegativeInfinity;
     protected int damage;
     protected float bulletSpeed;
-    protected float pelletsDeviation = 3;
-    protected float pelletsSpread = 1f;
+    protected float pelletsDeviation = 1;
+    protected float pelletsSpread = 0.5f;
 
     //Состояние курка
     private bool isTriggerPulled = false;
