@@ -10,18 +10,24 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         pauseMenu.SetActive(true);
+        CursorManager.Instance.SetMenuCursor();
         Time.timeScale = 0f;
     }
 
     public void Resume()
     {
         pauseMenu.SetActive(false);
+        CursorManager.Instance.SetScopeCursor();
         Time.timeScale = 1f;
     }
 
     public void Home(int sceneID)
     {
         Time.timeScale = 1f;
+        //”станавливаю курсор
+        CursorManager.Instance.SetMenuCursor();
+        
+        //”ничтожаю то что не уничтожаетс€ при переходе, в меню оно не нужно
         PlayerManager.Instance.DestroyPlayer();
         CameraManager.Instance.DestroyCamera();
         CanvasManager.Instance.DestroyCanvas();
