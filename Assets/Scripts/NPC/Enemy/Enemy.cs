@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        EnemyManager.instance.AddToDeadList(Id, SceneId);
+        EnemyManager.Instance.AddToDeadList(Id, SceneId);
         Destroy(gameObject);
     }
 }

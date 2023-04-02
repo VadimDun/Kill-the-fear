@@ -5,12 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class CanvasTransition : MonoBehaviour
 {
-    
+
     private Animator animator;
 
     private TriggerScript triggerScript;
 
-    private string SceneName;
+    private string sceneName;
+    public string SceneName
+    {
+        get { return sceneName; }
+        set { sceneName = value; }
+    }
 
     private void Start()
     {
@@ -35,9 +40,6 @@ public class CanvasTransition : MonoBehaviour
     //После завершения эффекта затемнения (на 60-м кадре анимации вызывается этот метод)
     public void OnFadeComplite()
     {
-        triggerScript = GameObject.FindGameObjectWithTag("ChangeSceneTrigger").GetComponent<TriggerScript>();
-        SceneName = triggerScript.GetSceneName;
-
         StartTransitionFade();
 
         StartCoroutine(LoadSceneAsync());
@@ -53,6 +55,6 @@ public class CanvasTransition : MonoBehaviour
             yield return null;
         }
 
-        EnemyManager.instance.ToHell();
+        EnemyManager.Instance.ToHell();
     }
 }
