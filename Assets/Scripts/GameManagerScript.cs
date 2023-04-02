@@ -17,8 +17,11 @@ public class GameManagerScript : MonoBehaviour
 
     public void Restart()
     {
+        Debug.Log("Restart input");
         gameOverUi.SetActive(false);
         player.transform.position = GameObject.Find("PlayerSpawnPoint").GetComponent<Transform>().position;
+        player.GetComponent<Player>().playerHealth = 100;
+        player.GetComponent<Player>().playerIsDead = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1f;
     }

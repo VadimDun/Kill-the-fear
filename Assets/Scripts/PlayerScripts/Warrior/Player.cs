@@ -11,6 +11,12 @@ public class Player : MonoBehaviour
 
     private bool isDead;
 
+    public bool playerIsDead
+    { 
+        get { return isDead; }
+        set { isDead = value; }
+    }
+
     private void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
@@ -24,4 +30,5 @@ public class Player : MonoBehaviour
             gameManager.gameOver();
         }
     }
+
 }
