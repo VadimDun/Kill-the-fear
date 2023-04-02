@@ -7,7 +7,9 @@ public class EnemyManager : MonoBehaviour
 {
     //Единственный объект на карте, который отслеживает и убивает убитых 
 
-    public static EnemyManager instance;
+    private static EnemyManager instance;
+
+    public static EnemyManager Instance => instance;
 
     public void Awake()
     {

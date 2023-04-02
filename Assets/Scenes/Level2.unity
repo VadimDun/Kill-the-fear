@@ -21477,6 +21477,7 @@ GameObject:
   - component: {fileID: 151667346}
   - component: {fileID: 151667345}
   - component: {fileID: 151667344}
+  - component: {fileID: 151667347}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -21533,6 +21534,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &151667347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151667343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e462bf9b1a5b4d46847f943de4f3422, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &176972011
 GameObject:
   m_ObjectHideFlags: 0
@@ -78683,6 +78696,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1830646705686204738, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1830646705686204738, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
       propertyPath: m_TargetDisplay
       value: 0
       objectReference: {fileID: 0}
@@ -78810,6 +78827,23 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1830646706481967076, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
   m_PrefabInstance: {fileID: 1864891972}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1864891974 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1830646705686204767, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+  m_PrefabInstance: {fileID: 1864891972}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1864891975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864891974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8202cd9cf942d68468e195b2631e2b17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1884795342
 PrefabInstance:
   m_ObjectHideFlags: 0

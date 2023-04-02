@@ -7,6 +7,8 @@ public class CanvasManager : MonoBehaviour
 
     private static CanvasManager instance;
 
+    public static CanvasManager Instance => instance;
+
     public void Awake()
     {
         if (instance == null)

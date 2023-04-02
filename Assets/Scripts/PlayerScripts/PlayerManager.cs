@@ -9,6 +9,8 @@ public class PlayerManager : MonoBehaviour
 
     private static PlayerManager instance;
 
+    public static PlayerManager Instance => instance;
+
     public void Awake()
     {
         if (instance == null)

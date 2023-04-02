@@ -55,6 +55,6 @@ public class CanvasTransition : MonoBehaviour
             yield return null;
         }
 
-        EnemyManager.instance.ToHell();
+        EnemyManager.Instance.ToHell();
     }
 }

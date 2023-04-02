@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class EventManager : MonoBehaviour
 {
-    // MainCamera - это единственный объект на сцене. Этот скрипт для нее
-    // Она не будет уничтожаться при переходе на другую сцену
+    private static EventManager instance;
 
-    private static CameraManager instance;
-
-    public static CameraManager Instance => instance;
+    public static EventManager Instance => instance;
 
     public void Awake()
     {
