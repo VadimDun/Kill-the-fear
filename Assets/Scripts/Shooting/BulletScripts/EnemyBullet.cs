@@ -40,6 +40,6 @@ public class EnemyBullet : Bullet
     {
         Player player = collider.GetComponent<Player>();
         if (player != null) { Destroy(gameObject, deathTime); }
-        //player.TakeDamage(damage); 
+        player.TakeDamage(damage);
     }
 }
