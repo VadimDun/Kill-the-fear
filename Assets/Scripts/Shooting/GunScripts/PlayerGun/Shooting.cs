@@ -54,7 +54,7 @@ public class Shooting : MonoBehaviour
         if (Input.GetButtonUp("Fire1")) { playerGun.PullTheTrigger(); }
 
 
-        if (playerGun.GetIsTriggered())
+        if (playerGun.TriggerIsPulled)
         {
             //Выстрел
             if ((playerGun.GetShootMode() == Gun.ShootMode.auto)) { playerGun.PlayerShoot(); }

@@ -22,7 +22,9 @@ public class GameManagerScript : MonoBehaviour
 
     private EnemyManager enemyReaper;
 
-    private GameObject levelChanger;
+    private CanvasTransition transition;
+
+    private Gun gun;
 
 
     public void gameOver()
@@ -33,12 +35,16 @@ public class GameManagerScript : MonoBehaviour
         playerShooting = player.GetComponent<Shooting>();
         pauseMenu = GetComponent<PauseMenu>();
         enemyReaper = GameObject.Find("EnemyReaper").GetComponent<EnemyManager>();
+        gun = player.GetComponent<PlayerGun>();
 
         // Выключаю передвижение, поворот
         player.GetComponent<WarriorMovement>().enabled = false;
 
         // Выключаю физику
         player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+
+        // Если во время окна смерти курок в зажатом положении - я его отключаю
+        gun.TriggerIsPulled = false;
 
         // Передаю состояние окна в скрипт игрока Shooting, чтобы игнорировать ввод у персонажа
         playerShooting.enabled = false;
@@ -71,7 +77,7 @@ public class GameManagerScript : MonoBehaviour
         SpawnPointPosition = GameObject.Find("PlayerSpawnPoint").GetComponent<Transform>().position;
 
         // Получаю скипт анимаций перехода
-        levelChanger = GameObject.Find("LevelChanger");
+        transition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
     }
 
 
@@ -80,10 +86,10 @@ public class GameManagerScript : MonoBehaviour
     {
 
         // Перезагружаю сцену
-        SceneManager.LoadSceneAsync(StartSceneIndex);
+        SceneManager.LoadScene(StartSceneIndex);
 
         //Включаю затемнение
-        levelChanger.SetActive(false);
+        transition.StartDeathTransition();
 
         gameOverUi.SetActive(false);
         player.transform.position = SpawnPointPosition;
@@ -119,7 +125,7 @@ public class GameManagerScript : MonoBehaviour
         enemyReaper.SetOfDeadEdit.Clear();
 
         // Выключаю затемнение
-        levelChanger.SetActive(true);
+        
 
     }
 
