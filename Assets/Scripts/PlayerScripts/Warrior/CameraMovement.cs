@@ -6,11 +6,16 @@ public class CameraMovement : MonoBehaviour
 {
     private GameObject player;
     private Camera cam;
+    private Shooting shooting;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         cam = GameObject.FindGameObjectWithTag("MainCamera")?.GetComponent<Camera>();
+
+        // В билде почему-то этот скрипт отключается в начале, поэтому я его включу
+        shooting = player.GetComponent<Shooting>();
+        shooting.enabled = true;
     }
     void FixedUpdate()
     {

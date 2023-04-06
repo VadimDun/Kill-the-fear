@@ -29,7 +29,11 @@ public class Gun : MonoBehaviour
 
     //Состояние курка
     private bool isTriggerPulled = false;
-    public bool GetIsTriggered() => isTriggerPulled;
+    public bool TriggerIsPulled
+    {
+        get { return isTriggerPulled; }
+        set { isTriggerPulled = value; }
+    }
 
     public void PullTheTrigger()
     {
