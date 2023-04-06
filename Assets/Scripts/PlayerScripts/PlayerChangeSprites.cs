@@ -5,9 +5,35 @@ using UnityEngine;
 public class PlayerChangeSprites : MonoBehaviour
 {
 
-    //спрайт на персе в данный момент
-    private SpriteRenderer current_sprite;
-//
+    private enum Sprites { withPistol, withShotGun, withRifle, none }
+
+    private Sprites CurrentSprite = Sprites.none;
+
+
+    //расстояние, на котором скин будет меняться на spriteNearWall
+    float DistForSpriteNearWall = 0.15f;
+    private RangeFinder rangeFinder;
+
+
+    private void Awake() 
+    {
+        rangeFinder = GetComponentInChildren<RangeFinder>();
+        current_sprite = GetComponent<SpriteRenderer>();
+    }
+
+    private void Update()
+    {
+
+
+        //спрайт меняется, когда подходишь к стене, и возвращается, когда отходишь
+        if (rangeFinder.GetDistToTarget <= DistForSpriteNearWall) 
+        {
+            current_sprite.sprite = spriteNearWall;
+        }
+        else {current_sprite.sprite = spriteBeforeWall; }
+
+    }
+
     //все спрайты
     [SerializeField]
     private Sprite spriteWithPistol;
@@ -19,53 +45,37 @@ public class PlayerChangeSprites : MonoBehaviour
     private Sprite spriteNearWall;
 
     //спрайт, используемый до момента приближения к стене
-    private Sprite spriteBeforeWall;
-    //расстояние, на котором скин будет меняться на spriteNearWall
-    float DistForSpriteNearWall = 0.15f;
-    private RangeFinder rangeFinder;
+    private Sprite spriteBeforeWall = null;
 
 
+    //спрайт на персе в данный момент
+    private SpriteRenderer current_sprite;
 
-    private void Start() 
-    {
-
-        current_sprite = GetComponent<SpriteRenderer>();
-        current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
-        rangeFinder = GetComponentInChildren<RangeFinder>();
-        
-    }
-
-    private void Update()
-    {
-        //спрайт меняется, когда подходишь к стене, и возвращается, когда отходишь
-        if (rangeFinder.GetDistToTarget <= DistForSpriteNearWall) 
+    public void changeSprite(int NumberOfGun)
+    { 
+        switch (NumberOfGun) 
         {
-            current_sprite.sprite = spriteNearWall;
-        }
-        else {current_sprite.sprite = spriteBeforeWall; }
+            case 1:
+                if (CurrentSprite != Sprites.withPistol)
+                {
+                    current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
+                }
+                break;
+            case 2:
+                if (CurrentSprite != Sprites.withRifle)
+                {
+                    current_sprite.sprite = spriteBeforeWall = spriteWithRiffle;
+                }
+                break;
+            case 3:
+                if (CurrentSprite != Sprites.withShotGun)
+                {
+                    current_sprite.sprite = spriteBeforeWall = spriteWithShotGun;
+                }
+                break;
 
-
-        //смена спрайта от нажатия кнопки(смены оружия)
-
-        if (Input.GetKey("1") && current_sprite.sprite != spriteWithPistol) 
-        { 
-            current_sprite.sprite = spriteBeforeWall = spriteWithPistol;
-
-
-        }
-
-        if (Input.GetKey("2") && current_sprite.sprite != spriteWithRiffle) 
-        { 
-            current_sprite.sprite = spriteBeforeWall = spriteWithRiffle;
-
-        }
-
-        if (Input.GetKey("3") && current_sprite.sprite != spriteWithShotGun)
-        {
-            current_sprite.sprite = spriteBeforeWall = spriteWithShotGun;
 
         }
-
     }
     
 

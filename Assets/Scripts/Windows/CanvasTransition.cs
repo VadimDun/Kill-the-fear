@@ -8,7 +8,6 @@ public class CanvasTransition : MonoBehaviour
 
     private Animator animator;
 
-    private TriggerScript triggerScript;
 
     private string sceneName;
     public string SceneName
@@ -35,6 +34,11 @@ public class CanvasTransition : MonoBehaviour
     public void StartTransitionFadeOut()
     {
         animator.Play("FadeOut");
+    }
+
+    public void StartDeathTransition()
+    {
+        animator.Play("DeathFade", -1 ,0f);
     }
 
     //После завершения эффекта затемнения (на 60-м кадре анимации вызывается этот метод)

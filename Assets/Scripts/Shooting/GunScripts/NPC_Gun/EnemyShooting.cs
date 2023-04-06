@@ -8,7 +8,6 @@ public class EnemyShooting : MonoBehaviour
     private EnemyMovement enemyMovement;
     Visibility visibility;
 
-
     void Start()
     {
         enemySound = GetComponent<EnemySound>();    
@@ -23,6 +22,7 @@ public class EnemyShooting : MonoBehaviour
     {
         if (visibility.isVisible)
         {
+
             Vector3 lookDirection = visibility.GetPlayerAxis.position - transform.position;
             transform.rotation = Quaternion.AngleAxis(Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg - enemyMovement.angleDifference - 2f, Vector3.forward);
             enemyGun.EnemyShoot();

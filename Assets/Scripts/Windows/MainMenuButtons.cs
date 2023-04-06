@@ -7,6 +7,7 @@ public class MainMenuButtons : MonoBehaviour
 {
     public void PlayButton()
     {
+        CursorManager.Instance.SetMenuCursor();
         SceneManager.LoadScene(1);
     }
 
