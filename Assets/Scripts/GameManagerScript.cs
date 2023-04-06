@@ -14,6 +14,8 @@ public class GameManagerScript : MonoBehaviour
 
     private Shooting playerShooting;
 
+    private PauseMenu pauseMenu;
+
 
     public void gameOver()
     {
@@ -21,7 +23,8 @@ public class GameManagerScript : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerParams = player.GetComponent<Player>();
         playerShooting = player.GetComponent<Shooting>();
-        
+        pauseMenu = GetComponent<PauseMenu>();
+
         // Выключаю передвижение, поворот
         player.GetComponent<WarriorMovement>().enabled = false;
 
@@ -31,6 +34,19 @@ public class GameManagerScript : MonoBehaviour
         // Передаю состояние окна в скрипт игрока Shooting, чтобы игнорировать ввод у персонажа
         playerShooting.enabled = false;
 
+        // Выключаю стрельбу всем террористам
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            EnemyShooting enemyShooting = enemy.GetComponentInChildren<EnemyShooting>();
+            if (enemyShooting != null)
+            {
+                enemyShooting.enabled = false;
+            }
+        }
+
+        // Отключаю ввод для паузы
+        pauseMenu.deathWindowIsActive = true;
 
     }
 
@@ -54,6 +70,19 @@ public class GameManagerScript : MonoBehaviour
         // Передаю состояние окна в скрипт игрока Shooting, чтобы больше не игнорировать ввод у персонажа
         playerShooting.enabled = true;
 
+        // Включаю стрельбу всем террористам
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            EnemyShooting enemyShooting = enemy.GetComponentInChildren<EnemyShooting>();
+            if (enemyShooting != null)
+            {
+                enemyShooting.enabled = true;
+            }
+        }
+
+        // Разрешаю ввод для паузы
+        pauseMenu.deathWindowIsActive = false;
 
         // Перезагружаю сцену
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

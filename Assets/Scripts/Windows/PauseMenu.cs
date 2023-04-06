@@ -7,6 +7,14 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
 
+    private bool DeathWindowIsActive = false;
+
+    public bool deathWindowIsActive
+    {
+        get { return DeathWindowIsActive; }
+        set { DeathWindowIsActive = value; }
+    }
+
     public void Pause()
     {
         pauseMenu.SetActive(true);
@@ -39,6 +47,11 @@ public class PauseMenu : MonoBehaviour
 
     private void Update()
     {
+        // Если персонаж умер - тогда окно паузы нельзя вызвать
+        if (DeathWindowIsActive)
+            return;
+
+        // Вызов паузы на клавишу escape
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Pause();

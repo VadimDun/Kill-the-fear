@@ -79495,6 +79495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverUi: {fileID: 837955205}
+  enemyPrefab: {fileID: 5023115184924220943, guid: 27fa1cb00b8fb4a4eaf0b9959bbd8bf6, type: 3}
 --- !u!1001 &1830646704628665712
 PrefabInstance:
   m_ObjectHideFlags: 0
