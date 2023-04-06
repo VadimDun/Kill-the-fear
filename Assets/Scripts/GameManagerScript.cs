@@ -16,6 +16,14 @@ public class GameManagerScript : MonoBehaviour
 
     private PauseMenu pauseMenu;
 
+    private int StartSceneIndex;
+
+    private Vector3 SpawnPointPosition;
+
+    private EnemyManager enemyReaper;
+
+    private GameObject levelChanger;
+
 
     public void gameOver()
     {
@@ -24,6 +32,7 @@ public class GameManagerScript : MonoBehaviour
         playerParams = player.GetComponent<Player>();
         playerShooting = player.GetComponent<Shooting>();
         pauseMenu = GetComponent<PauseMenu>();
+        enemyReaper = GameObject.Find("EnemyReaper").GetComponent<EnemyManager>();
 
         // Выключаю передвижение, поворот
         player.GetComponent<WarriorMovement>().enabled = false;
@@ -48,14 +57,36 @@ public class GameManagerScript : MonoBehaviour
         // Отключаю ввод для паузы
         pauseMenu.deathWindowIsActive = true;
 
+        Debug.Log($"Start index = {StartSceneIndex}");
+
+    }
+
+
+    private void Start()
+    {
+        // Получаю сцену, с которой мы изначально загрузились
+        StartSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        // Получаю позицию точки спавна игрока
+        SpawnPointPosition = GameObject.Find("PlayerSpawnPoint").GetComponent<Transform>().position;
+
+        // Получаю скипт анимаций перехода
+        levelChanger = GameObject.Find("LevelChanger");
     }
 
 
 
     public void Restart()
     {
+
+        // Перезагружаю сцену
+        SceneManager.LoadSceneAsync(StartSceneIndex);
+
+        //Включаю затемнение
+        levelChanger.SetActive(false);
+
         gameOverUi.SetActive(false);
-        player.transform.position = GameObject.Find("PlayerSpawnPoint").GetComponent<Transform>().position;
+        player.transform.position = SpawnPointPosition;
 
         //Возвращаю HP игрока в дефолтное состояния, на данный момент оно в минусе
         playerParams.playerHealth = playerParams.GetDefaultHP;
@@ -84,10 +115,13 @@ public class GameManagerScript : MonoBehaviour
         // Разрешаю ввод для паузы
         pauseMenu.deathWindowIsActive = false;
 
-        // Перезагружаю сцену
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+        // Отчищаю список убитых у жнеца
+        enemyReaper.SetOfDeadEdit.Clear();
 
+        // Выключаю затемнение
+        levelChanger.SetActive(true);
+
+    }
 
 
 

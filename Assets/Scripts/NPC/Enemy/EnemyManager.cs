@@ -27,6 +27,12 @@ public class EnemyManager : MonoBehaviour
 
     private HashSet<(int, int)> SetOfDead = new HashSet<(int, int)>();
 
+    public HashSet<(int, int)> SetOfDeadEdit
+    {
+        get { return SetOfDead; }
+        set { SetOfDead = value; }
+    }
+
 
     // Добавляем в мертвых
     public void AddToDeadList(int id, int sceneId)
@@ -48,7 +54,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    // For Debug
+    // Для дебага
     public void ShowMeTheDead()
     {
         foreach (var elem in SetOfDead)

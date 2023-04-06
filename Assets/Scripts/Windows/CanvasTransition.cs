@@ -8,7 +8,6 @@ public class CanvasTransition : MonoBehaviour
 
     private Animator animator;
 
-    private TriggerScript triggerScript;
 
     private string sceneName;
     public string SceneName

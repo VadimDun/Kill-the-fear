@@ -21750,6 +21750,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1436847617790489335, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+      propertyPath: gameOverUi
+      value: 
+      objectReference: {fileID: 1864891976}
     - target: {fileID: 1436847617814366837, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -21809,6 +21813,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+--- !u!114 &539451106 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1436847617790489335, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+  m_PrefabInstance: {fileID: 539451104}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f3571f02a3bf047a7e0c9f5d288bd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &616546417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21960,6 +21975,37 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!1 &1076404087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1076404088}
+  m_Layer: 0
+  m_Name: PlayerSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1076404088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076404087}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.601, y: -3.357, z: 2.2177153}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1151466263
 GameObject:
   m_ObjectHideFlags: 0
@@ -78603,6 +78649,22 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 643839022, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 539451106}
+    - target: {fileID: 643839022, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 868897741, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 539451106}
+    - target: {fileID: 868897741, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Home
+      objectReference: {fileID: 0}
     - target: {fileID: 1830646704744540654, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -78765,6 +78827,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8202cd9cf942d68468e195b2631e2b17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1864891976 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 837955205, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+  m_PrefabInstance: {fileID: 1864891972}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1884795342
 PrefabInstance:
   m_ObjectHideFlags: 0
