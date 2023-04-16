@@ -16,6 +16,8 @@ public class GameManagerScript : MonoBehaviour
 
     private PauseMenu pauseMenu;
 
+    private InventoryMenu inventoryMenu;
+
     private int StartSceneIndex;
 
     private Vector3 SpawnPointPosition;
@@ -29,25 +31,27 @@ public class GameManagerScript : MonoBehaviour
 
     public void gameOver()
     {
+        // Если игрок умер - закрываю окно паузы 
+        if (!pauseMenu.PauseWindowIsNotActive)
+        {
+            pauseMenu.Resume();
+        }
+
+
+        // Если игрок умер - закрываю окно инвентаря
+        if (!inventoryMenu.inventoryWindowIsNotActive)
+        {
+            inventoryMenu.InventoryClose();
+        }
+
+
+        //Устанавливаю курсор
+        CursorManager.Instance.SetMenuCursor();
+
         gameOverUi.SetActive(true);
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerParams = player.GetComponent<Player>();
-        playerShooting = player.GetComponent<Shooting>();
-        pauseMenu = GetComponent<PauseMenu>();
-        enemyReaper = GameObject.Find("EnemyReaper").GetComponent<EnemyManager>();
-        gun = player.GetComponent<PlayerGun>();
 
-        // Выключаю передвижение, поворот
-        player.GetComponent<WarriorMovement>().enabled = false;
-
-        // Выключаю физику
-        player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-
-        // Если во время окна смерти курок в зажатом положении - я его отключаю
-        gun.TriggerIsPulled = false;
-
-        // Передаю состояние окна в скрипт игрока Shooting, чтобы игнорировать ввод у персонажа
-        playerShooting.enabled = false;
+        // Замораживаю игрока
+        FreezePlayer();
 
         // Выключаю стрельбу всем террористам
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -63,8 +67,49 @@ public class GameManagerScript : MonoBehaviour
         // Отключаю ввод для паузы
         pauseMenu.deathWindowIsActive = true;
 
-        Debug.Log($"Start index = {StartSceneIndex}");
+        // Отключаю ввод для инвентаря
+        inventoryMenu.deathWindowIsActive = true;
 
+        
+
+    }
+
+
+    public void FreezePlayer()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerParams = player.GetComponent<Player>();
+        playerShooting = player.GetComponent<Shooting>();
+
+        pauseMenu = GetComponent<PauseMenu>();
+        inventoryMenu = GetComponent<InventoryMenu>();
+
+        enemyReaper = GameObject.Find("EnemyReaper").GetComponent<EnemyManager>();
+        gun = player.GetComponent<PlayerGun>();
+
+        // Выключаю передвижение, поворот
+        player.GetComponent<WarriorMovement>().enabled = false;
+
+        // Выключаю физику
+        player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+
+        // Если во время окна смерти (или чего другого) курок в зажатом положении - я его отключаю
+        gun.TriggerIsPulled = false;
+
+        // Передаю состояние окна в скрипт игрока Shooting, чтобы игнорировать ввод у персонажа
+        playerShooting.enabled = false;
+    }
+
+    public void UnfreezePlayer()
+    {
+        // Включаю передвижение, поворот
+        player.GetComponent<WarriorMovement>().enabled = true;
+
+        // Включаю физику
+        player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
+        // Передаю состояние окна в скрипт игрока Shooting, чтобы больше не игнорировать ввод у персонажа
+        playerShooting.enabled = true;
     }
 
 
@@ -85,6 +130,9 @@ public class GameManagerScript : MonoBehaviour
     public void Restart()
     {
 
+        //Устанавливаю курсор
+        CursorManager.Instance.SetScopeCursor();
+
         // Перезагружаю сцену
         SceneManager.LoadScene(StartSceneIndex);
 
@@ -92,20 +140,15 @@ public class GameManagerScript : MonoBehaviour
         transition.StartDeathTransition();
 
         gameOverUi.SetActive(false);
+
+        // Возвращаю игрока на стартовую позицию
         player.transform.position = SpawnPointPosition;
 
         //Возвращаю HP игрока в дефолтное состояния, на данный момент оно в минусе
         playerParams.playerHealth = playerParams.GetDefaultHP;
         playerParams.playerIsDead = false;
 
-        // Включаю передвижение, поворот
-        player.GetComponent<WarriorMovement>().enabled = true;
-
-        // Включаю физику
-        player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-
-        // Передаю состояние окна в скрипт игрока Shooting, чтобы больше не игнорировать ввод у персонажа
-        playerShooting.enabled = true;
+        UnfreezePlayer();
 
         // Включаю стрельбу всем террористам
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -121,10 +164,13 @@ public class GameManagerScript : MonoBehaviour
         // Разрешаю ввод для паузы
         pauseMenu.deathWindowIsActive = false;
 
+        // Разрешаю ввод для инвентаря
+        inventoryMenu.deathWindowIsActive = false;
+
         // Отчищаю список убитых у жнеца
         enemyReaper.SetOfDeadEdit.Clear();
 
-        // Выключаю затемнение
+        
         
 
     }

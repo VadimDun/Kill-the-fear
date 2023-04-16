@@ -6,15 +6,34 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
+    public GameObject GetPauseMenu => pauseMenu;
+
+    private InventoryMenu inventoryMenu;
+
+    private GameManagerScript gameManagerScript;
+
 
     private bool DeathWindowIsActive = false;
 
     private bool pauseWindowIsNotActive = true;
 
+    public bool PauseWindowIsNotActive => pauseWindowIsNotActive;
+
+
+
+
     public bool deathWindowIsActive
     {
         get { return DeathWindowIsActive; }
         set { DeathWindowIsActive = value; }
+    }
+
+    private bool InventoryWindowIsActive = false;
+
+    public bool inventoryWindowIsActive
+    {
+        get { return InventoryWindowIsActive; }
+        set { InventoryWindowIsActive = value; }
     }
 
     public void Pause()
@@ -24,7 +43,14 @@ public class PauseMenu : MonoBehaviour
             Resume();
         else
         {
+            // Замораживаю игрока
+            gameManagerScript.FreezePlayer();
+
             pauseMenu.SetActive(true);
+            
+            // Выключаю ввод инвентарю
+            inventoryMenu.pauseWindowIsActive = true;
+
             CursorManager.Instance.SetMenuCursor();
             Time.timeScale = 0f;
         }
@@ -32,8 +58,15 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        // Размораживаю игрока
+        gameManagerScript.UnfreezePlayer();
+
         pauseWindowIsNotActive = true;
         pauseMenu.SetActive(false);
+
+        // Включаю ввод инвентарю
+        inventoryMenu.pauseWindowIsActive = false;
+
         CursorManager.Instance.SetScopeCursor();
         Time.timeScale = 1f;
     }
@@ -54,10 +87,19 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(sceneID);
     }
 
+
+    private void Start()
+    {
+        inventoryMenu = GetComponent<InventoryMenu>();
+
+        gameManagerScript = GetComponent<GameManagerScript>();
+    }
+
+
     private void Update()
     {
         // Если персонаж умер - тогда окно паузы нельзя вызвать
-        if (DeathWindowIsActive)
+        if (DeathWindowIsActive || InventoryWindowIsActive)
             return;
 
         // Вызов паузы на клавишу escape
@@ -65,5 +107,8 @@ public class PauseMenu : MonoBehaviour
         {
             Pause();
         }
+
+        Debug.Log("Окно инвентаря открыто? = " + InventoryWindowIsActive);
+
     }
 }
