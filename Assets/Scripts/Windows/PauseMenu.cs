@@ -9,6 +9,8 @@ public class PauseMenu : MonoBehaviour
 
     private bool DeathWindowIsActive = false;
 
+    private bool pauseWindowIsNotActive = true;
+
     public bool deathWindowIsActive
     {
         get { return DeathWindowIsActive; }
@@ -17,13 +19,20 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-        pauseMenu.SetActive(true);
-        CursorManager.Instance.SetMenuCursor();
-        Time.timeScale = 0f;
+        pauseWindowIsNotActive = !pauseWindowIsNotActive;
+        if (pauseWindowIsNotActive)
+            Resume();
+        else
+        {
+            pauseMenu.SetActive(true);
+            CursorManager.Instance.SetMenuCursor();
+            Time.timeScale = 0f;
+        }
     }
 
     public void Resume()
     {
+        pauseWindowIsNotActive = true;
         pauseMenu.SetActive(false);
         CursorManager.Instance.SetScopeCursor();
         Time.timeScale = 1f;
