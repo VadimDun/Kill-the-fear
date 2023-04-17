@@ -42,6 +42,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
+        Debug.Log("Вызов паузы");
         pauseWindowIsNotActive = !pauseWindowIsNotActive;
         if (pauseWindowIsNotActive)
             Resume();
@@ -66,7 +67,6 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        Debug.Log("Вызов Resume()");
         pauseWindowIsNotActive = true;
 
         // Размораживаю игрока
@@ -117,9 +117,11 @@ public class PauseMenu : MonoBehaviour
         if (DeathWindowIsActive || InventoryWindowIsActive)
             return;
 
+        Debug.Log("Ввод для паузы включен");
         // Вызов паузы на клавишу escape
-        if (Input.GetKeyDown(KeyCode.Escape) && !InventoryWindowIsActive)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
+            Debug.Log("Вхождение Escape в паузу");
             Pause();
         }
         

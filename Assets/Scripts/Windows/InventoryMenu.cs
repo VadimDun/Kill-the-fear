@@ -47,7 +47,7 @@ public class InventoryMenu : MonoBehaviour
 
     public void Inventory()
     {
-
+        Debug.Log("Вызов инвентаря");
         InventoryWindowIsNotActive = !InventoryWindowIsNotActive;
         if (InventoryWindowIsNotActive)
         {
@@ -61,6 +61,7 @@ public class InventoryMenu : MonoBehaviour
 
             // Выключаю ввод паузе
             pauseMenu.inventoryWindowIsActive = true;
+            
 
             // Сохраняем текущую позицию курсора
             beforeOpeningPosition = Input.mousePosition;
@@ -78,13 +79,16 @@ public class InventoryMenu : MonoBehaviour
         inventoryWindow.SetActive(false);
 
         // Включаю ввод паузе
-        pauseMenu.inventoryWindowIsActive = false;
+        Invoke("ActivatePauseInput", 0.2f);
 
         Mouse.current.WarpCursorPosition(beforeOpeningPosition);
 
         InputState.Change(Mouse.current.position, beforeOpeningPosition);
 
     }
+
+    // Включает ввод для паузы
+    private void ActivatePauseInput() => pauseMenu.inventoryWindowIsActive = false;
 
     private void Update()
     {
