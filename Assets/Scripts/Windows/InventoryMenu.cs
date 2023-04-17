@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public class InventoryMenu : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class InventoryMenu : MonoBehaviour
     private GameManagerScript gameManagerScript;
 
     private PauseMenu pauseMenu;
+
+    private Vector3 beforeOpeningPosition;
 
     private bool InventoryWindowIsNotActive = true;
 
@@ -43,6 +47,7 @@ public class InventoryMenu : MonoBehaviour
 
     public void Inventory()
     {
+
         InventoryWindowIsNotActive = !InventoryWindowIsNotActive;
         if (InventoryWindowIsNotActive)
         {
@@ -56,6 +61,9 @@ public class InventoryMenu : MonoBehaviour
 
             // Выключаю ввод паузе
             pauseMenu.inventoryWindowIsActive = true;
+
+            // Сохраняем текущую позицию курсора
+            beforeOpeningPosition = Input.mousePosition;
         }
     }
 
@@ -63,12 +71,19 @@ public class InventoryMenu : MonoBehaviour
     {
         InventoryWindowIsNotActive = true;
 
+        Debug.Log("Я закрыл инвентарь на Escape");
+
         gameManagerScript.UnfreezePlayer();
         CursorManager.Instance.SetScopeCursor();
         inventoryWindow.SetActive(false);
 
         // Включаю ввод паузе
         pauseMenu.inventoryWindowIsActive = false;
+
+        Mouse.current.WarpCursorPosition(beforeOpeningPosition);
+
+        InputState.Change(Mouse.current.position, beforeOpeningPosition);
+
     }
 
     private void Update()
@@ -84,9 +99,10 @@ public class InventoryMenu : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !InventoryWindowIsNotActive)
         {
             InventoryClose();
         }
+
     }
 }

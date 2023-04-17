@@ -9,10 +9,21 @@ public class CursorManager : MonoBehaviour
     public static CursorManager Instance => instance;
 
     [SerializeField] private Texture2D menuCursorTexture;
+
+    public Texture2D GetMenuCursorTexture => menuCursorTexture;
+
     [SerializeField] private Texture2D scopeCursorTexture;
+
+    public Texture2D GetScopeCursorTexture => scopeCursorTexture;
+
     private Vector2 ScopeHotspot = new Vector2(13, 13);
+
+    public Vector2 GetScopeHotspot => ScopeHotspot;
+
     private Vector2 MenuHotspot = Vector2.zero;
     private CursorMode cursorMode = CursorMode.Auto;
+
+    
 
     public void Awake()
     {
@@ -39,4 +50,6 @@ public class CursorManager : MonoBehaviour
     {
         Cursor.SetCursor(scopeCursorTexture, ScopeHotspot, cursorMode);
     }
+
+
 }

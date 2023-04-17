@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
@@ -12,12 +14,14 @@ public class PauseMenu : MonoBehaviour
 
     private GameManagerScript gameManagerScript;
 
+    private Vector3 beforeOpeningPosition;
 
     private bool DeathWindowIsActive = false;
 
     private bool pauseWindowIsNotActive = true;
 
     public bool PauseWindowIsNotActive => pauseWindowIsNotActive;
+
 
 
 
@@ -45,29 +49,40 @@ public class PauseMenu : MonoBehaviour
         {
             // Замораживаю игрока
             gameManagerScript.FreezePlayer();
-
+            CursorManager.Instance.SetMenuCursor();
             pauseMenu.SetActive(true);
+
             
             // Выключаю ввод инвентарю
             inventoryMenu.pauseWindowIsActive = true;
 
-            CursorManager.Instance.SetMenuCursor();
+            // Сохраняем текущую позицию курсора
+            beforeOpeningPosition = Input.mousePosition;
+
             Time.timeScale = 0f;
+
         }
     }
 
     public void Resume()
     {
+        Debug.Log("Вызов Resume()");
+        pauseWindowIsNotActive = true;
+
         // Размораживаю игрока
         gameManagerScript.UnfreezePlayer();
-
-        pauseWindowIsNotActive = true;
+        CursorManager.Instance.SetScopeCursor();
         pauseMenu.SetActive(false);
 
         // Включаю ввод инвентарю
         inventoryMenu.pauseWindowIsActive = false;
 
-        CursorManager.Instance.SetScopeCursor();
+
+        // Устанавливаю курсор
+        Mouse.current.WarpCursorPosition(beforeOpeningPosition);
+
+        InputState.Change(Mouse.current.position, beforeOpeningPosition);
+
         Time.timeScale = 1f;
     }
 
@@ -103,12 +118,12 @@ public class PauseMenu : MonoBehaviour
             return;
 
         // Вызов паузы на клавишу escape
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !InventoryWindowIsActive)
         {
             Pause();
         }
+        
 
-        Debug.Log("Окно инвентаря открыто? = " + InventoryWindowIsActive);
 
     }
 }

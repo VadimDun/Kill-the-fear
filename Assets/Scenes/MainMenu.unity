@@ -478,6 +478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuCursorTexture: {fileID: 2800000, guid: 472171e4f3a72044596d592779ba0674, type: 3}
   scopeCursorTexture: {fileID: 2800000, guid: 028d82acbff36bf4991a5cf948b46551, type: 3}
+  cursorTransform: {fileID: 0}
 --- !u!4 &489540172
 Transform:
   m_ObjectHideFlags: 0
