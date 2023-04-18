@@ -5,7 +5,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 
 public class InventoryMenu : MonoBehaviour
+
 {
+    private Inventory inventory;
+
     [SerializeField] private GameObject inventoryWindow;
 
     public GameObject GetInventoryWindow => inventoryWindow;
@@ -43,11 +46,14 @@ public class InventoryMenu : MonoBehaviour
         gameManagerScript = GetComponent<GameManagerScript>();
 
         pauseMenu = GetComponent<PauseMenu>();
+
+        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
     }
 
     public void Inventory()
     {
-        Debug.Log("Вызов инвентаря");
+        
+        
         InventoryWindowIsNotActive = !InventoryWindowIsNotActive;
         if (InventoryWindowIsNotActive)
         {
@@ -65,6 +71,8 @@ public class InventoryMenu : MonoBehaviour
 
             // Сохраняем текущую позицию курсора
             beforeOpeningPosition = Input.mousePosition;
+
+            inventory.AddItem();
         }
     }
 
