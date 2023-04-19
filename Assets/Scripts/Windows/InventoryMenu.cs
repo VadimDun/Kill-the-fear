@@ -7,7 +7,6 @@ using UnityEngine.InputSystem.LowLevel;
 public class InventoryMenu : MonoBehaviour
 
 {
-    private Inventory inventory;
 
     [SerializeField] private GameObject inventoryWindow;
 
@@ -46,8 +45,6 @@ public class InventoryMenu : MonoBehaviour
         gameManagerScript = GetComponent<GameManagerScript>();
 
         pauseMenu = GetComponent<PauseMenu>();
-
-        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
     }
 
     public void Inventory()
@@ -71,8 +68,6 @@ public class InventoryMenu : MonoBehaviour
 
             // Сохраняем текущую позицию курсора
             beforeOpeningPosition = Input.mousePosition;
-
-            inventory.AddItem();
         }
     }
 
@@ -80,7 +75,6 @@ public class InventoryMenu : MonoBehaviour
     {
         InventoryWindowIsNotActive = true;
 
-        Debug.Log("Я закрыл инвентарь на Escape");
 
         gameManagerScript.UnfreezePlayer();
         CursorManager.Instance.SetScopeCursor();

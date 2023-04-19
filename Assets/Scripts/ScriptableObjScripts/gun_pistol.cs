@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Pistol", menuName = "ScriptableObject/Items/Pistol", order = 1)]
+[CreateAssetMenu(fileName = "Pistol", menuName = "ScriptableObject/Items/Guns/Pistol", order = 1)]
 public class gun_pistol : Item 
 {
     private Gun gunClass;
@@ -51,5 +51,6 @@ public class gun_pistol : Item
 
         bulletSpeed = 10f;
 
+        itemType = ItemType.gun;
     }
 }

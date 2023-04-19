@@ -42,7 +42,6 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-        Debug.Log("Вызов паузы");
         pauseWindowIsNotActive = !pauseWindowIsNotActive;
         if (pauseWindowIsNotActive)
             Resume();
@@ -117,11 +116,10 @@ public class PauseMenu : MonoBehaviour
         if (DeathWindowIsActive || InventoryWindowIsActive)
             return;
 
-        Debug.Log("Ввод для паузы включен");
+
         // Вызов паузы на клавишу escape
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Вхождение Escape в паузу");
             Pause();
         }
         

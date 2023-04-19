@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Shotgun", menuName = "ScriptableObject/Items/Shotgun", order = 3)]
+[CreateAssetMenu(fileName = "Shotgun", menuName = "ScriptableObject/Items/Guns/Shotgun", order = 3)]
 public class gun_shotgun : Item
 {
     private Gun gunClass;
@@ -19,7 +19,7 @@ public class gun_shotgun : Item
 
     private float lastShotTime = Mathf.NegativeInfinity;
 
-
+    private int Capasity = 8;
 
 
     public Gun.Guns GetGunType => gunType;
@@ -33,6 +33,8 @@ public class gun_shotgun : Item
     public float GetBulletSpeed => bulletSpeed;
 
     public float GetLastShotTime => lastShotTime;
+
+    public int GetCapasity => Capasity;
 
 
 
@@ -50,6 +52,8 @@ public class gun_shotgun : Item
         damage = 11;
 
         bulletSpeed = 10f;
+
+        itemType = ItemType.gun;
 
     }
 }

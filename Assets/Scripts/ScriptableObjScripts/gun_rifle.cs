@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Rifle", menuName = "ScriptableObject/Items/Rifle", order = 2)]
+[CreateAssetMenu(fileName = "Rifle", menuName = "ScriptableObject/Items/Guns/Rifle", order = 2)]
 public class gun_rifle : Item
 {
     private Gun gunClass;
@@ -34,6 +34,8 @@ public class gun_rifle : Item
 
     public float GetLastShotTime => lastShotTime;
 
+    
+
 
 
 
@@ -50,6 +52,8 @@ public class gun_rifle : Item
         damage = 18;
 
         bulletSpeed = 10f;
+
+        itemType = ItemType.gun;
 
     }
 
