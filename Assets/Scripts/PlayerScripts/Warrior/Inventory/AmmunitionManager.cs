@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+using static Gun;
 
 public class AmmunitionManager : MonoBehaviour
 {
@@ -30,29 +33,92 @@ public class AmmunitionManager : MonoBehaviour
     }
 
 
+    private bool SuccessGunAddition = false;
+
     private bool SuccessAdd = false;
-    public void PutElem(Item item)
+    public void PutItem(Item item)
     {
-        int count = 0;
+        
+
         foreach (AmmunitionGunSlot slot in am_gun_slots)
         {
             // Проверка на пустотку и на оружие 
-            slot.AddItem(item, out SuccessAdd);
+            if (item.itemType == ItemType.gun)
+                PutGunItem(item, slot, out SuccessGunAddition);
 
             
-            count++;
+            if (SuccessGunAddition)
+            {
+                // Возвращаю дефолтное состояние
+                SuccessGunAddition = false;
+
+                return;
+            }
+            
 
             // Если элемент добавился - завершаем перебор слотов, ставим дефолтное значение
             if (SuccessAdd)
-            { 
+            {
                 SuccessAdd = false;
-                
+
                 return;
 
             }
         }
     }
 
+    private void PutGunItem(Item item, AmmunitionGunSlot slot, out bool SuccessGunAddition)
+    {
+        SuccessGunAddition = false;
+
+        if (slot.SlotIsEmpty)
+        {
+            if (item.itemType == ItemType.gun)
+            {
+
+                // Добавление предмета прошло успешно
+                SuccessGunAddition = true;
+
+                // Теперь слот не пустой
+                slot.SlotIsEmpty = false;
+
+                // Получаю картинку в слоте, которая будет отображать оружие
+                Transform gunImageTransform = slot.transform.GetChild(1);
+
+
+
+                // Устанавливаю объект подобранного оружия
+                GameObject child = Instantiate(item.ScriptableGameObject, slot.transform);
+
+                // Уничтожаю оружие на земле
+                //Destroy(item);
+
+
+
+                // Помещаю переданное оружие в слот хранения
+                slot.GunInSlot = child.GetComponent<FloorItem>().getItem;
+
+                // Устанавливаю этот объект как child объект картинки, которая его отображает
+                child.transform.SetParent(gunImageTransform);
+
+                // Устанавливаю картинку в слот инвентаря
+                gunImageTransform.GetComponent<Image>().sprite = slot.GunInSlot.GetInventoryIcon;
+
+                gunImageTransform.GetComponent<Image>().enabled = true;
+
+            }
+            else
+            {
+                // Это не оружие, добавление прошло не успешно
+                SuccessGunAddition = false;
+            }
+        }
+        else
+        {
+            // Слот занят. Добавление прошло не успешно
+            SuccessGunAddition = false;
+        }
+    }
 
 
 }

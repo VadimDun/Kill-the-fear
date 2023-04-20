@@ -20,6 +20,8 @@ public class FloorItem : MonoBehaviour
 
         am = GameObject.Find("Main Camera").GetComponent<AmmunitionManager>();
 
+        
+
     }
 
 
@@ -51,10 +53,11 @@ public class FloorItem : MonoBehaviour
     
     private void Update()
     {
+
         
         if (Input.GetKeyDown(KeyCode.E) && OnPlayerTarget)
         {
-            am.PutElem(item);
+            am.PutItem(item);
         }
     }
 

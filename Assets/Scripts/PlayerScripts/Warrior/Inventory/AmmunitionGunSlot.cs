@@ -10,56 +10,71 @@ public class AmmunitionGunSlot : MonoBehaviour
 {
     private bool IsEmpty = true;
 
-    public bool GetEmptyInfo => IsEmpty;
-
-
-    public Item gun;
+    public bool SlotIsEmpty
+    { 
+        get { return IsEmpty; }
+        set { IsEmpty = value; }
+    }
 
     private GameObject child;
 
+    private Item gun;
+
+    public Item GunInSlot;
+
+
     
 
-
+    /*
     public void AddItem(Item item, out bool SuccessAddition)
     {
         if (IsEmpty)
         {
             if (item.itemType == ItemType.gun)
             {
+                // Помещаю переданное оружие в слот хранения
                 gun = item;
 
+                // Добавление предмета прошло успешно
                 SuccessAddition = true;
+
+                // Теперь слот не пустой
                 IsEmpty = false;
 
+                // Получаю картинку в слоте, которая будет отображать оружие
+                Transform gunImageTransform = transform.GetChild(1);
 
-                Transform gunImageTransform = transform.GetChild(0);
 
-
-
+                // Устанавливаю объект подобранного оружия
                 child = Instantiate(gun.ScriptableGameObject, transform);
 
-                //child = gun.ScriptableGameObject;
-
+                // Устанавливаю этот объект как child объект картинки, которая его отображает
                 child.transform.SetParent(gunImageTransform);
 
-                gunImageTransform.GetComponent<Image>().enabled = true;
+                // Устанавливаю картинку в слот инвентаря
+                SetImage(gunImageTransform);
 
-                gunImageTransform.GetComponent<Image>().sprite = gun.GetInventoryIcon;
-
-                /*
-                transform.GetChild(0).GetComponent<Image>().sprite = gun.GetInventoryIcon;
-
-                child.GetComponent<Image>().sprite = gun.GetInventoryIcon;
-                */
             }
             else
             {
+                // Это не оружие, добавление прошло не успешно
                 SuccessAddition = false;
             }
         }
         else
         {
+            // Слот занят. Добавление прошло не успешно
             SuccessAddition = false;
         }
     }
+
+
+    public void SetImage(Transform imageObject)
+    {
+        imageObject.GetComponent<Image>().sprite = gun.GetInventoryIcon;
+
+        imageObject.GetComponent<Image>().enabled = true;
+    }
+
+    */
 }
