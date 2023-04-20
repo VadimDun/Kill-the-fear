@@ -36,7 +36,7 @@ public class AmmunitionManager : MonoBehaviour
     private bool SuccessGunAddition = false;
 
     private bool SuccessAdd = false;
-    public void PutItem(Item item)
+    public void PutItem(Item item, GameObject gameObj)
     {
         
 
@@ -51,6 +51,11 @@ public class AmmunitionManager : MonoBehaviour
             {
                 // Возвращаю дефолтное состояние
                 SuccessGunAddition = false;
+
+                // Уничтожаю оружие на земле, если добавление прошло успешно 
+                Destroy(gameObj);
+
+                Debug.Log("Объект уничтожен");
 
                 return;
             }
@@ -76,9 +81,6 @@ public class AmmunitionManager : MonoBehaviour
             if (item.itemType == ItemType.gun)
             {
 
-                // Добавление предмета прошло успешно
-                SuccessGunAddition = true;
-
                 // Теперь слот не пустой
                 slot.SlotIsEmpty = false;
 
@@ -90,8 +92,6 @@ public class AmmunitionManager : MonoBehaviour
                 // Устанавливаю объект подобранного оружия
                 GameObject child = Instantiate(item.ScriptableGameObject, slot.transform);
 
-                // Уничтожаю оружие на земле
-                //Destroy(item);
 
 
 
@@ -105,6 +105,9 @@ public class AmmunitionManager : MonoBehaviour
                 gunImageTransform.GetComponent<Image>().sprite = slot.GunInSlot.GetInventoryIcon;
 
                 gunImageTransform.GetComponent<Image>().enabled = true;
+
+                // Добавление предмета прошло успешно
+                SuccessGunAddition = true;
 
             }
             else
