@@ -9,6 +9,7 @@ TagManager:
   - PlayerBullet
   - FirePoint2
   - FirePoint
+  - GunSlot
   layers:
   - Default
   - TransparentFX

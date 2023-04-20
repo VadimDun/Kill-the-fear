@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8525943616653135902}
   m_Layer: 5
   m_Name: GunImage
-  m_TagString: GunImage
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -221,7 +221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc2387af1752dc24eb2bc98454fccbbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gun: {fileID: 0}
+  GunInSlot: {fileID: 0}
 --- !u!1 &7485139559449356002
 GameObject:
   m_ObjectHideFlags: 0

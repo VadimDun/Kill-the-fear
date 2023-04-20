@@ -9,7 +9,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private Transform parentTransform;
 
-    private GameObject gunImage;
+    private GameObject gunSlot;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -36,22 +36,34 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         Vector2 newPosition = eventData.position - offset;
         (transform as RectTransform).anchoredPosition = newPosition;
 
-        gunImage = null;
+        gunSlot = null;
 
         // Пытаюсь получить объект картинки слота
-        if (eventData.pointerCurrentRaycast.gameObject.tag == "GunImage")
+        if (eventData.pointerCurrentRaycast.gameObject.tag == "GunSlot")
         {
-            gunImage = eventData.pointerCurrentRaycast.gameObject;
+            gunSlot = eventData.pointerCurrentRaycast.gameObject;
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
 
-        if (gunImage != null)
+        if (gunSlot != null)
         { 
-            // Передаю оружие в новый слот
+            /*
 
+            //Получаю оружие, которое передаю
+            GameObject gun = transform.GetChild(0).gameObject;
+
+            // Получаю слот, в который хочу передать оружие
+            AmmunitionGunSlot slot = gunSlot.GetComponent<AmmunitionGunSlot>();
+
+            bool SuccessAddition;
+
+            // Передаю оружие в новый слот
+            GameObject.Find("Main Camera").GetComponent<AmmunitionManager>().PutWeaponToSlot(gun, slot, out SuccessAddition);
+
+            */
         }
 
         // Устанавливаю в качестве родительского объекта тот, который был родительским до нажатия
