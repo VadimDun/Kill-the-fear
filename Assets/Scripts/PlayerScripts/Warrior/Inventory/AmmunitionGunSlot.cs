@@ -5,10 +5,11 @@ using UnityEngine;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
 using static Gun;
+using static UnityEditor.Progress;
 
 public class AmmunitionGunSlot : MonoBehaviour
 {
-    private bool IsEmpty = true;
+    public bool IsEmpty = true;
 
     public bool SlotIsEmpty
     {
@@ -17,16 +18,16 @@ public class AmmunitionGunSlot : MonoBehaviour
     }
 
     
-    private GameObject child;
+    public GameObject GunObject;
 
     public GameObject GunObj
     {
-        get { return child; }
-        set { child = value; }
+        get { return GunObject; }
+        set { GunObject = value; }
     }
 
 
-    private Item gun;
+    public Item gun;
 
     public Item GunInSlot
     {
@@ -38,10 +39,32 @@ public class AmmunitionGunSlot : MonoBehaviour
 
     public Vector3 SlotDefaultPosition => defaultPosition;
 
+
+
+
+
     private void Start()
     {
         // Получаю начальную позицию Gun Image
-        defaultPosition = transform.GetChild(1).transform.position;
+        defaultPosition = transform.GetChild(2).transform.position;
+    }
+
+    public void SetItem(Item item, GameObject gunObj)
+    { 
+        gun = item;
+
+        GunObject = gunObj;
+
+        IsEmpty = false;
+    }
+
+    public void ClearClot()
+    {
+        gun = null;
+
+        GunObject = null;
+
+        IsEmpty = true;
     }
 
 }

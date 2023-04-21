@@ -6,11 +6,11 @@ public class FloorItem : MonoBehaviour
 {
     [SerializeField] private Item item;
 
-    [SerializeField] private GameObject floorGameObject;
-
     public Item getItem => item;
 
-    public GameObject getFloorGameObject => floorGameObject;
+    [SerializeField] private GameObject itemObject;
+
+    public GameObject GetItemObject => itemObject;
 
 
     private bool OnPlayerTarget = false;
@@ -53,7 +53,6 @@ public class FloorItem : MonoBehaviour
 
 
 
-
     
     private void Update()
     {
@@ -61,7 +60,9 @@ public class FloorItem : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.E) && OnPlayerTarget)
         {
-            am.PutItem(item, floorGameObject);
+
+            am.PutItem(item, itemObject);
+                
         }
     }
 

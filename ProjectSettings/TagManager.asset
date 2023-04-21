@@ -10,6 +10,7 @@ TagManager:
   - FirePoint2
   - FirePoint
   - GunSlot
+  - Indicator
   layers:
   - Default
   - TransparentFX

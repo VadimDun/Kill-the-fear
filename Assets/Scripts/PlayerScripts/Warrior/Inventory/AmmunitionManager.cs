@@ -34,18 +34,18 @@ public class AmmunitionManager : MonoBehaviour
     }
 
 
-    private bool SuccessGunAddition = false;
 
-    private bool SuccessAdd = false;
-    public void PutItem(Item item, GameObject gameObj)
+
+
+    public void PutItem(Item item, GameObject itemObj)
     {
-        
+        bool SuccessGunAddition = false;
 
         foreach (AmmunitionGunSlot slot in am_gun_slots)
         {
-            // Проверка на пустотку и на оружие 
+            // Если передаваемый объект является оружием
             if (item.itemType == ItemType.gun)
-                PutGunItem(item, gameObj, slot, out SuccessGunAddition);
+                PutGunItem(item, itemObj, slot, out SuccessGunAddition);
 
             
             if (SuccessGunAddition)
@@ -53,27 +53,13 @@ public class AmmunitionManager : MonoBehaviour
                 // Возвращаю дефолтное состояние
                 SuccessGunAddition = false;
 
-                // Уничтожаю оружие на земле, если добавление прошло успешно 
-                Destroy(gameObj);
-
-                Debug.Log("Объект уничтожен");
-
                 return;
             }
             
-
-            // Если элемент добавился - завершаем перебор слотов, ставим дефолтное значение
-            if (SuccessAdd)
-            {
-                SuccessAdd = false;
-
-                return;
-
-            }
         }
     }
 
-    private void PutGunItem(Item item, GameObject gameObj, AmmunitionGunSlot slot, out bool SuccessGunAddition)
+    private void PutGunItem(Item item, GameObject TransmittedObject, AmmunitionGunSlot slot, out bool SuccessGunAddition)
     {
         SuccessGunAddition = false;
 
@@ -83,29 +69,60 @@ public class AmmunitionManager : MonoBehaviour
             {
 
                 // Получаю картинку в слоте, которая будет отображать оружие
-                Transform gunImageTransform = slot.transform.GetChild(1);
+                Transform gunImageTransform = slot.transform.GetChild(2);
 
 
-                // Устанавливаю объект подобранного оружия
-                GameObject child = Instantiate(gameObj, slot.transform);
 
 
-                // Помещаю переданное оружие в слот хранения
-                slot.GunInSlot = child.GetComponent<FloorItem>().getItem;
+                /*
+                 *  Устанавливаю объект представляющий вещь, которую я передаю
+                */
 
-                // Перемещаю объект оружия в слот хранения
-                slot.GunObj = child;
+
+
 
                 // Устанавливаю этот объект как child объект картинки, которая его отображает
-                child.transform.SetParent(gunImageTransform);
+                TransmittedObject.transform.SetParent(gunImageTransform);
 
-                // Устанавливаю картинку в слот инвентаря
-                gunImageTransform.GetComponent<Image>().sprite = slot.GunInSlot.GetInventoryIcon;
+
+                TransmittedObject.GetComponent<SpriteRenderer>().sprite = null;
+
+
+
+                /*
+                 *  Устанавливаю изображение оружия, которое передал в слот
+                */
+
+
+
+
+                // Устанавливаю картинку в оружия, которое передал в слот
+                gunImageTransform.GetComponent<Image>().sprite = item.GetInventoryIcon;
 
                 gunImageTransform.GetComponent<Image>().enabled = true;
 
-                // Теперь слот не пустой
-                slot.SlotIsEmpty = false;
+
+
+
+
+                /*
+                 * Настраиваю скрипт слота
+                */
+
+
+
+                // Передаю в слот предмет и представляющий его объект 
+                slot.SetItem(item, TransmittedObject);
+
+
+
+
+                /*
+                 * Успешное завершение передачи оружия в слот 
+                */ 
+
+
+
 
                 // Добавление предмета прошло успешно
                 SuccessGunAddition = true;
@@ -113,7 +130,7 @@ public class AmmunitionManager : MonoBehaviour
             }
             else
             {
-                // Это не оружие, добавление прошло не успешно
+                // Данный предмет не является оружием, поэтому его нельзя добавить в этот слот
                 SuccessGunAddition = false;
             }
         }
@@ -125,13 +142,15 @@ public class AmmunitionManager : MonoBehaviour
     }
 
 
-    //                         что передаём,     куда передаём,         выходной результат    
-    public void PutWeaponToSlot(GameObject gun, AmmunitionGunSlot slot, out bool GunIsAdded)
+    //          предмет, который передаем,         куда передаём,          выходной результат    
+    public void PutWeaponToSlot(Item item, GameObject TransmittedObject, AmmunitionGunSlot slot, out bool GunIsAdded)
     { 
         GunIsAdded = false;
 
-        if (gun.GetComponent<FloorItem>().getItem.itemType != ItemType.gun)
+        
+        if (item.itemType != ItemType.gun)
         {
+            // Предмет не является оружием, добавление прошло не успешно 
             GunIsAdded = false;
         }
         else 
@@ -139,61 +158,93 @@ public class AmmunitionManager : MonoBehaviour
             if (slot.SlotIsEmpty)
             {
 
+                // Получаю Transform картинки, в которую хочу передать предмет
+                Transform InputImageTransform = slot.transform.GetChild(2);
 
-                // Получаю картинку в слоте, которая будет отображать оружие
-                Transform gunImageTransform = slot.transform.GetChild(1);
-
-                // Устанавливаю объект передаваемого в слот оружия
-                GameObject child = Instantiate(gun, slot.transform);
-
-                // Помещаю переданное оружие в слот хранения
-                slot.GunInSlot = child.GetComponent<FloorItem>().getItem;
-
-                // Перемещаю объект оружия в слот хранения
-                slot.GunObj = child;
-
-                // Устанавливаю этот объект как child объект картинки, которая его отображает
-                child.transform.SetParent(gunImageTransform);
-
-                // Устанавливаю картинку в слот инвентаря
-                gunImageTransform.GetComponent<Image>().sprite = slot.GunInSlot.GetInventoryIcon;
-
-                gunImageTransform.GetComponent<Image>().enabled = true;
-
-                // Теперь слот не пустой
-                slot.SlotIsEmpty = false;
-
-
-
-
+                // Получаю Transform картинки, текущей картинки передаваемого предмета
+                Transform currentImageTransform = TransmittedObject.transform.parent;
 
                 
-                // Получаю Transform картинки оружия, которое передавал в слот
-                Transform currentGunImage = gun.transform.parent;
 
-                //Получаю слот передаваемого оружия
-                AmmunitionGunSlot currentSlot = currentGunImage.parent.GetComponent<AmmunitionGunSlot>();
 
-                // Устанавливаю картинку на исходное положение
-                currentGunImage.position = currentSlot.SlotDefaultPosition;
-                
-                // Убираю картинку у спрайта 
-                currentGunImage.GetComponent<Image>().sprite = null;
 
-                // Делаю её неактивной
-                currentGunImage.GetComponent<Image>().enabled = false;
 
-                //Уничтожаю передаваемый объект
-                Destroy(gun);
+                /*
+                 * Получаю и устанавливаю объект, который отображает передаваемый предмет 
+                */
 
-                // Теперь слот пустой
-                currentSlot.SlotIsEmpty = true;
 
-                // Слот не содержит в себе какой-либо объект 
-                currentSlot.GunObj = null;
 
-                // Слот не содержит ScriptableObject
-                currentSlot.GunInSlot = null;
+
+                // Устанавливаю передаваемый объект на картинку слота, в который мы передаём (как child объект)
+                TransmittedObject.transform.SetParent(InputImageTransform);
+
+
+
+
+
+                /*
+                 * Устанавливаю изображение в слот, в который передали и включаю её
+                */
+
+
+
+                InputImageTransform.GetComponent<Image>().sprite = item.GetInventoryIcon;
+
+                InputImageTransform.GetComponent<Image>().enabled = true;
+
+
+
+
+                /*
+                 * Настраиваю скрипт слота, в который передали 
+                */
+
+
+
+                // Передаю в слот предмет и представляющий его объект
+                slot.SetItem(item, TransmittedObject);
+
+
+
+
+
+
+
+
+
+                /*
+                 * Настраиваю скрипт слота, из которого передавали предмет 
+                */
+
+
+                // Очищаю слот 
+                currentImageTransform.parent.gameObject.GetComponent<AmmunitionGunSlot>().ClearClot();
+
+
+
+                /*
+                 * Настраиваю картинку слота, из которой передавали предмет  
+                */
+
+
+                // Удаляю изображение предмета, который передавали
+                currentImageTransform.GetComponent<Image>().sprite = null;
+
+                // Возвращаю картинку дефолтное на место
+                currentImageTransform.position = currentImageTransform.parent.gameObject.GetComponent<AmmunitionGunSlot>().SlotDefaultPosition;
+
+                // Делаю ее неактивной
+                currentImageTransform.GetComponent<Image>().enabled = false;
+
+
+
+
+
+
+                /*
+                 * Успешная передача предмета
+                */
 
 
 
@@ -203,43 +254,22 @@ public class AmmunitionManager : MonoBehaviour
             }
             else
             {
-                // Получаю картинку в слоте, которая будет отображать оружие
-                Transform gunImageTransform = slot.transform.GetChild(1);
-
-                // Получаю Transform картинки оружия, которое передавал в слот
-                Transform currentGunImage = gun.transform.parent;
-
-                // Сохряняю дочерний объект картинки
-                GameObject InternalObject = Instantiate(gunImageTransform.GetChild(0).gameObject, currentGunImage);
-
-                // Уничтожаю дочерний объект картинки
-                Destroy(gunImageTransform.GetChild(0).gameObject);
 
 
 
 
-                // Устанавливаю объект передаваемого в слот оружия
-                GameObject child = Instantiate(gun, slot.transform);
 
-                // Уничтожаю исходный объект, клон которого я передал
-                Destroy(gun);
+                // Получаю Transform картинки, в которую хочу передать предмет
+                Transform InputImageTransform = slot.transform.GetChild(2);
 
-                // Помещаю переданное оружие в слот хранения
-                slot.GunInSlot = child.GetComponent<FloorItem>().getItem;
+                // Получаю Transform картинки, текущей картинки передаваемого предмета
+                Transform currentImageTransform = TransmittedObject.transform.parent;
 
-                // Перемещаю объект оружия в слот хранения
-                slot.GunObj = child;
+                // Получаю слот исходной картинки
+                AmmunitionGunSlot currentSlot = currentImageTransform.parent.GetComponent<AmmunitionGunSlot>();
 
-                // Устанавливаю этот объект как child объект картинки, которая его отображает
-                child.transform.SetParent(gunImageTransform);
-
-                // Устанавливаю картинку в слот инвентаря
-                gunImageTransform.GetComponent<Image>().sprite = slot.GunInSlot.GetInventoryIcon;
-
-                gunImageTransform.GetComponent<Image>().enabled = true;
-
-                // Теперь слот не пустой
-                slot.SlotIsEmpty = false;
+                // Получаю слот входной картинки 
+                AmmunitionGunSlot inputSlot = InputImageTransform.parent.GetComponent<AmmunitionGunSlot>();
 
 
 
@@ -247,29 +277,86 @@ public class AmmunitionManager : MonoBehaviour
 
 
 
-                // Получаю ScriptableObject объекта
-                Item InternalItem = InternalObject.GetComponent<FloorItem>().getItem;
-
-                //Получаю слот передаваемого оружия
-                AmmunitionGunSlot currentSlot = currentGunImage.parent.GetComponent<AmmunitionGunSlot>();
+                /*
+                 * Меняю местами объекты 
+                */
 
 
 
-                // Устанавливаю картинку на исходное положение
-                currentGunImage.position = currentSlot.SlotDefaultPosition;
 
-                // Ставлю картинку оружия, которое находится в слоте
-                currentGunImage.GetComponent<Image>().sprite = InternalItem.GetInventoryIcon;
 
-                // Устанавливаю ScriptableObject в слот
-                currentSlot.GunInSlot = InternalItem;
+                //Получаю объект предмета, который находится во входном слоте
+                GameObject InternalObject = InputImageTransform.GetChild(0).gameObject;
 
-                // Устанавливаю объект оружия в слот
-                currentSlot.GunObj = InternalObject;
+                InternalObject.transform.SetParent(currentImageTransform);
 
-                // Слот не пустой
-                currentSlot.SlotIsEmpty = false;
+                TransmittedObject.transform.SetParent(InputImageTransform);
 
+
+
+
+
+
+                /*
+                 * Меняю местами картинки  
+                */
+
+
+
+
+
+
+                // Изменяю исходную картинку 
+                currentImageTransform.GetComponent<Image>().sprite = currentImageTransform.GetChild(0).GetComponent<FloorItem>().getItem.GetInventoryIcon;
+
+                // Изменяю входную картинку
+                InputImageTransform.GetComponent<Image>().sprite = InputImageTransform.GetChild(0).GetComponent<FloorItem>().getItem.GetInventoryIcon;
+
+                // Возвращаю исходную картинку на место
+                currentImageTransform.position = currentSlot.SlotDefaultPosition;
+
+
+
+
+
+
+                /*
+                 * Настраиваю скрипты слотов, в который передали 
+                */
+
+
+
+
+
+
+                // Получаю объект, который сейчас находится в CurrentSlot
+                GameObject gm_current = currentImageTransform.GetChild(0).transform.gameObject;
+
+                // Получаю предмет, который сейчас находится в CurrentSlot
+                Item item_current = gm_current.GetComponent<FloorItem>().getItem;
+
+                // Устанавливаю их в новый слот
+                currentSlot.SetItem(item_current, gm_current);
+
+
+
+                // Получаю объект, который сейчас находится в InputSlot
+                GameObject gm_input = InputImageTransform.GetChild(0).transform.gameObject;
+
+                // Получаю предмет, который сейчас находится в CurrentSlot
+                Item item_input = gm_input.GetComponent<FloorItem>().getItem;
+
+                // Устанавливаю их в новый слот 
+                inputSlot.SetItem(item_input, gm_input); 
+
+
+
+
+
+
+                /*
+                 * Успешная передача предмета
+                */
 
 
                 // Замена предмета прошла успешно
