@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static Gun;
-using static UnityEditor.Progress;
+
 
 public class AmmunitionManager : MonoBehaviour
 {

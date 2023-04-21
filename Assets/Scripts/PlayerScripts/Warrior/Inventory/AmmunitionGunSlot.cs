@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
 using static Gun;
-using static UnityEditor.Progress;
+
 
 public class AmmunitionGunSlot : MonoBehaviour
 {
