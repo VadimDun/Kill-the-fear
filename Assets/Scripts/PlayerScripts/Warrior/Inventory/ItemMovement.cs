@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
     private Vector2 offset; // смещение между позицией картинки и позицией мыши
 
@@ -12,17 +13,57 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private GameObject gunSlot;
 
+    private bool in_inventory_range = true;
+
     private bool flag_on_start = true;
+
+    private bool is_dragging = false;
+
+    private PointerEventData ItemEventData;
+
+    [SerializeField] private Transform inventoryTransform;
+
+    [SerializeField] private GameObject[] GunSlotIndicators = new GameObject[3];
+
+    private GameObject[] gunSlots = new GameObject[3];
+
+    private GameObject Camera_main;
+
+
+
+
+    private void Start()
+    {
+        // Получаю оружейные слоты инвентаря на старте
+        for (int i = 0; i < gunSlots.Count(); i++)
+        {
+            gunSlots[i] = GameObject.Find($"GunSlot({i + 1})");
+        }
+
+        // Получаю объект камеры на старте
+        Camera_main = GameObject.Find("Main Camera");
+
+    }
+
+
+
+
+
+
+
+
 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
 
+        ItemEventData = eventData;
+
         // Запоминаю Transform родительского объекта
         parentTransform = transform.parent;
 
         // Устанавливаю родительский объект в качестве инвентаря
-        transform.SetParent(GameObject.Find("Inventory").transform);
+        transform.SetParent(inventoryTransform);
 
         // Рассчитываю смещение между позицией картинки и позицией мыши
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -37,7 +78,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         // Ставлю индикаторы на передний план
 
-        foreach (GameObject indicator in GameObject.FindGameObjectsWithTag("Indicator"))
+        foreach (GameObject indicator in GunSlotIndicators)
         {
 
             if (indicator != null)
@@ -53,14 +94,18 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                     }
 
                     // Устанавливаем родителя в качестве инвентаря, чтобы поместить индикатор на передний план
-                    indicator.transform.SetParent(GameObject.Find("Inventory").transform);
+                    indicator.transform.SetParent(inventoryTransform);
                 }
 
             }
 
 
+            is_dragging = true;
+
+
         }
     }
+
 
 
 
@@ -73,24 +118,63 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     public void OnDrag(PointerEventData eventData)
     {
 
-
-
-        // Обновляю позицию картинки на Canvas
-        Vector2 newPosition = eventData.position - offset;
-        (transform as RectTransform).anchoredPosition = newPosition;
+        RaycastResult cursorEvent = eventData.pointerCurrentRaycast;
 
         gunSlot = null;
 
-
-        // Пытаюсь получить объект картинки слота
-        if (eventData.pointerCurrentRaycast.gameObject.tag == "Indicator")
+        if (cursorEvent.gameObject != null)
         {
-            Indicator ind = eventData.pointerCurrentRaycast.gameObject.GetComponent<Indicator>();
-            if (ind != null)
+            // Если курсор мышки на индикаторе,то получаем слот этого индикатора 
+            if (cursorEvent.gameObject.name == "GunSlotIndicator")
             {
-                gunSlot = ind.GetIndicatorParent;
-            }
+                Indicator ind = cursorEvent.gameObject.GetComponent<Indicator>();
+                if (ind != null)
+                {
+                    gunSlot = ind.GetIndicatorParent;
+                }
 
+            }
+        }
+
+        
+
+        Debug.Log("Предмет внутри инвентаря? = " + in_inventory_range);
+
+
+    }
+
+
+    
+    private void LateUpdate()
+    {
+        if (is_dragging)
+        {
+            // Обновляю позицию картинки на Canvas
+            
+            
+            Vector2 newPosition = ItemEventData.position - offset;
+            (transform as RectTransform).anchoredPosition = newPosition;
+
+
+
+        }
+    }
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        
+        if (eventData.pointerPressRaycast.gameObject != null)
+        {
+            if (eventData.pointerPressRaycast.gameObject.name == "InventoryRoot")
+            {
+                in_inventory_range = true;
+            }
+            else if (eventData.pointerPressRaycast.gameObject.name == "InventoryBackground")
+            {
+                in_inventory_range = false;
+
+            }
         }
     }
 
@@ -103,27 +187,38 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
+
+
     public void OnEndDrag(PointerEventData eventData)
     {
-        GameObject[] indicators = GameObject.FindGameObjectsWithTag("Indicator").ToArray();
+        is_dragging = false;
 
-        for (int i = 0; i < indicators.Count(); i++)
+
+
+
+        /*
+         *  Устанавливаю индикаторы на обратно 
+        */
+
+
+
+        for (int i = 0; i < GunSlotIndicators.Count(); i++)
         {
 
-            Indicator ind = indicators[i].GetComponent<Indicator>();
+            Indicator ind = GunSlotIndicators[i].GetComponent<Indicator>();
 
             if (ind != null)
             {
-                if (indicators[i] != null)
+                if (GunSlotIndicators[i] != null)
                 {
                     // Устанавливаю родителя
-                    indicators[i].transform.SetParent(GameObject.Find($"GunSlot({i + 1})").transform);
-                    
+                    GunSlotIndicators[i].transform.SetParent(gunSlots[i].transform);
+
                     // Устанавливаю индикатор на нужный мне индекс 
-                    indicators[i].transform.SetSiblingIndex(1);
+                    GunSlotIndicators[i].transform.SetSiblingIndex(1);
 
                     // Получаю родителя
-                    GameObject ind_parent = indicators[i].transform.parent.gameObject;
+                    GameObject ind_parent = GunSlotIndicators[i].transform.parent.gameObject;
 
 
                     // Запоминаю родителя
@@ -131,7 +226,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
                     // Устанавливаю индикатор на позицию родительского слота
-                    indicators[i].transform.position = ind_parent.GetComponent<AmmunitionGunSlot>().SlotDefaultPosition;
+                    GunSlotIndicators[i].transform.position = ind_parent.GetComponent<AmmunitionGunSlot>().SlotDefaultPosition;
 
                     // Последующие разы в начале не будем запоминать родительский объект за ненадобностью
                     flag_on_start = false;
@@ -141,8 +236,19 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         }
 
+        
+        
+        
         // Устанавливаю в качестве родительского объекта тот, который был родительским до нажатия (для объекта, который перетаскиваем)
         transform.SetParent(parentTransform);
+
+
+
+        /*
+         *  Если обнаружен индикатор слота с оружием 
+        */
+
+
 
         if (gunSlot != null)
         {
@@ -159,7 +265,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             bool SuccessAddition;
 
             // Передаю оружие в новый слот
-            GameObject.Find("Main Camera").GetComponent<AmmunitionManager>().PutWeaponToSlot(item, gun, slot, out SuccessAddition);
+            Camera_main.GetComponent<AmmunitionManager>().PutWeaponToSlot(item, gun, slot, out SuccessAddition);
 
             if (!SuccessAddition)
             { 
@@ -167,6 +273,24 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             }
 
             
+        }
+
+
+
+        /*
+         *  Если индикаторов не обнаруженно, и курсор находиться в пределах инвентаря 
+        */
+
+
+        if (in_inventory_range == true)
+        {
+            // Устанавливаю картинку на исходную позицию
+            transform.position = transform.parent.GetComponent<AmmunitionGunSlot>().SlotDefaultPosition;
+            Debug.Log("Картинка вернулась на исходную позицию");
+        }
+        else
+        { 
+        
         }
 
 

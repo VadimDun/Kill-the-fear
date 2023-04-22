@@ -1647,7 +1647,7 @@ GameObject:
   - component: {fileID: 1968688753}
   - component: {fileID: 1968688752}
   m_Layer: 5
-  m_Name: InventotyBackground
+  m_Name: InventoryBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3701,6 +3701,22 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 1887668012}
     m_Modifications:
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: inventoryTransform
+      value: 
+      objectReference: {fileID: 1958406446}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[0]
+      value: 
+      objectReference: {fileID: 9151605452121995887}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[1]
+      value: 
+      objectReference: {fileID: 5471139380957063802}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[2]
+      value: 
+      objectReference: {fileID: 7508619675582593889}
     - target: {fileID: 7485139557972284841, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
       propertyPath: m_Name
       value: GunSlot(3)
@@ -3845,6 +3861,11 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &5471139380957063802 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1792861936407888885, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+  m_PrefabInstance: {fileID: 5984406671469963663}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6289487865359154052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4381,6 +4402,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.06674194
       objectReference: {fileID: 0}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: inventoryTransform
+      value: 
+      objectReference: {fileID: 1958406446}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[0]
+      value: 
+      objectReference: {fileID: 9151605452121995887}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[1]
+      value: 
+      objectReference: {fileID: 5471139380957063802}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[2]
+      value: 
+      objectReference: {fileID: 7508619675582593889}
     - target: {fileID: 7485139557972284841, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
       propertyPath: m_Name
       value: GunSlot(2)
@@ -4519,6 +4556,11 @@ MonoBehaviour:
 --- !u!224 &1602399284 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7485139557972284846, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+  m_PrefabInstance: {fileID: 7485139558534429082}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9151605452121995887 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1792861936407888885, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
   m_PrefabInstance: {fileID: 7485139558534429082}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7691181596294989492
@@ -4841,6 +4883,22 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 1887668012}
     m_Modifications:
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: inventoryTransform
+      value: 
+      objectReference: {fileID: 1958406446}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[0]
+      value: 
+      objectReference: {fileID: 9151605452121995887}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[1]
+      value: 
+      objectReference: {fileID: 5471139380957063802}
+    - target: {fileID: 3504154977644815245, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+      propertyPath: GunSlotIndicators.Array.data[2]
+      value: 
+      objectReference: {fileID: 7508619675582593889}
     - target: {fileID: 7485139557972284841, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
       propertyPath: m_Name
       value: GunSlot(1)
@@ -4939,5 +4997,10 @@ PrefabInstance:
 --- !u!224 &1671663925400907066 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7485139557972284846, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
+  m_PrefabInstance: {fileID: 8129700734170216596}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7508619675582593889 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1792861936407888885, guid: f7f81c976725b514e85e1fbbf2150161, type: 3}
   m_PrefabInstance: {fileID: 8129700734170216596}
   m_PrefabAsset: {fileID: 0}
