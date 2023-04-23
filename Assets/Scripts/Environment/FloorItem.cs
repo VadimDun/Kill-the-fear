@@ -15,14 +15,14 @@ public class FloorItem : MonoBehaviour
 
     private bool OnPlayerTarget = false;
 
-    private AmmunitionManager am;
+    private InventoryManager am;
 
 
     private void Start()
     {
         GetComponent<SpriteRenderer>().sprite = item.GetFloorIcon;
 
-        am = GameObject.Find("Main Camera").GetComponent<AmmunitionManager>();
+        am = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
 
         
 

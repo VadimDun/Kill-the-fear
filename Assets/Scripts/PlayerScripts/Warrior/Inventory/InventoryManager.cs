@@ -6,12 +6,15 @@ using UnityEngine.UI;
 using static Gun;
 
 
-public class AmmunitionManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour
 {
 
     private List<AmmunitionGunSlot> am_gun_slots = new List<AmmunitionGunSlot>();
 
     private RectTransform am_UI;
+
+
+
 
 
 
@@ -32,6 +35,10 @@ public class AmmunitionManager : MonoBehaviour
         GameObject.Find("Inventory").SetActive(false);
 
     }
+
+
+
+
 
 
 
@@ -58,6 +65,14 @@ public class AmmunitionManager : MonoBehaviour
             
         }
     }
+
+
+
+
+
+
+
+
 
     private void PutGunItem(Item item, GameObject TransmittedObject, AmmunitionGunSlot slot, out bool SuccessGunAddition)
     {
@@ -140,6 +155,14 @@ public class AmmunitionManager : MonoBehaviour
             SuccessGunAddition = false;
         }
     }
+
+
+
+
+
+
+
+
 
 
     //          предмет, который передаем,         куда передаём,          выходной результат    
@@ -366,6 +389,115 @@ public class AmmunitionManager : MonoBehaviour
         }
 
 
+    }
+
+
+    public void DropItemFromInventory(Item item, GameObject currentObject, Slot slot, out bool SuccessDrop)
+    { 
+        SuccessDrop = false;
+
+        if (item != null && currentObject != null)
+        {
+
+
+
+            /*
+             * Настраиваю слот предмета 
+            */
+
+
+
+            slot.ClearClot();
+
+
+
+
+
+            /*
+             * Убираю картинку предмету в инвентаре
+            */
+
+
+
+
+
+            // Получаю картинку
+            Image image_component = currentObject.transform.parent.gameObject.GetComponent<Image>();
+
+            // Убираю картинку
+            image_component.sprite = null;
+
+            // Делаю картинку неактивной
+            image_component.enabled = false;
+
+
+
+
+
+            /*
+             *  Ставлю картинку на дефолтное место
+            */
+
+            // Получаю объект картинки
+            GameObject image_obj = currentObject.transform.parent.gameObject;
+
+            // Ставлю на дефолтное место 
+            image_obj.transform.position = slot.SlotDefaultPosition;
+
+
+
+
+
+            /*
+             * Выбрасываем предмет из инвентаря 
+            */
+
+
+
+
+
+            // Поднимаю его на вершину иерархии 
+            currentObject.transform.SetParent(null);
+
+            // Устанавливаю выброшенному объекту позицию игрока
+            currentObject.transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
+
+
+
+
+
+            /*
+             * Устанавливаю спрайт предмету 
+            */
+
+
+
+
+
+            // Получаю спрайт предмета
+            Sprite item_floor_image = item.GetFloorIcon;
+
+            // Устанавливаю спрайт
+            currentObject.GetComponent<SpriteRenderer>().sprite = item_floor_image;
+
+
+
+
+
+            /*
+             * Успешное завершение
+            */
+
+
+
+
+            SuccessDrop = true;
+
+
+
+
+
+        }
     }
 
 

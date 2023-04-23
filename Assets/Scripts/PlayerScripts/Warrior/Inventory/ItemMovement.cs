@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
+public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     private Vector2 offset; // смещение между позицией картинки и позицией мыши
 
@@ -21,7 +21,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private PointerEventData ItemEventData;
 
-    [SerializeField] private Transform inventoryTransform;
+    [SerializeField] private RectTransform inventoryTransform;
 
     [SerializeField] private GameObject[] GunSlotIndicators = new GameObject[3];
 
@@ -29,6 +29,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private GameObject Camera_main;
 
+    private RectTransform inventoryRootTransform;
+
+    
 
 
 
@@ -42,6 +45,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         // Получаю объект камеры на старте
         Camera_main = GameObject.Find("Main Camera");
+
+        // Получаю RectTransform корня инвентаря
+        inventoryRootTransform = GameObject.Find("InventoryRoot").GetComponent<RectTransform>();
 
     }
 
@@ -136,9 +142,28 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             }
         }
 
-        
 
-        Debug.Log("Предмет внутри инвентаря? = " + in_inventory_range);
+
+
+        /*
+         *  Проверка на нахождение курсора мыши в пределах корня инвентаря  
+        */
+
+
+
+        // Позиция мыши на экране
+        Vector3 mousePosition = Input.mousePosition;
+
+
+        if (RectTransformUtility.RectangleContainsScreenPoint(inventoryRootTransform, mousePosition))
+        {
+            in_inventory_range = true;
+        }
+        else
+        {
+            in_inventory_range = false;
+        }
+
 
 
     }
@@ -155,31 +180,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             Vector2 newPosition = ItemEventData.position - offset;
             (transform as RectTransform).anchoredPosition = newPosition;
 
-
-
         }
     }
-
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        
-        if (eventData.pointerPressRaycast.gameObject != null)
-        {
-            if (eventData.pointerPressRaycast.gameObject.name == "InventoryRoot")
-            {
-                in_inventory_range = true;
-            }
-            else if (eventData.pointerPressRaycast.gameObject.name == "InventoryBackground")
-            {
-                in_inventory_range = false;
-
-            }
-        }
-    }
-
-
-
 
 
 
@@ -196,9 +198,14 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
+
+
         /*
          *  Устанавливаю индикаторы на обратно 
         */
+
+
+
 
 
 
@@ -244,9 +251,15 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
+
+
+
         /*
          *  Если обнаружен индикатор слота с оружием 
         */
+
+
+
 
 
 
@@ -265,7 +278,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             bool SuccessAddition;
 
             // Передаю оружие в новый слот
-            Camera_main.GetComponent<AmmunitionManager>().PutWeaponToSlot(item, gun, slot, out SuccessAddition);
+            Camera_main.GetComponent<InventoryManager>().PutWeaponToSlot(item, gun, slot, out SuccessAddition);
 
             if (!SuccessAddition)
             { 
@@ -277,20 +290,54 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
+
+
+
         /*
          *  Если индикаторов не обнаруженно, и курсор находиться в пределах инвентаря 
         */
+
+
+
 
 
         if (in_inventory_range == true)
         {
             // Устанавливаю картинку на исходную позицию
             transform.position = transform.parent.GetComponent<AmmunitionGunSlot>().SlotDefaultPosition;
-            Debug.Log("Картинка вернулась на исходную позицию");
         }
         else
-        { 
-        
+        {
+
+            // Получаю выбрасываемый объект
+            GameObject DroppedObj = transform.GetChild(0).gameObject;
+
+            // Получаю выбрасываемый предмет
+            Item item = DroppedObj.GetComponent<FloorItem>().getItem;
+
+            // Получаю слот из которого выбросили предмет
+            GameObject slot = transform.parent.gameObject;
+
+            Slot item_slot = null;
+
+            if (item.itemType == ItemType.gun)
+            {
+                item_slot = slot.GetComponent<AmmunitionGunSlot>();
+            }
+
+            if (DroppedObj != null && item != null && item_slot != null)
+            {
+                bool drop_is_success;
+
+                Camera_main.GetComponent<InventoryManager>().DropItemFromInventory(item, DroppedObj, item_slot, out drop_is_success);
+
+                if (!drop_is_success)
+                {
+                    Debug.Log("Предмет не был выброшен");
+                }
+
+            }
+
         }
 
 
