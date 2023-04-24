@@ -11,7 +11,11 @@ public class InventoryManager : MonoBehaviour
 
     private List<AmmunitionGunSlot> am_gun_slots = new List<AmmunitionGunSlot>();
 
+    public List<ItemSlot> itemSlots = new List<ItemSlot>();
+
     private RectTransform am_UI;
+
+    private RectTransform item_UI;
 
 
 
@@ -32,6 +36,20 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
+        item_UI = GameObject.Find("ItemsUI").GetComponent<RectTransform>();
+
+
+        // Получаем все дефолтные слоты
+        for (int i = 0; i < item_UI.childCount; i++)
+        {
+            if (item_UI.GetChild(i).GetComponent<ItemSlot>() != null)
+            {
+                itemSlots.Add(item_UI.GetChild(i).GetComponent<ItemSlot>());
+            }
+        }
+        
+
+        // Делаю неактивным 
         GameObject.Find("Inventory").SetActive(false);
 
     }
@@ -48,26 +66,135 @@ public class InventoryManager : MonoBehaviour
     {
         bool SuccessGunAddition = false;
 
-        foreach (AmmunitionGunSlot slot in am_gun_slots)
+
+
+        /*
+         * Если передаваемый объект является оружием 
+        */
+
+
+
+        if (item.itemType == ItemType.gun)
         {
-            // Если передаваемый объект является оружием
-            if (item.itemType == ItemType.gun)
+            foreach (AmmunitionGunSlot slot in am_gun_slots)
+            {
+                
                 PutGunItem(item, itemObj, slot, out SuccessGunAddition);
 
-            
-            if (SuccessGunAddition)
-            {
-                // Возвращаю дефолтное состояние
-                SuccessGunAddition = false;
 
-                return;
+                if (SuccessGunAddition)
+                {
+                    // Возвращаю дефолтное состояние
+                    SuccessGunAddition = false;
+
+                    return;
+                }
+
             }
-            
         }
+
+
+        /*
+         * Если передаваемый предмет не является оружием или броней 
+        */
+
+        if (item.itemType != ItemType.gun && item.itemType != ItemType.secondaty_arms && item.itemType != ItemType.armor)
+        {
+            foreach (ItemSlot slot in itemSlots)
+            {
+                bool success = false;
+
+                PutDefaultItem(item, itemObj, slot, out success);
+
+
+                if (success)
+                {
+                    // Возвращаю дефолтное состояние
+                    success = false;
+
+                    return;
+                }
+            }
+        }
+
+
     }
 
 
 
+    private void PutDefaultItem(Item item, GameObject TransmittedObject, ItemSlot slot, out bool success)
+    { 
+        success = false;
+
+        if (slot.SlotIsEmpty)
+        {
+
+
+
+
+            /*
+             *  Получаю картинку предмета
+            */
+
+            Transform item_image_transform = slot.transform.GetChild(1);
+
+
+
+
+
+            /*
+             *  Устанавливаю объект представляющий вещь, которую я передаю
+            */
+
+            // Устанавливаю объект как child object картинки предмета
+            TransmittedObject.transform.SetParent(item_image_transform);
+
+            // Убираю спрайт объекта на земле 
+            TransmittedObject.GetComponent<SpriteRenderer>().sprite = null;
+
+
+
+
+
+            /*
+             *  Устанавливаю изображение предмета, которого передал в слот
+            */
+
+            item_image_transform.GetComponent<Image>().sprite = item.GetInventoryIcon;
+
+            item_image_transform.GetComponent<Image>().enabled = true;
+
+
+
+
+
+            /*
+             * Настраиваю скрипт слота
+            */
+
+
+            // Передаю в слот предмет и представляющий его объект 
+            slot.SetItem(item, TransmittedObject);
+
+
+
+            /*
+             * Успешное завершение передачи оружия в слот 
+             */
+
+
+
+
+            // Добавление предмета прошло успешно
+            success = true;
+
+        }
+        else
+        {
+            // Слот был занят другим предметом, добавление прошло неуспешно
+            success = false;
+        }
+    }
 
 
 
@@ -151,7 +278,7 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
-            // Слот занят. Добавление прошло не успешно
+            // Слот занят. Добавление прошло неуспешно
             SuccessGunAddition = false;
         }
     }
@@ -498,6 +625,217 @@ public class InventoryManager : MonoBehaviour
 
 
         }
+    }
+
+
+
+    public void PutItemToSlot(Item item, GameObject TransmittedObject, ItemSlot slot, out bool ItemAdded)
+    {
+        ItemAdded = false;
+
+
+        if (item.itemType == ItemType.gun || item.itemType == ItemType.armor || item.itemType == ItemType.secondaty_arms)
+        {
+            // Предмет не является оружием, добавление прошло не успешно 
+            ItemAdded = false;
+        }
+        else
+        {
+            if (slot.SlotIsEmpty)
+            {
+
+                // Получаю Transform картинки, в которую хочу передать предмет
+                Transform InputImageTransform = slot.transform.GetChild(1);
+
+                // Получаю Transform картинки, текущей картинки передаваемого предмета
+                Transform currentImageTransform = TransmittedObject.transform.parent;
+
+
+                /*
+                 * Получаю и устанавливаю объект, который отображает передаваемый предмет 
+                */
+
+
+                // Устанавливаю передаваемый объект на картинку слота, в который мы передаём (как child объект)
+                TransmittedObject.transform.SetParent(InputImageTransform);
+
+
+                /*
+                 * Устанавливаю изображение в слот, в который передали и включаю её
+                */
+
+                InputImageTransform.GetComponent<Image>().sprite = item.GetInventoryIcon;
+
+                InputImageTransform.GetComponent<Image>().enabled = true;
+
+                /*
+                 * Настраиваю скрипт слота, в который передали 
+                */
+
+                // Передаю в слот предмет и представляющий его объект
+                slot.SetItem(item, TransmittedObject);
+
+
+
+
+
+
+
+
+
+                /*
+                 * Настраиваю скрипт слота, из которого передавали предмет 
+                */
+
+
+                // Очищаю слот 
+                currentImageTransform.parent.gameObject.GetComponent<ItemSlot>().ClearClot();
+
+
+
+                /*
+                 * Настраиваю картинку слота, из которой передавали предмет  
+                */
+
+
+                // Удаляю изображение предмета, который передавали
+                currentImageTransform.GetComponent<Image>().sprite = null;
+
+                // Возвращаю картинку дефолтное на место
+                currentImageTransform.position = currentImageTransform.parent.gameObject.GetComponent<ItemSlot>().SlotDefaultPosition;
+
+                // Делаю ее неактивной
+                currentImageTransform.GetComponent<Image>().enabled = false;
+
+
+
+
+
+
+                /*
+                 * Успешная передача предмета
+                */
+
+
+
+                // Добавление предмета прошло успешно
+                ItemAdded = true;
+
+            }
+            else
+            {
+
+
+
+
+
+                // Получаю Transform картинки, в которую хочу передать предмет
+                Transform InputImageTransform = slot.transform.GetChild(1);
+
+                // Получаю Transform картинки, текущей картинки передаваемого предмета
+                Transform currentImageTransform = TransmittedObject.transform.parent;
+
+                // Получаю слот исходной картинки
+                ItemSlot currentSlot = currentImageTransform.parent.GetComponent<ItemSlot>();
+
+                // Получаю слот входной картинки 
+                ItemSlot inputSlot = InputImageTransform.parent.GetComponent<ItemSlot>();
+
+
+
+
+
+
+
+                /*
+                 * Меняю местами объекты 
+                */
+
+
+
+
+
+                //Получаю объект предмета, который находится во входном слоте
+                GameObject InternalObject = InputImageTransform.GetChild(0).gameObject;
+
+                InternalObject.transform.SetParent(currentImageTransform);
+
+                TransmittedObject.transform.SetParent(InputImageTransform);
+
+
+
+
+
+
+                /*
+                 * Меняю местами картинки  
+                */
+
+
+
+
+
+
+                // Изменяю исходную картинку 
+                currentImageTransform.GetComponent<Image>().sprite = currentImageTransform.GetChild(0).GetComponent<FloorItem>().getItem.GetInventoryIcon;
+
+                // Изменяю входную картинку
+                InputImageTransform.GetComponent<Image>().sprite = InputImageTransform.GetChild(0).GetComponent<FloorItem>().getItem.GetInventoryIcon;
+
+                // Возвращаю исходную картинку на место
+                currentImageTransform.position = currentSlot.SlotDefaultPosition;
+
+
+
+
+
+
+                /*
+                 * Настраиваю скрипты слотов, в который передали 
+                */
+
+
+
+
+
+
+                // Получаю объект, который сейчас находится в CurrentSlot
+                GameObject gm_current = currentImageTransform.GetChild(0).transform.gameObject;
+
+                // Получаю предмет, который сейчас находится в CurrentSlot
+                Item item_current = gm_current.GetComponent<FloorItem>().getItem;
+
+                // Устанавливаю их в новый слот
+                currentSlot.SetItem(item_current, gm_current);
+
+
+
+                // Получаю объект, который сейчас находится в InputSlot
+                GameObject gm_input = InputImageTransform.GetChild(0).transform.gameObject;
+
+                // Получаю предмет, который сейчас находится в CurrentSlot
+                Item item_input = gm_input.GetComponent<FloorItem>().getItem;
+
+                // Устанавливаю их в новый слот 
+                inputSlot.SetItem(item_input, gm_input);
+
+
+
+
+
+
+                /*
+                 * Успешная передача предмета
+                */
+
+
+                // Замена предмета прошла успешно
+                ItemAdded = true;
+
+            }
+        }
+
+
     }
 
 

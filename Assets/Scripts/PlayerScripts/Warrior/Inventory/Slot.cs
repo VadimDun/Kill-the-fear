@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -103,7 +104,13 @@ public class Slot : MonoBehaviour
 
     private void Start()
     {
-        // Получаю начальную позицию Gun Image
-        defaultPosition = transform.GetChild(2).transform.position;
+        try
+        {
+            defaultPosition = transform.GetChild(2).transform.position;
+        }
+        catch (UnityException)
+        {
+            defaultPosition = transform.GetChild(1).transform.position;
+        }
     }
 }

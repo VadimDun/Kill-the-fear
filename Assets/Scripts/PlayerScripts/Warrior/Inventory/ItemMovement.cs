@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Gun;
 
 public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -13,6 +14,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private GameObject gunSlot;
 
+    private GameObject item_slot;
+
     private bool in_inventory_range = true;
 
     private bool flag_on_start = true;
@@ -21,9 +24,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private PointerEventData ItemEventData;
 
-    [SerializeField] private RectTransform inventoryTransform;
+    private RectTransform inventoryTransform;
 
-    [SerializeField] private GameObject[] GunSlotIndicators = new GameObject[3];
+    private GameObject[] GunSlotIndicators = new GameObject[3];
 
     private GameObject[] gunSlots = new GameObject[3];
 
@@ -31,23 +34,57 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private RectTransform inventoryRootTransform;
 
+    private RectTransform items_UI_transform;
+
+    private RectTransform canvasTransform;
+
+    private RectTransform parent_transform_of_items_UI;
     
 
 
 
     private void Start()
     {
-        // Получаю оружейные слоты инвентаря на старте
-        for (int i = 0; i < gunSlots.Count(); i++)
-        {
-            gunSlots[i] = GameObject.Find($"GunSlot({i + 1})");
-        }
+
 
         // Получаю объект камеры на старте
         Camera_main = GameObject.Find("Main Camera");
 
         // Получаю RectTransform корня инвентаря
         inventoryRootTransform = GameObject.Find("InventoryRoot").GetComponent<RectTransform>();
+
+
+        /*
+         * Получаю оружейные слоты 
+        */
+
+        for (int i = 0; i < gunSlots.Count(); i++)
+        {
+            GameObject gunSlotObj = GameObject.Find($"GunSlot({i + 1})");
+            gunSlots[i] = gunSlotObj;
+            GunSlotIndicators[i] = gunSlotObj.transform.GetChild(1).gameObject;
+        }
+
+
+
+        /*
+         * Получаю RectTransform инвентаря  
+        */
+
+        inventoryTransform = GameObject.Find("Inventory").GetComponent<RectTransform>();
+
+
+        /*
+         * Получаю Items_UI RectTransform  
+        */
+
+        items_UI_transform = GameObject.Find("ItemsUI").GetComponent<RectTransform>();
+
+        /*
+         *  Получаю Transform канваса
+        */
+
+        canvasTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
 
     }
 
@@ -68,8 +105,11 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // Запоминаю Transform родительского объекта
         parentTransform = transform.parent;
 
+        // Запоминаю Transform родительского объекта Items_UI
+        parent_transform_of_items_UI = items_UI_transform.parent.gameObject.GetComponent<RectTransform>();
+
         // Устанавливаю родительский объект в качестве инвентаря
-        transform.SetParent(inventoryTransform);
+        transform.SetParent(canvasTransform);
 
         // Рассчитываю смещение между позицией картинки и позицией мыши
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -106,10 +146,27 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             }
 
 
-            is_dragging = true;
-
-
         }
+
+
+
+
+        /*
+         * Items_UI на передний план 
+        */
+
+        items_UI_transform.SetParent(canvasTransform);
+
+
+        /*
+         * Ставлю приоритет рендеринга перетаскиваемой картинке выше всех
+        */
+
+        transform.SetSiblingIndex(canvasTransform.childCount - 1);
+
+
+        
+        is_dragging = true;
     }
 
 
@@ -128,6 +185,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         gunSlot = null;
 
+        item_slot = null;
+
         if (cursorEvent.gameObject != null)
         {
             // Если курсор мышки на индикаторе,то получаем слот этого индикатора 
@@ -140,7 +199,19 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 }
 
             }
+
+            if (cursorEvent.gameObject.name == "Item_border")
+            {
+                // Получаю родителя (слот)
+                GameObject item_border_parent = cursorEvent.gameObject.transform.parent.gameObject;
+
+                item_slot = item_border_parent;
+
+                Debug.Log("Найден");
+            }
         }
+
+
 
 
 
@@ -197,11 +268,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
-
-
-
         /*
-         *  Устанавливаю индикаторы на обратно 
+         *  Устанавливаю индикаторы обратно 
         */
 
 
@@ -212,37 +280,54 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         for (int i = 0; i < GunSlotIndicators.Count(); i++)
         {
 
-            Indicator ind = GunSlotIndicators[i].GetComponent<Indicator>();
+            
 
-            if (ind != null)
+            if (GunSlotIndicators[i] != null)
             {
-                if (GunSlotIndicators[i] != null)
+                Indicator ind = GunSlotIndicators[i].GetComponent<Indicator>();
+
+                if (ind != null)
                 {
-                    // Устанавливаю родителя
-                    GunSlotIndicators[i].transform.SetParent(gunSlots[i].transform);
 
-                    // Устанавливаю индикатор на нужный мне индекс 
-                    GunSlotIndicators[i].transform.SetSiblingIndex(1);
+                    if (GunSlotIndicators[i] != null)
+                    {
+                        // Устанавливаю родителя
+                        GunSlotIndicators[i].transform.SetParent(gunSlots[i].transform);
 
-                    // Получаю родителя
-                    GameObject ind_parent = GunSlotIndicators[i].transform.parent.gameObject;
+                        // Устанавливаю индикатор на нужный мне индекс 
+                        GunSlotIndicators[i].transform.SetSiblingIndex(1);
+
+                        // Получаю родителя
+                        GameObject ind_parent = GunSlotIndicators[i].transform.parent.gameObject;
 
 
-                    // Запоминаю родителя
-                    ind.RememperParent(ind_parent);
+                        // Запоминаю родителя
+                        ind.RememperParent(ind_parent);
 
 
-                    // Устанавливаю индикатор на позицию родительского слота
-                    GunSlotIndicators[i].transform.position = ind_parent.GetComponent<AmmunitionGunSlot>().SlotDefaultPosition;
+                        // Устанавливаю индикатор на позицию родительского слота
+                        GunSlotIndicators[i].transform.position = ind_parent.GetComponent<AmmunitionGunSlot>().SlotDefaultPosition;
 
-                    // Последующие разы в начале не будем запоминать родительский объект за ненадобностью
-                    flag_on_start = false;
+                        // Последующие разы в начале не будем запоминать родительский объект за ненадобностью
+                        flag_on_start = false;
+                    }
                 }
             }
+
+            
 
 
         }
 
+
+
+
+
+        /*
+         * Возвращаю ItemsUI обратно  
+        */
+
+        items_UI_transform.SetParent(parent_transform_of_items_UI);
         
         
         
@@ -281,11 +366,50 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             Camera_main.GetComponent<InventoryManager>().PutWeaponToSlot(item, gun, slot, out SuccessAddition);
 
             if (!SuccessAddition)
-            { 
+            {
                 // Логика если оружие не добавилось в слот 
+                
+            }
+            
+
+            return;
+            
+        }
+
+
+
+
+
+
+        /*
+         * Если обнаружен слот Item_UI 
+        */
+
+        if (item_slot != null)
+        {
+            Debug.Log("Выполняется");
+            // Получаю оружие, которое передаю
+            GameObject itemObject = transform.GetChild(0).gameObject;
+
+            // Получаю предмет, который передаю 
+            Item item = itemObject.GetComponent<FloorItem>().getItem;
+
+            // Получаю слот, в который хочу передать оружие
+            ItemSlot slot = item_slot.GetComponent<ItemSlot>();
+
+            bool SuccessAddition;
+
+            // Передаю оружие в новый слот
+            Camera_main.GetComponent<InventoryManager>().PutItemToSlot(item, itemObject, slot, out SuccessAddition);
+
+            if (!SuccessAddition)
+            {
+                // Логика если оружие не добавилось в слот 
+                Debug.Log("Что-то пошло по пизде");
             }
 
-            
+            Debug.Log("Оружие должно быть добавлено в новый слот");
+            return;
         }
 
 
@@ -299,7 +423,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
-
+        /*
 
         if (in_inventory_range == true)
         {
@@ -340,6 +464,6 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         }
 
-
+        */
     }
 }
