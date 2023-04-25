@@ -7,11 +7,11 @@ using UnityEngine.UI;
 public class Items_UI_starter : MonoBehaviour
 {
 
-    public Dictionary<string, Vector2> cells_positions = new Dictionary<string, Vector2>();
+    private Dictionary<string, Vector2> cells_positions = new Dictionary<string, Vector2>();
 
     private Vector2 start_position;
 
-    void Start()
+    void Awake()
     {
         start_position = transform.GetChild(0).position;
 
@@ -48,8 +48,16 @@ public class Items_UI_starter : MonoBehaviour
 
     public Vector2 GetDefaultPosition(string cellName)
     {
-        Debug.Log($"Получено дефолтное значение {cells_positions[cellName]} для {cellName}");
-        return cells_positions[cellName];
+        try
+        {
+            Debug.Log($"Получено дефолтное значение {cells_positions[cellName]} для {cellName}");
+            return cells_positions[cellName];
+        }
+        catch (KeyNotFoundException ex)
+        {
+            Debug.Log($"Имя ячейки {cellName} не найдено в списке!" + ex);
+            return Vector2.zero;
+        }
     }
 
 }
