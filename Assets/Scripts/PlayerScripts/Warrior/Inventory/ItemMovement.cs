@@ -4,13 +4,15 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using static Gun;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     private Vector2 offset; // смещение между позицией картинки и позицией мыши
 
-    private Transform parentTransform;
+    private UnityEngine.Transform parentTransform;
 
     private GameObject gunSlot;
 
@@ -40,7 +42,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private RectTransform parent_transform_of_items_UI;
     
-
+    private Vector2 item_hotspot;
 
 
     private void Start()
@@ -86,6 +88,12 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         canvasTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
 
+        /*
+         * Получаю hotspot перетаскиваемой картинки 
+        */
+
+        item_hotspot = new Vector2 (inventoryTransform.position.x - inventoryRootTransform.position.x, inventoryTransform.position.y - inventoryRootTransform.position.y);
+
     }
 
 
@@ -109,7 +117,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         parent_transform_of_items_UI = items_UI_transform.parent.gameObject.GetComponent<RectTransform>();
 
         // Устанавливаю родительский объект в качестве инвентаря
-        transform.SetParent(canvasTransform);
+        transform.SetParent(inventoryRootTransform);
 
         // Рассчитываю смещение между позицией картинки и позицией мыши
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -155,8 +163,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
          * Items_UI на передний план 
         */
 
+        /*
         items_UI_transform.SetParent(canvasTransform);
-
+        */
 
         /*
          * Ставлю приоритет рендеринга перетаскиваемой картинке выше всех
@@ -164,9 +173,12 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         transform.SetSiblingIndex(canvasTransform.childCount - 1);
 
-
+        // Отключаю коллайдер перетаскиваемому объекту, чтобы луч не разбивался об него 
+        transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = true;
         
         is_dragging = true;
+
+        item_slot = null;
     }
 
 
@@ -176,16 +188,16 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
-
+    RaycastResult cursorEvent;
 
     public void OnDrag(PointerEventData eventData)
     {
 
-        RaycastResult cursorEvent = eventData.pointerCurrentRaycast;
+        cursorEvent = eventData.pointerCurrentRaycast;
 
         gunSlot = null;
 
-        item_slot = null;
+        
 
         if (cursorEvent.gameObject != null)
         {
@@ -200,16 +212,12 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
             }
 
-            if (cursorEvent.gameObject.name == "Item_border")
-            {
-                // Получаю родителя (слот)
-                GameObject item_border_parent = cursorEvent.gameObject.transform.parent.gameObject;
 
-                item_slot = item_border_parent;
-
-                Debug.Log("Найден");
-            }
         }
+
+
+
+        
 
 
 
@@ -248,9 +256,36 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             // Обновляю позицию картинки на Canvas
             
             
-            Vector2 newPosition = ItemEventData.position - offset;
+            Vector2 newPosition = ItemEventData.position - offset + item_hotspot;
             (transform as RectTransform).anchoredPosition = newPosition;
 
+        }
+
+
+    }
+
+
+    private void Update()
+    {
+
+
+        if (is_dragging)
+        {
+            if (cursorEvent.gameObject != null)
+            {
+
+                if (cursorEvent.gameObject.name == "Item_border")
+                {
+                    // Получаю родителя (слот)
+                    GameObject item_border_parent = cursorEvent.gameObject.transform.parent.gameObject;
+
+                    item_slot = item_border_parent;
+
+                    Debug.Log("Найден");
+                }
+
+
+            }
         }
     }
 
@@ -280,7 +315,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         for (int i = 0; i < GunSlotIndicators.Count(); i++)
         {
 
-            
+
 
             if (GunSlotIndicators[i] != null)
             {
@@ -314,7 +349,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 }
             }
 
-            
+
 
 
         }
@@ -327,10 +362,10 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
          * Возвращаю ItemsUI обратно  
         */
 
-        items_UI_transform.SetParent(parent_transform_of_items_UI);
-        
-        
-        
+        //items_UI_transform.SetParent(parent_transform_of_items_UI);
+
+
+
         // Устанавливаю в качестве родительского объекта тот, который был родительским до нажатия (для объекта, который перетаскиваем)
         transform.SetParent(parentTransform);
 
@@ -368,17 +403,21 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             if (!SuccessAddition)
             {
                 // Логика если оружие не добавилось в слот 
-                
+
             }
-            
+
 
             return;
-            
+
         }
 
 
 
 
+        if (item_slot != null)
+        { 
+            Debug.Log($"Имя объекта, на который мы ставим картинку = {item_slot.name}");
+        }
 
 
         /*
@@ -405,7 +444,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             if (!SuccessAddition)
             {
                 // Логика если оружие не добавилось в слот 
-                Debug.Log("Что-то пошло по пизде");
+
             }
 
             Debug.Log("Оружие должно быть добавлено в новый слот");
@@ -414,7 +453,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
-
+        // Отключаю коллайдер перетаскиваемому объекту, чтобы луч не разбивался об него 
+        transform.GetChild(0).gameObject.GetComponent<Collider2D>().enabled = true;
 
 
         /*

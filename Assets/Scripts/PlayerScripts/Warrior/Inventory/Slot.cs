@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
@@ -104,13 +105,36 @@ public class Slot : MonoBehaviour
 
     private void Start()
     {
+        /*
         try
         {
             defaultPosition = transform.GetChild(2).transform.position;
+            Debug.Log($"Получена дефолтная позиция с индексом 2, координаты равны = {defaultPosition}");
         }
         catch (UnityException)
         {
             defaultPosition = transform.GetChild(1).transform.position;
+            Debug.Log($"Получена дефолтная позиция с индексом 1, координаты равны = {defaultPosition}");
         }
+
+        */
+
+
+
+
+
+        if (transform.gameObject.tag == "ItemSlot")
+        {
+
+            defaultPosition = transform.localPosition;
+            Debug.Log($"Получена дефолтная позиция с индексом 1, координаты равны = {defaultPosition}");
+        }
+        else if (transform.gameObject.tag == "GunSlot")
+        {
+            defaultPosition = transform.GetChild(2).position;
+            Debug.Log($"Получена дефолтная позиция с индексом 2, координаты равны = {defaultPosition}");
+        }
+
+
     }
 }
