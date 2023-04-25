@@ -105,34 +105,22 @@ public class Slot : MonoBehaviour
 
     private void Start()
     {
-        /*
-        try
-        {
-            defaultPosition = transform.GetChild(2).transform.position;
-            Debug.Log($"Получена дефолтная позиция с индексом 2, координаты равны = {defaultPosition}");
-        }
-        catch (UnityException)
-        {
-            defaultPosition = transform.GetChild(1).transform.position;
-            Debug.Log($"Получена дефолтная позиция с индексом 1, координаты равны = {defaultPosition}");
-        }
-
-        */
-
-
-
 
 
         if (transform.gameObject.tag == "ItemSlot")
         {
+            Items_UI_starter items_UI_Starter = transform.parent.gameObject.GetComponent<Items_UI_starter>();
 
-            defaultPosition = transform.localPosition;
-            Debug.Log($"Получена дефолтная позиция с индексом 1, координаты равны = {defaultPosition}");
+            if (items_UI_Starter != null)
+            {
+                // Получаем дефолтную позицию объекта из Dictionary
+                defaultPosition = items_UI_Starter.GetDefaultPosition(transform.gameObject.name);
+
+            }
         }
         else if (transform.gameObject.tag == "GunSlot")
         {
             defaultPosition = transform.GetChild(2).position;
-            Debug.Log($"Получена дефолтная позиция с индексом 2, координаты равны = {defaultPosition}");
         }
 
 

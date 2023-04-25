@@ -16,20 +16,31 @@ public class Items_UI_starter : MonoBehaviour
         start_position = transform.GetChild(0).position;
 
         GridLayoutGroup gl = transform.gameObject.GetComponent<GridLayoutGroup>();
-        
+
+        gl.childAlignment = TextAnchor.LowerLeft;
+
         // Создаю матриу позиций клеток
         Vector2[,] cells = new Vector2[4,5];
         
         int k = 1;
 
-        for (int i = 0; i < cells.GetLength(0); i++)
+
+        
+
+        for (int i = cells.GetLength(0)-1; i >= 0; i--)
         {
+
             for (int j = 0; j < cells.GetLength(1); j++)
             {
-                cells_positions.Add($"ItemSlot({k})", start_position + new Vector2(gl.cellSize.x * j, gl.cellSize.y * i));
+
+                float posX = start_position.x + (gl.cellSize.x + gl.spacing.x) * j;
+                float posY = start_position.y + (gl.cellSize.y + gl.spacing.y) * i;
+                cells_positions.Add($"ItemSlot({k})", new Vector2(posX, posY));
                 k++;
             }
         }
+
+
 
     }
 
@@ -37,6 +48,7 @@ public class Items_UI_starter : MonoBehaviour
 
     public Vector2 GetDefaultPosition(string cellName)
     {
+        Debug.Log($"Получено дефолтное значение {cells_positions[cellName]} для {cellName}");
         return cells_positions[cellName];
     }
 
