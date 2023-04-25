@@ -120,7 +120,7 @@ public class Slot : MonoBehaviour
         }
         else if (transform.gameObject.tag == "GunSlot")
         {
-            defaultPosition = transform.GetChild(2).position;
+            defaultPosition = transform.GetChild(1).position;
         }
 
 

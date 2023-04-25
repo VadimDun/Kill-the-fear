@@ -211,7 +211,7 @@ public class InventoryManager : MonoBehaviour
             {
 
                 // Получаю картинку в слоте, которая будет отображать оружие
-                Transform gunImageTransform = slot.transform.GetChild(2);
+                Transform gunImageTransform = slot.transform.GetChild(1);
 
 
 
@@ -309,7 +309,7 @@ public class InventoryManager : MonoBehaviour
             {
 
                 // Получаю Transform картинки, в которую хочу передать предмет
-                Transform InputImageTransform = slot.transform.GetChild(2);
+                Transform InputImageTransform = slot.transform.GetChild(1);
 
                 // Получаю Transform картинки, текущей картинки передаваемого предмета
                 Transform currentImageTransform = TransmittedObject.transform.parent;
@@ -410,7 +410,7 @@ public class InventoryManager : MonoBehaviour
 
 
                 // Получаю Transform картинки, в которую хочу передать предмет
-                Transform InputImageTransform = slot.transform.GetChild(2);
+                Transform InputImageTransform = slot.transform.GetChild(1);
 
                 // Получаю Transform картинки, текущей картинки передаваемого предмета
                 Transform currentImageTransform = TransmittedObject.transform.parent;
