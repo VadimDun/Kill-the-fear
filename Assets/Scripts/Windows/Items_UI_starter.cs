@@ -50,7 +50,6 @@ public class Items_UI_starter : MonoBehaviour
     {
         try
         {
-            Debug.Log($"Получено дефолтное значение {cells_positions[cellName]} для {cellName}");
             return cells_positions[cellName];
         }
         catch (KeyNotFoundException ex)
