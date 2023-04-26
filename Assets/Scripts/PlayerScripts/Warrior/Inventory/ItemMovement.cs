@@ -208,13 +208,19 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 gunSlot = gun_border_parent;
             }
 
+            if (TargetObject.name == "ItemImage" && TargetObject != transform.gameObject)
+            {
+                GameObject item_border_parent = TargetObject.transform.parent.gameObject;
+                item_slot = item_border_parent;
+            }
 
 
 
-            if (gunSlot != null)
-                Debug.Log($"Обнаружен {cursorEvent.gameObject.name}, при этом Gun slot = {gunSlot.name}");
+
+            if (item_slot != null)
+                Debug.Log($"Обнаружен {cursorEvent.gameObject.name}, при этом Item slot = {item_slot.name}");
             else
-                Debug.Log($"Обнаружен {cursorEvent.gameObject.name}, при этом Gun slot = Null");
+                Debug.Log($"Обнаружен {cursorEvent.gameObject.name}, при этом Item slot = Null");
 
 
         }
@@ -368,7 +374,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             {
                 // Устанавливаю картинку на исходную позицию
                 transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
-
+                Debug.Log("Что-то пошло по пизде");
             }
 
 
@@ -418,8 +424,16 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 if (!drop_is_success)
                 {
                     Debug.Log("Предмет не был выброшен");
+
+                    // Устанавливаю картинку на исходную позицию
+                    transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
                 }
 
+            }
+            else 
+            {
+                // Устанавливаю картинку на исходную позицию
+                transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
             }
 
         }
