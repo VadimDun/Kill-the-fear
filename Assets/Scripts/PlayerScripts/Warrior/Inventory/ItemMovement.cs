@@ -48,6 +48,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     
     private Vector2 item_hotspot;
 
+    //bool target_on_slot;
+
 
     private void Start()
     {
@@ -92,6 +94,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         item_hotspot = new Vector2 (inventoryTransform.position.x - inventoryRootTransform.position.x, inventoryTransform.position.y - inventoryRootTransform.position.y);
 
+        
     }
 
 
@@ -146,6 +149,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         item_slot = null;
 
         gunSlot = null;
+
+        //target_on_slot = true;
+
     }
 
 
@@ -156,6 +162,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
     RaycastResult cursorEvent;
+
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -180,6 +187,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 gunSlot = gun_border_parent;
 
             }
+            else
+                gunSlot = null;
 
             if (TargetObject.name == "Item_border")
             {
@@ -190,14 +199,17 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
             }
+            else
+                item_slot = null;
 
             if (TargetObject.name == "GunImage" && TargetObject != transform.gameObject)
-            { 
+            {
                 GameObject gun_border_parent = TargetObject.transform.parent.gameObject;
                 gunSlot = gun_border_parent;
             }
 
-            
+
+
 
             if (gunSlot != null)
                 Debug.Log($"Обнаружен {cursorEvent.gameObject.name}, при этом Gun slot = {gunSlot.name}");
@@ -205,6 +217,11 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 Debug.Log($"Обнаружен {cursorEvent.gameObject.name}, при этом Gun slot = Null");
 
 
+        }
+        else 
+        {
+            gunSlot = null;
+            item_slot = null;
         }
 
 
@@ -215,12 +232,20 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // Позиция мыши на экране
         Vector3 mousePosition = Input.mousePosition;
 
+        // Проверка на нахожнение курсора мыши в пределах корня инвентаря 
+        bool contains = RectTransformUtility.RectangleContainsScreenPoint(inventoryRootTransform, mousePosition);
 
-        if (RectTransformUtility.RectangleContainsScreenPoint(inventoryRootTransform, mousePosition))
+        //bool is_slot = false;
+
+        //GameObject current_object_on_cursor = eventData.pointerCurrentRaycast.gameObject;
+
+
+        if (contains)
         {
             in_inventory_range = true;
+            //target_on_slot = false;
         }
-        else
+        else if (!contains)
         {
             in_inventory_range = false;
         }
@@ -303,7 +328,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
             if (!SuccessAddition)
             {
-                // Логика если оружие не добавилось в слот 
+
+                // Устанавливаю картинку на исходную позицию
+                transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
 
             }
 
@@ -339,11 +366,12 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
             if (!SuccessAddition)
             {
-                // Логика если оружие не добавилось в слот 
+                // Устанавливаю картинку на исходную позицию
+                transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
 
             }
 
-            Debug.Log("Оружие должно быть добавлено в новый слот");
+
             return;
         }
 
