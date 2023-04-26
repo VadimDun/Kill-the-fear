@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor.UI;
+using UnityEngine.UI;
 
-
-public class GameManagerScript : MonoBehaviour
+public class WinScreen : MonoBehaviour
 {
-    public GameObject gameOverUi;
+
+    public GameObject winScreen;
 
     private GameObject player;
 
@@ -28,53 +30,7 @@ public class GameManagerScript : MonoBehaviour
 
     private Gun gun;
 
-
-    public void gameOver()
-    {
-        // Если игрок умер - закрываю окно паузы 
-        if (!pauseMenu.PauseWindowIsNotActive)
-        {
-            pauseMenu.Resume();
-        }
-
-
-        // Если игрок умер - закрываю окно инвентаря
-        if (!inventoryMenu.inventoryWindowIsNotActive)
-        {
-            inventoryMenu.InventoryClose();
-        }
-
-
-        //Устанавливаю курсор
-        CursorManager.Instance.SetMenuCursor();
-
-        gameOverUi.SetActive(true);
-
-        // Замораживаю игрока
-        FreezePlayer();
-
-        // Выключаю стрельбу всем террористам
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies)
-        {
-            EnemyShooting enemyShooting = enemy.GetComponentInChildren<EnemyShooting>();
-            if (enemyShooting != null)
-            {
-                enemyShooting.enabled = false;
-            }
-        }
-
-        // Отключаю ввод для паузы
-        pauseMenu.deathWindowIsActive = true;
-
-        // Отключаю ввод для инвентаря
-        inventoryMenu.deathWindowIsActive = true;
-
-        
-
-    }
-
-
+    
     public void FreezePlayer()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -112,21 +68,6 @@ public class GameManagerScript : MonoBehaviour
         playerShooting.enabled = true;
     }
 
-
-    private void Start()
-    {
-        // Получаю сцену, с которой мы изначально загрузились
-        StartSceneIndex = SceneManager.GetActiveScene().buildIndex;
-
-        // Получаю позицию точки спавна игрока
-        SpawnPointPosition = GameObject.Find("PlayerSpawnPoint").GetComponent<Transform>().position;
-
-        // Получаю скипт анимаций перехода
-        transition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
-    }
-
-
-
     public void Restart()
     {
 
@@ -139,7 +80,7 @@ public class GameManagerScript : MonoBehaviour
         //Включаю затемнение
         transition.StartDeathTransition();
 
-        gameOverUi.SetActive(false);
+        winScreen.SetActive(false);
 
         // Возвращаю игрока на стартовую позицию
         player.transform.position = SpawnPointPosition;
@@ -170,16 +111,20 @@ public class GameManagerScript : MonoBehaviour
         // Отчищаю список убитых у жнеца
         enemyReaper.SetOfDeadEdit.Clear();
 
-        
-        
+
+
 
     }
 
-
-
+    public void NextLevel(int sceneID)
+    {
+        winScreen.SetActive(false);
+        SceneManager.LoadScene(sceneID);
+    }
+    
     public void Home(int sceneID)
     {
-        gameOverUi.SetActive(false);
+        winScreen.SetActive(false);
         SceneManager.LoadScene(sceneID);
 
         //Устанавливаю курсор
@@ -192,5 +137,33 @@ public class GameManagerScript : MonoBehaviour
         EnemyManager.Instance.DestroyReaper();
         PauseManager.Instance.DestroyPause();
         EventManager.Instance.DestroyEventSys();
+    }
+
+    //Вызов окна победы
+    public void win()
+    {
+        if (false)
+        {
+            winScreen.SetActive(true);
+        }
+        // Замораживаю игрока
+        FreezePlayer();
+
+        // Выключаю стрельбу всем террористам
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            EnemyShooting enemyShooting = enemy.GetComponentInChildren<EnemyShooting>();
+            if (enemyShooting != null)
+            {
+                enemyShooting.enabled = false;
+            }
+        }
+
+        // Отключаю ввод для паузы
+        pauseMenu.deathWindowIsActive = true;
+
+        // Отключаю ввод для инвентаря
+        inventoryMenu.deathWindowIsActive = true;
     }
 }
