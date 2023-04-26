@@ -63,8 +63,10 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    public void PutItem(Item item, GameObject itemObj)
+    public void MainInventoryManager(Item item, GameObject itemObj)
     {
+
+
         bool SuccessGunAddition = false;
 
 
@@ -74,13 +76,12 @@ public class InventoryManager : MonoBehaviour
         */
 
 
-
         if (item.itemType == ItemType.gun)
         {
             foreach (AmmunitionGunSlot slot in am_gun_slots)
             {
                 
-                PutGunItem(item, itemObj, slot, out SuccessGunAddition);
+                GrabGunItem(item, itemObj, slot, out SuccessGunAddition);
 
 
                 if (SuccessGunAddition)
@@ -95,9 +96,11 @@ public class InventoryManager : MonoBehaviour
         }
 
 
+
         /*
          * Если передаваемый предмет не является оружием или броней 
         */
+
 
         if (item.itemType != ItemType.gun && item.itemType != ItemType.secondaty_arms && item.itemType != ItemType.armor)
         {
@@ -105,7 +108,7 @@ public class InventoryManager : MonoBehaviour
             {
                 bool success = false;
 
-                PutDefaultItem(item, itemObj, slot, out success);
+                GrabDefaultItem(item, itemObj, slot, out success);
 
 
                 if (success)
@@ -142,6 +145,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
             /*
              *  Устанавливаю подобранный предмет
             */
@@ -155,6 +159,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
             /*
              *  Устанавливаю изображение предмета, которого передал в слот
             */
@@ -165,6 +170,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
             /*
              * Настраиваю скрипт слота
             */
@@ -172,6 +178,7 @@ public class InventoryManager : MonoBehaviour
 
             // Передаю в слот предмет и представляющий его объект 
             slot.SetItem(item, TransmittedObject);
+
 
 
 
@@ -199,7 +206,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private void PutDefaultItem(Item item, GameObject TransmittedObject, ItemSlot slot, out bool success)
+    private void GrabDefaultItem(Item item, GameObject TransmittedObject, ItemSlot slot, out bool success)
     { 
         success = false;
 
@@ -223,7 +230,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private void PutGunItem(Item item, GameObject TransmittedObject, AmmunitionGunSlot slot, out bool SuccessGunAddition)
+    private void GrabGunItem(Item item, GameObject TransmittedObject, AmmunitionGunSlot slot, out bool SuccessGunAddition)
     {
         SuccessGunAddition = false;
 
@@ -273,14 +280,15 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
             /*
              * Получаю и устанавливаю объект, который отображает передаваемый предмет 
             */
 
 
-
             // Устанавливаю передаваемый объект на картинку слота, в который мы передаём (как child объект)
             TransmittedObject.transform.SetParent(InputImageTransform);
+
 
 
 
@@ -295,14 +303,15 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
             /*
              * Настраиваю скрипт слота, в который передали 
             */
 
 
-
             // Передаю в слот предмет и представляющий его объект
             slot.SetItem(item, TransmittedObject);
+
 
 
 
@@ -311,16 +320,15 @@ public class InventoryManager : MonoBehaviour
             */
 
 
-
             // Очищаю слот 
             currentImageTransform.parent.gameObject.GetComponent<Slot>().ClearClot();
+
 
 
 
             /*
              * Настраиваю картинку слота, из которой передавали предмет  
             */
-
 
 
             // Удаляю изображение предмета, который передавали
@@ -334,10 +342,10 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
             /*
              * Успешная передача предмета
             */
-
 
 
             // Добавление предмета прошло успешно
@@ -371,7 +379,6 @@ public class InventoryManager : MonoBehaviour
         */
 
 
-
         // Получаю Transform картинки, в которую хочу передать предмет
         Transform InputImageTransform = slot.transform.GetChild(1);
 
@@ -380,10 +387,10 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
         /*
          * Получаю текущие слот и картинку  
         */
-
 
 
         // Получаю Transform картинки, текущей картинки передаваемого предмета
@@ -394,10 +401,10 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
         /*
          * Меняю местами картинки (в иерархии)
         */
-
 
 
         InputImageTransform.transform.SetParent(currentSlot.transform);
@@ -406,16 +413,17 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
         /*
          * Меняю местами картинки (визуально)
         */
-
 
 
         // Возвращаю исходную картинку на место
         currentImageTransform.position = currentImageTransform.parent.gameObject.GetComponent<Slot>().SlotDefaultPosition;
 
         InputImageTransform.position = InputImageTransform.parent.gameObject.GetComponent<Slot>().SlotDefaultPosition;
+
 
 
 
@@ -451,10 +459,10 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
         /*
          * Успешная передача предмета
         */
-
 
 
         // Замена предмета прошла успешно
@@ -555,17 +563,9 @@ public class InventoryManager : MonoBehaviour
 
         if (item != null && currentObject != null)
         {
-
-
-
-            /*
-             * Настраиваю слот предмета 
-            */
-
-
-
+            
+            // Настраиваю слот, в котором лежал предмет
             slot.ClearClot();
-
 
 
 
@@ -573,9 +573,6 @@ public class InventoryManager : MonoBehaviour
             /*
              * Убираю картинку предмету в инвентаре
             */
-
-
-
 
 
             // Получаю картинку
@@ -590,10 +587,10 @@ public class InventoryManager : MonoBehaviour
 
 
 
-
             /*
              *  Ставлю картинку на дефолтное место
             */
+
 
             // Получаю объект картинки
             GameObject image_obj = currentObject.transform.parent.gameObject;
@@ -604,13 +601,9 @@ public class InventoryManager : MonoBehaviour
 
 
 
-
             /*
              * Выбрасываем предмет из инвентаря 
             */
-
-
-
 
 
             // Поднимаю его на вершину иерархии 
@@ -622,13 +615,9 @@ public class InventoryManager : MonoBehaviour
 
 
 
-
             /*
              * Устанавливаю спрайт предмету 
             */
-
-
-
 
 
             // Получаю спрайт предмета
@@ -639,19 +628,11 @@ public class InventoryManager : MonoBehaviour
 
 
 
-
-
             /*
              * Успешное завершение
             */
 
-
-
-
             SuccessDrop = true;
-
-
-
 
 
         }

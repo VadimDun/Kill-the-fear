@@ -18,6 +18,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private GameObject item_slot;
 
+    private GameObject current_slot;
+
     private bool in_inventory_range = true;
 
     private bool flag_on_start = true;
@@ -163,77 +165,50 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     RaycastResult cursorEvent;
 
+    private string[] borders = { "Gun_border", "Item_border" };
+
+    private string[] images = { "GunImage", "ItemImage" };
+
 
     public void OnDrag(PointerEventData eventData)
     {
 
-
-
-
+        // Получаю графический луч
         cursorEvent = eventData.pointerCurrentRaycast;
 
+        // Получаю объект, который под курсором мыши
         GameObject TargetObject = cursorEvent.gameObject;
 
 
 
+
+        /*
+         * Попытка получить слот, в который передаем предмет 
+        */
+
+
         if (TargetObject != null)
         {
-            // Если курсор мышки на индикаторе,то получаем слот этого индикатора 
-            if (TargetObject.name == "Gun_border")
-            {
-                // Получаю родителя (слот)
-                GameObject gun_border_parent = TargetObject.transform.parent.gameObject;
+            // Проверяю если TargetObject является границей слота
+            CheckCurrentObjectOnBorders(TargetObject, ref current_slot);
 
-                gunSlot = gun_border_parent;
-
-            }
-            else
-                gunSlot = null;
-
-            if (TargetObject.name == "Item_border")
-            {
-                // Получаю родителя (слот)
-                GameObject item_border_parent = TargetObject.transform.parent.gameObject;
-
-                item_slot = item_border_parent;
-
-
-            }
-            else
-                item_slot = null;
-
-            if (TargetObject.name == "GunImage" && TargetObject != transform.gameObject)
-            {
-                GameObject gun_border_parent = TargetObject.transform.parent.gameObject;
-                gunSlot = gun_border_parent;
-            }
-
-            if (TargetObject.name == "ItemImage" && TargetObject != transform.gameObject)
-            {
-                GameObject item_border_parent = TargetObject.transform.parent.gameObject;
-                item_slot = item_border_parent;
-            }
-
-
-
-
-            if (item_slot != null)
-                Debug.Log($"Обнаружен {cursorEvent.gameObject.name}, при этом Item slot = {item_slot.name}");
-            else
-                Debug.Log($"Обнаружен {cursorEvent.gameObject.name}, при этом Item slot = Null");
-
-
+            // Проверяю если TargetObject является картинкой в слоте 
+            CheckCurrentObjectOnImages(TargetObject, ref current_slot);
         }
-        else 
+        else
         {
-            gunSlot = null;
-            item_slot = null;
+
+            // Обновляю current_slot, если луч не встречает объектов
+            current_slot = null;
         }
+
+
 
 
         /*
          *  Проверка на нахождение курсора мыши в пределах корня инвентаря  
         */
+
 
         // Позиция мыши на экране
         Vector3 mousePosition = Input.mousePosition;
@@ -241,9 +216,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // Проверка на нахожнение курсора мыши в пределах корня инвентаря 
         bool contains = RectTransformUtility.RectangleContainsScreenPoint(inventoryRootTransform, mousePosition);
 
-        //bool is_slot = false;
 
-        //GameObject current_object_on_cursor = eventData.pointerCurrentRaycast.gameObject;
 
 
         if (contains)
@@ -257,18 +230,79 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         }
 
 
+    }
+
+
+
+
+
+
+
+
+
+    private void CheckCurrentObjectOnBorders(GameObject current_object, ref GameObject current_slot)
+    {
+        if (borders.Contains(current_object.name))
+        {
+            // Получаю слот оружия, либо предмета
+            current_slot = GetSlot(current_object);
+        }
 
     }
 
 
-    
+
+
+
+
+
+
+    private void CheckCurrentObjectOnImages(GameObject current_object, ref GameObject current_slot)
+    {
+        if (images.Contains(current_object.name))
+        {
+            // Если картинка не является картинкой перетаскиваемого объекта 
+            if (current_object != transform.gameObject)
+            {
+                // Получаю слот картинки оружия, либо предмета
+                current_slot = GetSlot(current_object);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    private GameObject GetSlot(GameObject current_object)
+    {
+        // Получаю слот, в котором находится текущий объект
+        GameObject item_border_parent = current_object.transform.parent.gameObject;
+
+        return item_border_parent;
+
+    }
+
+
+
+
+
+
+
+
+
+
     private void LateUpdate()
     {
         if (is_dragging)
         {
+
             // Обновляю позицию картинки на Canvas
-            
-            
             Vector2 newPosition = ItemEventData.position - offset + item_hotspot;
             (transform as RectTransform).anchoredPosition = newPosition;
 
@@ -314,10 +348,11 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
          *  Если обнаружен оружейный слот 
         */
 
-
-        if (gunSlot != null)
+        //gunSlot
+        if (current_slot != null && current_slot.tag == "GunSlot")
         {
-
+            Debug.Log("Тэг ганслота = " + current_slot.tag);
+            Debug.Log("Имя слота = " + current_slot.name);
             // Получаю оружие, которое передаю
             GameObject gun = transform.GetChild(0).gameObject;
 
@@ -325,7 +360,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             Item item = gun.GetComponent<FloorItem>().getItem;
 
             // Получаю слот, в который хочу передать оружие
-            AmmunitionGunSlot slot = gunSlot.GetComponent<AmmunitionGunSlot>();
+            AmmunitionGunSlot slot = current_slot.GetComponent<AmmunitionGunSlot>();
 
             bool SuccessAddition;
 
@@ -353,7 +388,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
-        if (item_slot != null)
+        if (current_slot != null && current_slot.tag == "ItemSlot")
         {
             Debug.Log("Выполняется");
             // Получаю оружие, которое передаю
@@ -363,7 +398,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             Item item = itemObject.GetComponent<FloorItem>().getItem;
 
             // Получаю слот, в который хочу передать оружие
-            ItemSlot slot = item_slot.GetComponent<ItemSlot>();
+            ItemSlot slot = current_slot.GetComponent<ItemSlot>();
 
             bool SuccessAddition;
 
@@ -374,7 +409,6 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             {
                 // Устанавливаю картинку на исходную позицию
                 transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
-                Debug.Log("Что-то пошло по пизде");
             }
 
 
@@ -407,13 +441,10 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
             // Получаю слот из которого выбросили предмет
             GameObject slot = transform.parent.gameObject;
+            
+            // Получаю данные слота
+            Slot item_slot = slot.GetComponent<Slot>();
 
-            Slot item_slot = null;
-
-            if (item.itemType == ItemType.gun)
-            {
-                item_slot = slot.GetComponent<AmmunitionGunSlot>();
-            }
 
             if (DroppedObj != null && item != null && item_slot != null)
             {

@@ -61,7 +61,7 @@ public class FloorItem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && OnPlayerTarget)
         {
 
-            am.PutItem(item, itemObject);
+            am.MainInventoryManager(item, itemObject);
                 
         }
     }
