@@ -13,6 +13,8 @@ public class Slot : MonoBehaviour
 
     protected bool IsEmpty = true;
 
+    protected bool IsSetted = false;
+
     public bool SlotIsEmpty
     { 
         get { return IsEmpty; }
@@ -79,13 +81,14 @@ public class Slot : MonoBehaviour
 
 
 
-    public void SetItem(Item item, GameObject gunObj)
+    public virtual void SetItem(Item item, GameObject itemObj)
     {
         this.item = item;
 
-        internal_object = gunObj;
+        internal_object = itemObj;
 
         IsEmpty = false;
+
     }
 
     public void ClearClot()

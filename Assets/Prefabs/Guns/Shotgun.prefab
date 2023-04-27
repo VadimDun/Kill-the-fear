@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 669926173109121149}
   m_Layer: 0
   m_Name: Shotgun
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 8ba1f3c2350c9cc4a887499c4202254d, type: 2}
-  itemObject: {fileID: 0}
+  itemObject: {fileID: 3817218404033357394}
 --- !u!222 &8126252881514541265
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FloorItem : MonoBehaviour
 {
@@ -17,11 +19,44 @@ public class FloorItem : MonoBehaviour
 
     private InventoryManager am;
 
+    private string[] scene_kill_list = { "MainMenu", "SelectLevel" };
+
+
+
+
 
     private void Start()
     {
         am = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
+
+        SceneManager.activeSceneChanged += OnSceneChanged;
     }
+
+
+
+
+    /*
+     * ”ничтожаю все предметы, при переходе на другой уровень,
+     * так как они €вл€ютс€ DontDestroyOnLoad, из-за того что стали дочерними объектами DontDestroyOnLoad
+     */
+
+    void OnSceneChanged(Scene previousScene, Scene newScene)
+    {
+        if (scene_kill_list.Contains(newScene.name))
+        {
+            Object.Destroy(this.gameObject);
+        }
+    }
+
+
+
+
+
+    void OnDestroy()
+    {
+        SceneManager.activeSceneChanged -= OnSceneChanged;
+    }
+
 
 
 
