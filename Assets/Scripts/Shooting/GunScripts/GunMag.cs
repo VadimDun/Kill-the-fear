@@ -7,9 +7,9 @@ public class GunMag : MonoBehaviour
 
     protected GameObject magObject;
 
-    public GameObject SetMagToRifle { set { magObject = value; } }
+    public GameObject SetMagToGun { set { magObject = value; } }
 
-    public GameObject GetMagInRifle { get { return magObject; } }
+    public GameObject GetMagInGun { get { return magObject; } }
 
 
 

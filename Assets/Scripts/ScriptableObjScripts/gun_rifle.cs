@@ -3,21 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Rifle", menuName = "ScriptableObject/Items/Guns/Rifle", order = 2)]
-public class gun_rifle : Item
+public class gun_rifle : root_item_gun
 {
-    private Gun gunClass;
-
-    private Gun.Guns gunType;
-
-    private Gun.ShootMode shootMode;
-
-    private float delayBetweenShots;
-
-    private int damage;
-
-    private float bulletSpeed;
-
-    private float lastShotTime = Mathf.NegativeInfinity;
 
     [SerializeField] private Sprite unloaded_rifle_icon;
 
@@ -26,17 +13,6 @@ public class gun_rifle : Item
 
 
 
-    public Gun.Guns GetGunType => gunType;
-
-    public Gun.ShootMode GetShootMode => shootMode;
-
-    public float GetDelayBetweenShots => delayBetweenShots;
-
-    public int GetDamage => damage;
-
-    public float GetBulletSpeed => bulletSpeed;
-
-    public float GetLastShotTime => lastShotTime;
 
     public Sprite GetUnloadedDroppedIcon => unloaded_rifle_icon;
 
@@ -47,9 +23,8 @@ public class gun_rifle : Item
 
 
 
-    private void Start()
+    private void OnEnable()
     {
-        gunClass = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerGun>();
 
         gunType = Gun.Guns.assaultRifle;
 

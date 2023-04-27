@@ -15,8 +15,6 @@ public class ItemSlot : Slot
 
         internal_object.GetComponent<Collider2D>().enabled = true;
 
-        Debug.Log("Метод вызвался, коллайдер был установлен");
-
     }
 
 }

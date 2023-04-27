@@ -35,6 +35,28 @@ public class Gun : MonoBehaviour
         set { isTriggerPulled = value; }
     }
 
+
+
+
+
+    // Массив слотов инвентаря (под оружие)
+    private AmmunitionGunSlot[] gun_slots = new AmmunitionGunSlot[3];
+
+    private void Awake()
+    {
+        gun_slots[0] = GameObject.Find("GunSlot(2)").GetComponent<AmmunitionGunSlot>();
+        gun_slots[1] = GameObject.Find("GunSlot(3)").GetComponent<AmmunitionGunSlot>();
+        gun_slots[2] = GameObject.Find("GunSlot(1)").GetComponent<AmmunitionGunSlot>();
+    }
+
+
+
+
+
+
+
+
+
     public void PullTheTrigger()
     {
         isTriggerPulled = !isTriggerPulled;
@@ -45,10 +67,24 @@ public class Gun : MonoBehaviour
         }
     }
 
+
+
+
+
+
+
+
+
     
     private Bullet bullet;
     private GameObject bulletPrefab;
     private Transform firePoint;
+
+
+
+
+
+
 
     protected virtual void Shoot()
     {
@@ -60,41 +96,102 @@ public class Gun : MonoBehaviour
         
     }
 
+
+
+
+
+
+    // Магазин оружия
+    protected mag gun_mag;
+
+    // Оружие
+    protected GameObject gunObject;
+
+
+
+
+
     public void ChangeGun(int numberOfGun)
     {
         switch (numberOfGun)
         {
             case 1:
-                if (current_gun != Guns.pistol)
+                if (gun_slots[0] != null)
                 {
-                    current_gun = Guns.pistol;
-                    delayBetweenShots = 0.3f;
-                    damage = 34;
-                    bulletSpeed = 10f;
-                    shootMode = ShootMode.semiAuto;
-                    lastShotTime = Mathf.NegativeInfinity;
+                    if (gun_slots[0].object_in_slot != null)
+                    {
+                        // Получаю информацию об оружии в этом слоте
+                        root_item_gun gun_data = gun_slots[0].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
+
+                        current_gun = gun_data.GetGunType;
+                        delayBetweenShots = gun_data.GetDelayBetweenShots;
+                        damage = gun_data.GetDamage;
+                        bulletSpeed = gun_data.GetBulletSpeed;
+                        shootMode = gun_data.GetShootMode;
+                        lastShotTime = gun_data.GetLastShotTime;
+
+                        // Получаю оружие и магазин от него
+                        gunObject = gun_slots[0].object_in_slot;
+
+                        if (current_gun != Guns.shotgun)
+                        {
+                            gun_mag = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                        }
+
+                    }
                 }
+                
                 break;
             case 2:
-                if (current_gun != Guns.assaultRifle)
+                if (gun_slots[1] != null)
                 {
-                    current_gun = Guns.assaultRifle;
-                    delayBetweenShots = 0.1f;
-                    damage = 18;
-                    bulletSpeed = 10f;
-                    shootMode = ShootMode.auto;
-                    lastShotTime = Mathf.NegativeInfinity;
+                    if (gun_slots[1].object_in_slot != null)
+                    {
+                        // Получаю информацию об оружии в этом слоте
+                        root_item_gun gun_data = gun_slots[1].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
+
+                        current_gun = gun_data.GetGunType;
+                        delayBetweenShots = gun_data.GetDelayBetweenShots;
+                        damage = gun_data.GetDamage;
+                        bulletSpeed = gun_data.GetBulletSpeed;
+                        shootMode = gun_data.GetShootMode;
+                        lastShotTime = gun_data.GetLastShotTime;
+
+                        // Получаю оружие и магазин от него
+                        gunObject = gun_slots[1].object_in_slot;
+
+                        if (current_gun != Guns.shotgun)
+                        {
+                            gun_mag = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                        }
+                    }
                 }
+
+                
                 break;
             case 3:
-                if (current_gun != Guns.shotgun)
+                if (gun_slots[2] != null)
                 {
-                    current_gun = Guns.shotgun;
-                    delayBetweenShots = 1.0f;
-                    damage = 11;
-                    bulletSpeed = 10f;
-                    shootMode = ShootMode.semiAuto;
-                    lastShotTime = Mathf.NegativeInfinity;
+                    if (gun_slots[2].object_in_slot != null)
+                    {
+                        // Получаю информацию об оружии в этом слоте
+                        root_item_gun gun_data = gun_slots[2].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
+
+                        current_gun = gun_data.GetGunType;
+                        delayBetweenShots = gun_data.GetDelayBetweenShots;
+                        damage = gun_data.GetDamage;
+                        bulletSpeed = gun_data.GetBulletSpeed;
+                        shootMode = gun_data.GetShootMode;
+                        lastShotTime = gun_data.GetLastShotTime;
+
+                        // Получаю оружие и магазин от него
+                        gunObject = gun_slots[2].object_in_slot;
+
+                        if (current_gun != Guns.shotgun)
+                        {
+                            gun_mag = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                        }
+                    }
                 }
                 break;
         }

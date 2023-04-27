@@ -19,6 +19,13 @@ public class mag : MonoBehaviour
 
 
 
+
+    public int get_current_bullet_count => current_bullet_count;
+
+    public int get_capacity => capacity;
+
+
+
     private void Start()
     {
         // Получаю емкость магазина

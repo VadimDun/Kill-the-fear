@@ -38,15 +38,27 @@ public class PlayerGun : Gun
     public void PlayerShoot() => Shoot();
 
 
+
+
+
     protected override void Shoot()
     {
-        if ((Time.time - lastShotTime < delayBetweenShots) || (rangeFinder.GetDistToTarget <= MinFireDist) ) { return; }
+        if ((Time.time - lastShotTime < delayBetweenShots) || (rangeFinder.GetDistToTarget <= MinFireDist) || (gun_mag.get_current_bullet_count <= 0) ) { return; }
         lastShotTime = Time.time;
 
         //ќбновл€ю позицию CurrentPoint 
         firePoints.UpdateCurrentPoint(ref firePointTransform);
 
-        bullet = Instantiate(bulletPrefab, firePointTransform.position, firePointTransform.rotation).GetComponent<PlayerBullet>();
+        //bullet = Instantiate(bulletPrefab, firePointTransform.position, firePointTransform.rotation).GetComponent<PlayerBullet>();
+        
+        GameObject bullet_obj = gun_mag.TakeBullet();
+        bullet_obj.transform.position = firePointTransform.position;
+        bullet_obj.transform.rotation = firePointTransform.rotation;
+        bullet_obj.SetActive(true);
+
+        bullet = bullet_obj.GetComponent<PlayerBullet>();
+
+
         playerSounds.PlaySound();
         bullet.damage = damage;
         bullet.bulletSpeed = bulletSpeed;
