@@ -1,3 +1,5 @@
+using Mono.Cecil.Cil;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +52,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     
     private Vector2 item_hotspot;
 
+    private Rigidbody2D image_rb;
+
     //bool target_on_slot;
 
 
@@ -96,7 +100,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         item_hotspot = new Vector2 (inventoryTransform.position.x - inventoryRootTransform.position.x, inventoryTransform.position.y - inventoryRootTransform.position.y);
 
-        
+        image_rb = GetComponent<Rigidbody2D>();
     }
 
 
@@ -144,8 +148,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // ќтключаю Graphics Raycaster
         transform.gameObject.GetComponent<GraphicRaycaster>().enabled = false;
 
+        // ќтключаю скорость
+        image_rb.velocity = Vector2.zero;
 
-        
         is_dragging = true;
 
         item_slot = null;
@@ -168,6 +173,8 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     private string[] borders = { "Gun_border", "Item_border" };
 
     private string[] images = { "GunImage", "ItemImage" };
+
+
 
 
     public void OnDrag(PointerEventData eventData)
@@ -295,21 +302,24 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
-
-
-    private void LateUpdate()
+    
+    
+    private void Update()
     {
+        
         if (is_dragging)
         {
-
             // ќбновл€ю позицию картинки на Canvas
-            Vector2 newPosition = ItemEventData.position - offset + item_hotspot;
-            (transform as RectTransform).anchoredPosition = newPosition;
+            Vector2 targetPosition = ItemEventData.position - offset + item_hotspot;
 
+            Vector2 direction = (targetPosition - (transform as RectTransform).anchoredPosition).normalized;
+            image_rb.AddForce(direction * 10000);
+            (transform as RectTransform).anchoredPosition = targetPosition;
         }
 
-
     }
+
+    
 
 
 
@@ -329,6 +339,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         // ¬ключаю Graphics Raycaster
         transform.gameObject.GetComponent<GraphicRaycaster>().enabled = true;
+
+        // —брасываю скорость объекта
+        image_rb.velocity = Vector2.zero;
 
 
         /*
