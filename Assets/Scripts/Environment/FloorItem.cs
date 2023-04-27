@@ -20,12 +20,7 @@ public class FloorItem : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<SpriteRenderer>().sprite = item.GetFloorIcon;
-
         am = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
-
-        
-
     }
 
 

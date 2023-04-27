@@ -42,7 +42,7 @@ public class Slot : MonoBehaviour
 
 
 
-    protected GameObject internal_object;
+    public GameObject internal_object;
 
     public GameObject object_in_slot
     {

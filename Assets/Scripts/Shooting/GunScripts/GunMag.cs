@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class GunMag : MonoBehaviour
 {
-    private int capasity;
 
-    public int MagCapasity
-    { 
-        get { return capasity; }
-        set { capasity = value; }
-    }
+    protected GameObject magObject;
 
-    private int current_count;
+    public GameObject SetMagToRifle { set { magObject = value; } }
 
-    public int currentMagCount 
-    { 
-        get { return current_count; } 
-        set { current_count = value; } 
+    public GameObject GetMagInRifle { get { return magObject; } }
+
+
+
+
+    private void Start()
+    {
+        magObject = transform.GetChild(0).gameObject;
+
+        magObject.GetComponent<SpriteRenderer>().sprite = null;
+        magObject.GetComponent<Collider2D>().enabled = false;
     }
 
 

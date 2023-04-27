@@ -12,7 +12,7 @@ public class mag : MonoBehaviour
     private int current_bullet_count;
 
     // Стек патронов
-    private Stack<GameObject> bullets;
+    public Stack<GameObject> bullets;
 
     // Префаб пули 
     [SerializeField] private GameObject bulletPrefab;
@@ -36,9 +36,12 @@ public class mag : MonoBehaviour
                 GameObject bulletInstance = Instantiate(bulletPrefab, transform);
                 bulletInstance.SetActive(false);
                 bullets.Push(bulletInstance);
+                
             }
 
+
         }
+
 
         // Инициализирую текущее количество патрон
         current_bullet_count = bullets.Count;

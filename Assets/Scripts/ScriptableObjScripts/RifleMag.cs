@@ -8,7 +8,7 @@ public class RifleMag : Mag
 
     private const int rifle_mag_capacity = 30;
 
-    private void Start()
+    private void OnEnable()
     {
         capacity = rifle_mag_capacity;
 

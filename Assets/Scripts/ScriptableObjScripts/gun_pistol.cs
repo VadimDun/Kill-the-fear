@@ -19,6 +19,8 @@ public class gun_pistol : Item
 
     private float lastShotTime = Mathf.NegativeInfinity;
 
+    [SerializeField] private Sprite unloaded_pistol_inventory_icon;
+
 
 
 
@@ -33,6 +35,8 @@ public class gun_pistol : Item
     public float GetBulletSpeed => bulletSpeed;
 
     public float GetLastShotTime => lastShotTime;
+
+    public Sprite GetUnloadedInventoryIcon => unloaded_pistol_inventory_icon;
 
 
 

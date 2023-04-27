@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7814179308565853997}
   - component: {fileID: -3537967729830961730}
   - component: {fileID: 9221034864978584419}
+  - component: {fileID: 1030088502}
   m_Layer: 0
   m_Name: Rifle
   m_TagString: Untagged
@@ -82,7 +83,7 @@ SpriteRenderer:
   m_SortingLayerID: 1248659279
   m_SortingLayer: 2
   m_SortingOrder: 6
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: d4d58bbf5f2eff540891cc38c886ce14, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -90,7 +91,7 @@ SpriteRenderer:
   m_Size: {x: 0.32, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!60 &4498226770193358679
@@ -142,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: bdb8ba5193739aa43a4d4d428c55fe59, type: 2}
+  itemObject: {fileID: 4498226770193358667}
 --- !u!222 &-3537967729830961730
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -180,3 +182,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1030088502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4498226770193358667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fdcae43083bc22498d93a82141ae9b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

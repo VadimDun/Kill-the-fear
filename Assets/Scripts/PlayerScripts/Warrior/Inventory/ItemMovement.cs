@@ -16,15 +16,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private UnityEngine.Transform parentTransform;
 
-    private GameObject gunSlot;
-
-    private GameObject item_slot;
-
     private GameObject current_slot;
 
     private bool in_inventory_range = true;
-
-    private bool flag_on_start = true;
 
     private bool is_dragging = false;
 
@@ -32,23 +26,11 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private RectTransform inventoryTransform;
 
-    private GameObject[] GunSlotIndicators = new GameObject[3];
-
-    private GameObject[] gunSlots = new GameObject[3];
-
     private GameObject Camera_main;
 
     private RectTransform inventoryRootTransform;
 
-    private RectTransform items_UI_transform;
-
     private RectTransform canvasTransform;
-
-    private RectTransform parent_transform_of_items_UI;
-
-    private RectTransform parent_transform_of_ammunitionUI;
-
-    private RectTransform ammunitionUI_transform;
     
     private Vector2 item_hotspot;
 
@@ -67,40 +49,23 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // Получаю RectTransform корня инвентаря
         inventoryRootTransform = GameObject.Find("InventoryRoot").GetComponent<RectTransform>();
 
-        /*
-         * Получаю RectTransform инвентаря  
-        */
-
+        //Получаю RectTransform инвентаря  
         inventoryTransform = GameObject.Find("Inventory").GetComponent<RectTransform>();
 
-
-        /*
-         * Получаю Items_UI RectTransform  
-        */
-
-        items_UI_transform = GameObject.Find("ItemsUI").GetComponent<RectTransform>();
-
-        /*
-         *  Получаю Transform канваса
-        */
-
+        // Получаю Transform канваса
         canvasTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
 
 
-        /*
-         * Получаю RectTransform AmmunitionUI 
-        */
-
-        ammunitionUI_transform = GameObject.Find("AmmunitionUI").GetComponent<RectTransform>();
 
 
         /*
-         * Получаю hotspot перетаскиваемой картинки 
+         * Получаю hotspot перетаскиваемой картинки (Из-за локальных координат ItemsUI, ammunitionUI)
         */
 
         item_hotspot = new Vector2 (inventoryTransform.position.x - inventoryRootTransform.position.x, inventoryTransform.position.y - inventoryRootTransform.position.y);
 
         image_rb = GetComponent<Rigidbody2D>();
+
     }
 
 
@@ -120,12 +85,6 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // Запоминаю Transform родительского объекта
         parentTransform = transform.parent;
 
-        // Запоминаю Transform родительского объекта Items_UI
-        parent_transform_of_items_UI = items_UI_transform.parent.gameObject.GetComponent<RectTransform>();
-
-        // Запоминаю Transform родительского объекта AmmunitionUI
-        parent_transform_of_ammunitionUI = ammunitionUI_transform.parent.gameObject.GetComponent<RectTransform>();
-
         // Устанавливаю родительский объект в качестве инвентаря
         transform.SetParent(inventoryRootTransform);
 
@@ -136,6 +95,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             eventData.pressEventCamera,
             out offset
         );
+
 
 
 
@@ -152,12 +112,6 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         image_rb.velocity = Vector2.zero;
 
         is_dragging = true;
-
-        item_slot = null;
-
-        gunSlot = null;
-
-        //target_on_slot = true;
 
     }
 
@@ -334,6 +288,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnEndDrag(PointerEventData eventData)
     {
+
         is_dragging = false;
 
 
@@ -343,17 +298,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // Сбрасываю скорость объекта
         image_rb.velocity = Vector2.zero;
 
-
-        /*
-         * Возвращаю ItemsUI обратно  
-        */
-
-        //items_UI_transform.SetParent(parent_transform_of_items_UI);
-
-
-
         // Устанавливаю в качестве родительского объекта тот, который был родительским до нажатия (для объекта, который перетаскиваем)
         transform.SetParent(parentTransform);
+
 
 
 
@@ -361,11 +308,46 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
          *  Если обнаружен оружейный слот 
         */
 
-        //gunSlot
+
         if (current_slot != null && current_slot.tag == "GunSlot")
         {
-            Debug.Log("Тэг ганслота = " + current_slot.tag);
-            Debug.Log("Имя слота = " + current_slot.name);
+
+            // Получаю текущий объект, который находится в картинке
+            GameObject current_item = transform.GetChild(0).gameObject;
+
+            // Если это магазин
+            if (current_item.GetComponent<mag>() != null)
+            {
+
+                if (current_slot.transform.GetChild(1).childCount > 0)
+                {
+                    bool succesLoad = false;
+
+                    Slot current_slot_data = current_slot.GetComponent<Slot>();
+
+                    Camera_main.GetComponent<InventoryManager>().SetMagToGun(current_slot_data, transform.gameObject, out succesLoad);
+
+                    if (succesLoad)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Debug.Log("Добавление магазина прошло неуспешно!");
+                        transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
+                    }
+                }
+                
+            }
+
+
+
+
+
+
+
+
+
             // Получаю оружие, которое передаю
             GameObject gun = transform.GetChild(0).gameObject;
 
@@ -392,6 +374,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             return;
 
         }
+        
 
 
 
@@ -400,10 +383,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         */
 
 
-
         if (current_slot != null && current_slot.tag == "ItemSlot")
         {
-            Debug.Log("Выполняется");
+
             // Получаю оружие, которое передаю
             GameObject itemObject = transform.GetChild(0).gameObject;
 
@@ -430,13 +412,11 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
+
         /*
          *  Если индикаторов не обнаруженно, и курсор находиться в пределах инвентаря 
         */
 
-
-
-        
 
         if (in_inventory_range == true)
         {
@@ -467,8 +447,6 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
                 if (!drop_is_success)
                 {
-                    Debug.Log("Предмет не был выброшен");
-
                     // Устанавливаю картинку на исходную позицию
                     transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
                 }

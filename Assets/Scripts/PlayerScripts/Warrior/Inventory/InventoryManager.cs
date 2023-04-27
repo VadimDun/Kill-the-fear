@@ -435,7 +435,7 @@ public class InventoryManager : MonoBehaviour
 
 
         // Получаю объект, который сейчас находится в CurrentSlot
-        GameObject gm_current = currentImageTransform.GetChild(0).transform.gameObject;
+        GameObject gm_current = currentImageTransform.GetChild(0).gameObject;
 
         // Получаю предмет, который сейчас находится в CurrentSlot
         Item item_current = gm_current.GetComponent<FloorItem>().getItem;
@@ -448,7 +448,7 @@ public class InventoryManager : MonoBehaviour
 
 
         // Получаю объект, который сейчас находится в InputSlot
-        GameObject gm_input = InputImageTransform.GetChild(0).transform.gameObject;
+        GameObject gm_input = InputImageTransform.GetChild(0).gameObject;
 
         // Получаю предмет, который сейчас находится в CurrentSlot
         Item item_input = gm_input.GetComponent<FloorItem>().getItem;
@@ -486,7 +486,7 @@ public class InventoryManager : MonoBehaviour
 
         if (item.itemType == ItemType.gun || item.itemType == ItemType.armor || item.itemType == ItemType.secondaty_arms)
         {
-            // Предмет не является оружием, добавление прошло не успешно 
+            // Добавление прошло не успешно 
             ItemAdded = false;
         }
         else
@@ -635,6 +635,204 @@ public class InventoryManager : MonoBehaviour
 
 
         }
+    }
+
+
+
+
+
+
+
+
+
+    public void SetMagToGun(Slot slot, GameObject transmitted_picture, out bool successLoad)
+    {
+
+        successLoad = false;
+
+        // Получаю оружие в слоте
+        GameObject gun_in_slot = slot.object_in_slot;
+
+        // Получаю предмет в картинке
+        GameObject mag_in_pic = transmitted_picture.transform.GetChild(0).gameObject;
+
+        // Получаю слот картинки
+        GameObject image_slot = transmitted_picture.transform.parent.gameObject;
+
+
+
+
+        /*
+         * Проверяю на то, есть ли магазин в объекте
+        */
+
+        if (gun_in_slot.transform.childCount > 0)
+        {
+
+            /*
+             * Если объект не заряжен
+            */
+
+            bool is_loaded = false;
+
+            gun_rifle rifle = gun_in_slot.GetComponent<FloorItem>().getItem as gun_rifle;
+            gun_pistol pistol = gun_in_slot.GetComponent<FloorItem>().getItem as gun_pistol;
+
+            if (rifle != null)
+            {
+
+                // Устанавливаю магазин в переменную оружия
+                gun_in_slot.GetComponent<Internal_rifle_mag>().LoadMagToGun(mag_in_pic, out is_loaded);
+
+                if (is_loaded)
+                {
+                    // Получаю магазин в объекте
+                    GameObject mag_in_gun = gun_in_slot.transform.GetChild(0).gameObject;
+
+                    // Ставлю магазин из оружия в исходный слот инвентаря
+                    mag_in_gun.transform.SetParent(transmitted_picture.transform);
+
+                    // Стввлю магазин из инвентаря как дочерний объект оружия
+                    mag_in_pic.transform.SetParent(gun_in_slot.transform);
+
+                    // Устанавливаю магазины в инвентаре
+                    SetMagInInventoryWithReplace(transmitted_picture, image_slot, mag_in_pic, gun_in_slot, mag_in_gun);
+
+                }
+
+                successLoad = is_loaded;
+
+            }
+            else if (pistol != null)
+            {
+                // Устанавливаю магазин в переменную оружия
+                gun_in_slot.GetComponent<Internal_pistol_mag>().LoadMagToGun(mag_in_pic, out is_loaded);
+
+                if (is_loaded)
+                {
+                    // Получаю магазин в объекте
+                    GameObject mag_in_gun = gun_in_slot.transform.GetChild(0).gameObject;
+
+                    // Ставлю магазин из оружия в исходный слот инвентаря
+                    mag_in_gun.transform.SetParent(transmitted_picture.transform);
+
+                    // Стввлю магазин из инвентаря как дочерний объект оружия
+                    mag_in_pic.transform.SetParent(gun_in_slot.transform);
+
+                    // Устанавливаю магазины в инвентаре
+                    SetMagInInventoryWithReplace(transmitted_picture, image_slot, mag_in_pic, gun_in_slot, mag_in_gun);
+
+                }
+
+                successLoad = is_loaded;
+            }
+
+        }
+        else
+        {
+
+            /*
+             * Если объект не заряжен
+            */
+
+            bool is_loaded = false;
+
+            gun_rifle rifle = gun_in_slot.GetComponent<FloorItem>().getItem as gun_rifle;
+            gun_pistol pistol = gun_in_slot.GetComponent<FloorItem>().getItem as gun_pistol;
+
+            if (rifle != null)
+            {
+                // Устанавливаю магазин в переменную штурмовой винтовки
+                gun_in_slot.GetComponent<Internal_rifle_mag>().LoadMagToGun(mag_in_pic, out is_loaded);
+
+                if (is_loaded) 
+                {
+                    // Устанавливаю магазин в инвентаре
+                    SetMagInInventory(transmitted_picture, image_slot, mag_in_pic, gun_in_slot);
+                }
+
+                successLoad = is_loaded;
+
+            }
+            else if (pistol != null)
+            {
+                // Устанавливаю магазин в переменную пистолета
+                gun_in_slot.GetComponent<Internal_pistol_mag>().LoadMagToGun(mag_in_pic, out is_loaded);
+
+                if (is_loaded)
+                {
+                    // Устанавливаю магазин в инвентаре
+                    SetMagInInventory(transmitted_picture, image_slot, mag_in_pic, gun_in_slot);
+                }
+                
+                successLoad = is_loaded;
+
+            }
+
+            successLoad = is_loaded;
+
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+    private void SetMagInInventory(GameObject transmitted_picture, GameObject image_slot, GameObject mag_in_pic, GameObject gun_in_slot)
+    {
+        // Устанавливаю магазин как дочерний объект оружия 
+        mag_in_pic.transform.SetParent(gun_in_slot.transform);
+
+        // Убираю картинку магазина
+        transmitted_picture.GetComponent<Image>().sprite = null;
+
+        // Выключаю картинку
+        transmitted_picture.GetComponent<Image>().enabled = false;
+
+        // Ставлю картинку на дефолтную позицию
+        transmitted_picture.transform.position = image_slot.GetComponent<Slot>().SlotDefaultPosition;
+
+        // Получаю картинку оружия
+        Image gun_image = gun_in_slot.transform.parent.gameObject.GetComponent<Image>();
+
+        // Ставлю спрайт заряженного оружия 
+        gun_image.sprite = gun_in_slot.GetComponent<FloorItem>().getItem.GetInventoryIcon;
+
+        // Отчищаю слот
+        image_slot.GetComponent<Slot>().ClearClot();
+
+
+    }
+
+
+
+
+
+
+
+
+
+    private void SetMagInInventoryWithReplace(GameObject transmitted_picture, GameObject image_slot, GameObject mag_in_pic, GameObject gun_in_slot, GameObject mag_in_gun)
+    {
+        // Получаю картинку оружия
+        Image gun_image = gun_in_slot.transform.parent.gameObject.GetComponent<Image>();
+
+        // Ставлю спрайт заряженного оружия 
+        gun_image.sprite = gun_in_slot.GetComponent<FloorItem>().getItem.GetInventoryIcon;
+
+        // Обновляю картинку магазина
+        transmitted_picture.GetComponent<Image>().sprite = mag_in_gun.GetComponent<FloorItem>().getItem.GetInventoryIcon;
+
+        // Ставлю картинку на дефолтную позицию
+        transmitted_picture.transform.position = image_slot.GetComponent<Slot>().SlotDefaultPosition;
+
+        // Обновляю слот инвентаря
+        image_slot.GetComponent<Slot>().SetItem(mag_in_gun.GetComponent<FloorItem>().getItem, mag_in_gun);
     }
 
 
