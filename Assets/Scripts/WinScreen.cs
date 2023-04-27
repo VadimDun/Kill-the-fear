@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEditor.UI;
-using UnityEngine.UI;
+
 
 public class WinScreen : MonoBehaviour
 {
