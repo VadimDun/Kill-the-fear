@@ -64,7 +64,7 @@ public class Slot : MonoBehaviour
 
     public Vector3 SlotDefaultPosition => defaultPosition;
 
-
+    private Face_UI_manager face_UI_manager;
 
 
 
@@ -89,6 +89,8 @@ public class Slot : MonoBehaviour
 
         IsEmpty = false;
 
+        //face_UI_manager.UpdatePic();
+
     }
 
     public void ClearClot()
@@ -98,6 +100,8 @@ public class Slot : MonoBehaviour
         internal_object = null;
 
         IsEmpty = true;
+
+        //face_UI_manager.UpdatePic();
     }
 
 
@@ -125,6 +129,10 @@ public class Slot : MonoBehaviour
         {
             defaultPosition = transform.GetChild(1).position;
         }
+
+
+
+        face_UI_manager = GameObject.Find("GunBar").GetComponent<Face_UI_manager>();
 
 
     }

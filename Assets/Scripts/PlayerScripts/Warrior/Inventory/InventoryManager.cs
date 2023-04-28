@@ -22,6 +22,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
+
     private void Start()
     {
 
@@ -51,6 +52,7 @@ public class InventoryManager : MonoBehaviour
 
         // Делаю неактивным 
         GameObject.Find("Inventory").SetActive(false);
+
 
     }
 
