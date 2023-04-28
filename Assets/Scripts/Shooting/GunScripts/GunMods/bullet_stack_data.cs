@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class mag : MonoBehaviour
+public class bullet_stack_data : MonoBehaviour
 {
-    // Емкость магазина
+
+    // Емкость стека с патронами
     private int capacity;
 
-    // Текущее количество патрон в магазине
+    // Текущее количество патрон в стеке
     private int current_bullet_count;
 
     // Стек патронов
@@ -28,14 +28,14 @@ public class mag : MonoBehaviour
 
     private void Start()
     {
-        // Получаю емкость магазина
-        Mag mag_item = GetComponent<FloorItem>().getItem as Mag;
-        capacity = mag_item.GetCapacity;
+        // Получаю емкость стека с патронами 
+        BulletStack bullets_stack_item = GetComponent<FloorItem>().getItem as BulletStack;
+        capacity = bullets_stack_item.GetStackCapacity;
 
         // Инициализирую стек
         bullets = new Stack<GameObject>();
 
-        // Заполняю обойму пулями 
+        // Заполняю стек пулями 
         if (bulletPrefab != null)
         {
             for (int i = 0; i < capacity; i++)
@@ -43,10 +43,8 @@ public class mag : MonoBehaviour
                 GameObject bulletInstance = Instantiate(bulletPrefab, transform);
                 bulletInstance.SetActive(false);
                 bullets.Push(bulletInstance);
-                
+
             }
-
-
         }
 
 
@@ -65,9 +63,9 @@ public class mag : MonoBehaviour
 
             return takenBullet;
         }
-        else 
+        else
         {
-            
+
             return null;
         }
     }
