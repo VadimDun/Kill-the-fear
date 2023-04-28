@@ -28,5 +28,13 @@ public class gun_shotgun : root_item_gun
 
         itemType = ItemType.gun;
 
+        spriteIndex = 3;
+
+        soundIndex = 3;
+
+        firePointIndex = 3;
+
+        AD_index = 3;
+
     }
 }

@@ -27,5 +27,13 @@ public class gun_pistol : root_item_gun
         bulletSpeed = 10f;
 
         itemType = ItemType.gun;
+
+        spriteIndex = 1;
+
+        soundIndex = 1;
+
+        firePointIndex = 1;
+
+        AD_index = 1;
     }
 }

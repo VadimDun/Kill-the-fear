@@ -38,6 +38,14 @@ public class gun_rifle : root_item_gun
 
         itemType = ItemType.gun;
 
+        spriteIndex = 2;
+
+        soundIndex = 2;
+
+        firePointIndex = 2;
+
+        AD_index = 2;
+
     }
 
 }

@@ -17,6 +17,19 @@ public class root_item_gun : Item
     protected float lastShotTime = Mathf.NegativeInfinity;
 
 
+    // Индекс спрайта персонажа
+    protected int spriteIndex;
+
+    // Индекс звука выстрела
+    protected int soundIndex;
+
+    // Индекс огневой точки спрайта
+    protected int firePointIndex;
+
+    // Индекс разности направления ствола и спрайта
+    protected int AD_index;
+
+
 
 
 
@@ -31,6 +44,14 @@ public class root_item_gun : Item
     public float GetBulletSpeed => bulletSpeed;
 
     public float GetLastShotTime => lastShotTime;
+
+    public int GetSpriteIndex => spriteIndex;
+
+    public int GetSoundIndex => soundIndex;
+
+    public int GetFirePointIndex => firePointIndex;
+
+    public int get_AD_index => AD_index;
 
 
 }

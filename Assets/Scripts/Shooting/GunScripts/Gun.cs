@@ -47,6 +47,10 @@ public class Gun : MonoBehaviour
         gun_slots[0] = GameObject.Find("GunSlot(2)").GetComponent<AmmunitionGunSlot>();
         gun_slots[1] = GameObject.Find("GunSlot(3)").GetComponent<AmmunitionGunSlot>();
         gun_slots[2] = GameObject.Find("GunSlot(1)").GetComponent<AmmunitionGunSlot>();
+
+
+        shootingScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Shooting>();
+
     }
 
 
@@ -106,7 +110,7 @@ public class Gun : MonoBehaviour
     // Оружие
     protected GameObject gunObject;
 
-
+    private Shooting shootingScript;
 
 
 
@@ -131,6 +135,7 @@ public class Gun : MonoBehaviour
 
                         // Получаю оружие и магазин от него
                         gunObject = gun_slots[0].object_in_slot;
+                        shootingScript.set_root_gun = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
 
                         if (current_gun != Guns.shotgun)
                         {
@@ -162,6 +167,7 @@ public class Gun : MonoBehaviour
 
                         // Получаю оружие и магазин от него
                         gunObject = gun_slots[1].object_in_slot;
+                        shootingScript.set_root_gun = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
 
                         if (current_gun != Guns.shotgun)
                         {
@@ -193,6 +199,7 @@ public class Gun : MonoBehaviour
 
                         // Получаю оружие и магазин от него
                         gunObject = gun_slots[2].object_in_slot;
+                        shootingScript.set_root_gun = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
 
                         if (current_gun != Guns.shotgun)
                         {
