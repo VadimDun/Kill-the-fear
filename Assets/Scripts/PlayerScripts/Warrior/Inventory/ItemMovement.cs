@@ -311,33 +311,39 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         if (current_slot != null && current_slot.tag == "GunSlot")
         {
+            // Получаю слот текущего предмета с магазином
+            ItemSlot current_slot_with_mag = transform.parent.gameObject.GetComponent<ItemSlot>();
 
-            // Получаю текущий объект, который находится в картинке
-            GameObject current_item = transform.GetChild(0).gameObject;
-
-            // Если это магазин
-            if (current_item.GetComponent<mag>() != null)
+            if (current_slot_with_mag != null)
             {
 
-                if (current_slot.transform.GetChild(1).childCount > 0)
-                {
-                    bool succesLoad = false;
+                // Получаю текущий объект, который находится в слоте
+                GameObject current_item = current_slot_with_mag.object_in_slot;
 
+                // Если это магазин
+                if (current_item.GetComponent<mag>() != null)
+                {
+
+                    // Получаю данные входного слота
                     Slot current_slot_data = current_slot.GetComponent<Slot>();
 
-                    Camera_main.GetComponent<InventoryManager>().SetMagToGun(current_slot_data, transform.gameObject, out succesLoad);
+                    if (current_slot_data.object_in_slot != null)
+                    {
+                        bool succesLoad = false;
 
-                    if (succesLoad)
-                    {
-                        return;
+                        Camera_main.GetComponent<InventoryManager>().SetMagToGun(current_slot, transform.gameObject, out succesLoad);
+
+                        if (succesLoad)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
+                        }
                     }
-                    else
-                    {
-                        Debug.Log("Добавление магазина прошло неуспешно!");
-                        transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
-                    }
+
                 }
-                
             }
 
 
@@ -348,8 +354,11 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
+            // Получаю слот текущего предмета с оружием
+            AmmunitionGunSlot current_slot_with_gun = transform.parent.gameObject.GetComponent<AmmunitionGunSlot>();
+
             // Получаю оружие, которое передаю
-            GameObject gun = transform.GetChild(0).gameObject;
+            GameObject gun = transform.parent.gameObject.GetComponent<Slot>().object_in_slot;
 
             // Получаю предмет, который передаю 
             Item item = gun.GetComponent<FloorItem>().getItem;
@@ -360,7 +369,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             bool SuccessAddition;
 
             // Передаю оружие в новый слот
-            Camera_main.GetComponent<InventoryManager>().PutWeaponToSlot(item, gun, slot, out SuccessAddition);
+            Camera_main.GetComponent<InventoryManager>().PutWeaponToSlot(item, gun, slot, current_slot_with_gun, out SuccessAddition);
 
             if (!SuccessAddition)
             {
@@ -386,19 +395,22 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         if (current_slot != null && current_slot.tag == "ItemSlot")
         {
 
-            // Получаю оружие, которое передаю
-            GameObject itemObject = transform.GetChild(0).gameObject;
+            // Получаю объект, который передаю
+            GameObject itemObject = transform.parent.gameObject.GetComponent<Slot>().object_in_slot;
 
             // Получаю предмет, который передаю 
             Item item = itemObject.GetComponent<FloorItem>().getItem;
 
-            // Получаю слот, в который хочу передать оружие
+            // Получаю данные слота, в который хочу передать оружие
             ItemSlot slot = current_slot.GetComponent<ItemSlot>();
+
+            // Получаю данные текущего слота
+            ItemSlot current_pic_slot = transform.parent.gameObject.GetComponent<ItemSlot>();
 
             bool SuccessAddition;
 
             // Передаю оружие в новый слот
-            Camera_main.GetComponent<InventoryManager>().PutItemToSlot(item, itemObject, slot, out SuccessAddition);
+            Camera_main.GetComponent<InventoryManager>().PutItemToSlot(item, itemObject, slot, current_pic_slot, out SuccessAddition);
 
             if (!SuccessAddition)
             {
@@ -427,7 +439,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
 
             // Получаю выбрасываемый объект
-            GameObject DroppedObj = transform.GetChild(0).gameObject;
+            GameObject DroppedObj = transform.parent.gameObject.GetComponent<Slot>().object_in_slot;
 
             // Получаю выбрасываемый предмет
             Item item = DroppedObj.GetComponent<FloorItem>().getItem;

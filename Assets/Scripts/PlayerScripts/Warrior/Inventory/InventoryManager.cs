@@ -146,15 +146,15 @@ public class InventoryManager : MonoBehaviour
 
 
             /*
-             *  Устанавливаю подобранный предмет
+             *  Настраиваю подобранный предмет
             */
 
 
-            // Устанавливаю объект как child object картинки предмета
-            TransmittedObject.transform.SetParent(item_image_transform);
-
             // Убираю спрайт объекта на земле 
             TransmittedObject.GetComponent<SpriteRenderer>().sprite = null;
+
+            // Выключаю коллайдер пердмету на земле, чтобы его нельзя было подобрать дважды
+            TransmittedObject.GetComponent<Collider2D>().enabled = false;
 
 
 
@@ -263,7 +263,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private void SetItemToEmptySlot(Item item, GameObject TransmittedObject, Slot slot, out bool ItemAdded)
+    private void SetItemToEmptySlot(Item item, GameObject TransmittedObject, Slot slot, Slot current_slot, out bool ItemAdded)
     {
         ItemAdded = false;
 
@@ -275,18 +275,7 @@ public class InventoryManager : MonoBehaviour
             Transform InputImageTransform = slot.transform.GetChild(1);
 
             // Получаю Transform картинки, текущей картинки передаваемого предмета
-            Transform currentImageTransform = TransmittedObject.transform.parent;
-
-
-
-
-            /*
-             * Получаю и устанавливаю объект, который отображает передаваемый предмет 
-            */
-
-
-            // Устанавливаю передаваемый объект на картинку слота, в который мы передаём (как child объект)
-            TransmittedObject.transform.SetParent(InputImageTransform);
+            Transform currentImageTransform = current_slot.transform.GetChild(1);
 
 
 
@@ -320,7 +309,7 @@ public class InventoryManager : MonoBehaviour
 
 
             // Очищаю слот 
-            currentImageTransform.parent.gameObject.GetComponent<Slot>().ClearClot();
+            current_slot.ClearClot();
 
 
 
@@ -334,7 +323,7 @@ public class InventoryManager : MonoBehaviour
             currentImageTransform.GetComponent<Image>().sprite = null;
 
             // Возвращаю картинку дефолтное на место
-            currentImageTransform.position = currentImageTransform.parent.gameObject.GetComponent<Slot>().SlotDefaultPosition;
+            currentImageTransform.position = current_slot.SlotDefaultPosition;
 
             // Делаю ее неактивной
             currentImageTransform.GetComponent<Image>().enabled = false;
@@ -369,34 +358,20 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private void SetItemWithReplace(Item item, GameObject TransmittedObject, Slot slot, out bool ItemAdded)
+    private void SetItemWithReplace(Item item, GameObject TransmittedObject, Slot slot, Slot current_slot, out bool ItemAdded)
     {
         
 
         /*
-         * Получаю слот и картинку, в которых хочу передать предмет 
+         * Получаю картинки слотов
         */
 
 
         // Получаю Transform картинки, в которую хочу передать предмет
         Transform InputImageTransform = slot.transform.GetChild(1);
 
-        // Получаю слот входной картинки 
-        Slot inputSlot = InputImageTransform.parent.GetComponent<Slot>();
-
-
-
-
-        /*
-         * Получаю текущие слот и картинку  
-        */
-
-
         // Получаю Transform картинки, текущей картинки передаваемого предмета
-        Transform currentImageTransform = TransmittedObject.transform.parent;
-
-        // Получаю слот исходной картинки
-        Slot currentSlot = currentImageTransform.parent.GetComponent<Slot>();
+        Transform currentImageTransform = current_slot.transform.GetChild(1);
 
 
 
@@ -406,9 +381,9 @@ public class InventoryManager : MonoBehaviour
         */
 
 
-        InputImageTransform.transform.SetParent(currentSlot.transform);
+        InputImageTransform.SetParent(current_slot.transform);
 
-        currentImageTransform.transform.SetParent(inputSlot.transform);
+        currentImageTransform.SetParent(slot.transform);
 
 
 
@@ -419,9 +394,9 @@ public class InventoryManager : MonoBehaviour
 
 
         // Возвращаю исходную картинку на место
-        currentImageTransform.position = currentImageTransform.parent.gameObject.GetComponent<Slot>().SlotDefaultPosition;
+        currentImageTransform.position = slot.SlotDefaultPosition;
 
-        InputImageTransform.position = InputImageTransform.parent.gameObject.GetComponent<Slot>().SlotDefaultPosition;
+        InputImageTransform.position = current_slot.SlotDefaultPosition;
 
 
 
@@ -431,30 +406,23 @@ public class InventoryManager : MonoBehaviour
         */
 
 
-        // Слот 1
-
-
         // Получаю объект, который сейчас находится в CurrentSlot
-        GameObject gm_current = currentImageTransform.GetChild(0).gameObject;
+        GameObject current_obj = current_slot.object_in_slot;
 
         // Получаю предмет, который сейчас находится в CurrentSlot
-        Item item_current = gm_current.GetComponent<FloorItem>().getItem;
-
-        // Устанавливаю их в новый слот
-        currentSlot.SetItem(item_current, gm_current);
-
-
-        // Слот 2
-
+        Item item_current = current_slot.item_in_slot;
 
         // Получаю объект, который сейчас находится в InputSlot
-        GameObject gm_input = InputImageTransform.GetChild(0).gameObject;
+        GameObject input_obj = slot.object_in_slot;
 
         // Получаю предмет, который сейчас находится в CurrentSlot
-        Item item_input = gm_input.GetComponent<FloorItem>().getItem;
+        Item item_input = slot.item_in_slot;
+
+        // Устанавливаю их в новый слот
+        slot.SetItem(item_current, current_obj);
 
         // Устанавливаю их в новый слот 
-        inputSlot.SetItem(item_input, gm_input);
+        current_slot.SetItem(item_input, input_obj);
 
 
 
@@ -479,7 +447,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    public void PutItemToSlot(Item item, GameObject TransmittedObject, ItemSlot slot, out bool ItemAdded)
+    public void PutItemToSlot(Item item, GameObject TransmittedObject, ItemSlot slot, ItemSlot current_slot, out bool ItemAdded)
     {
         ItemAdded = false;
 
@@ -494,13 +462,13 @@ public class InventoryManager : MonoBehaviour
             if (slot.SlotIsEmpty)
             {
                 // Устанавливаю предмет в пустой слот
-                SetItemToEmptySlot(item, TransmittedObject, slot, out ItemAdded);
+                SetItemToEmptySlot(item, TransmittedObject, slot, current_slot, out ItemAdded);
 
             }
             else
             {
                 // Устанавливаю предмет в занятый другим предметом слот
-                SetItemWithReplace(item, TransmittedObject, slot, out ItemAdded);
+                SetItemWithReplace(item, TransmittedObject, slot, current_slot, out ItemAdded);
             }
         }
 
@@ -516,7 +484,7 @@ public class InventoryManager : MonoBehaviour
 
 
     //          предмет, который передаем,         куда передаём,          выходной результат    
-    public void PutWeaponToSlot(Item item, GameObject TransmittedObject, AmmunitionGunSlot slot, out bool GunIsAdded)
+    public void PutWeaponToSlot(Item item, GameObject TransmittedObject, AmmunitionGunSlot slot, AmmunitionGunSlot current_slot, out bool GunIsAdded)
     {
 
 
@@ -534,13 +502,13 @@ public class InventoryManager : MonoBehaviour
             {
 
                 // Устанавливаю оружие в пустой слот
-                SetItemToEmptySlot(item, TransmittedObject, slot, out GunIsAdded);
+                SetItemToEmptySlot(item, TransmittedObject, slot, current_slot, out GunIsAdded);
 
             }
             else
             {
                 // Устанавливаю оружие в занятый другим предметом слот
-                SetItemWithReplace(item, TransmittedObject, slot, out GunIsAdded);
+                SetItemWithReplace(item, TransmittedObject, slot, current_slot, out GunIsAdded);
 
             }
         }
@@ -575,7 +543,7 @@ public class InventoryManager : MonoBehaviour
 
 
             // Получаю картинку
-            Image image_component = currentObject.transform.parent.gameObject.GetComponent<Image>();
+            Image image_component = slot.transform.GetChild(1).gameObject.GetComponent<Image>();
 
             // Убираю картинку
             image_component.sprite = null;
@@ -592,7 +560,7 @@ public class InventoryManager : MonoBehaviour
 
 
             // Получаю объект картинки
-            GameObject image_obj = currentObject.transform.parent.gameObject;
+            GameObject image_obj = slot.transform.GetChild(1).gameObject;
 
             // Ставлю на дефолтное место 
             image_obj.transform.position = slot.SlotDefaultPosition;
@@ -604,9 +572,6 @@ public class InventoryManager : MonoBehaviour
              * Выбрасываем предмет из инвентаря 
             */
 
-
-            // Поднимаю его на вершину иерархии 
-            currentObject.transform.SetParent(null);
 
             // Устанавливаю выброшенному объекту позицию игрока
             currentObject.transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
@@ -625,7 +590,8 @@ public class InventoryManager : MonoBehaviour
             // Устанавливаю спрайт
             currentObject.GetComponent<SpriteRenderer>().sprite = item_floor_image;
 
-
+            // Включаю коллайдер обратно, чтобы его можно было подобрать
+            currentObject.GetComponent<Collider2D>().enabled = true;
 
             /*
              * Успешное завершение
@@ -645,19 +611,25 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    public void SetMagToGun(Slot slot, GameObject transmitted_picture, out bool successLoad)
+    public void SetMagToGun(GameObject input_slot, GameObject transmitted_picture, out bool successLoad)
     {
 
         successLoad = false;
 
-        // Получаю оружие в слоте
-        GameObject gun_in_slot = slot.object_in_slot;
+        // Получаю данные входнохо слота
+        Slot input_slot_data = input_slot.GetComponent<Slot>();
 
-        // Получаю предмет в картинке
-        GameObject mag_in_pic = transmitted_picture.transform.GetChild(0).gameObject;
+        // Получаю оружие во входном слоте
+        GameObject gun_in_input_slot = input_slot_data.object_in_slot;
 
-        // Получаю слот картинки
-        GameObject image_slot = transmitted_picture.transform.parent.gameObject;
+        // Получаю слот текущей картинки
+        GameObject current_slot = transmitted_picture.transform.parent.gameObject;
+
+        // Получаю данные текущего слота
+        Slot current_slot_data = current_slot.GetComponent<Slot>();
+
+        // Получаю предмет в исходном слоте
+        GameObject mag_in_current_slot = current_slot_data.object_in_slot;
 
 
 
@@ -666,37 +638,37 @@ public class InventoryManager : MonoBehaviour
          * Проверяю на то, есть ли магазин в объекте
         */
 
-        if (gun_in_slot.transform.childCount > 0)
+        if (gun_in_input_slot.transform.childCount > 0)
         {
 
             /*
-             * Если объект не заряжен
+             * Если объект заряжен
             */
 
             bool is_loaded = false;
 
-            gun_rifle rifle = gun_in_slot.GetComponent<FloorItem>().getItem as gun_rifle;
-            gun_pistol pistol = gun_in_slot.GetComponent<FloorItem>().getItem as gun_pistol;
+            gun_rifle rifle = gun_in_input_slot.GetComponent<FloorItem>().getItem as gun_rifle;
+            gun_pistol pistol = gun_in_input_slot.GetComponent<FloorItem>().getItem as gun_pistol;
 
             if (rifle != null)
             {
 
                 // Устанавливаю магазин в переменную оружия
-                gun_in_slot.GetComponent<Internal_rifle_mag>().LoadMagToGun(mag_in_pic, out is_loaded);
+                gun_in_input_slot.GetComponent<Internal_rifle_mag>().LoadMagToGun(mag_in_current_slot, out is_loaded);
 
                 if (is_loaded)
                 {
                     // Получаю магазин в объекте
-                    GameObject mag_in_gun = gun_in_slot.transform.GetChild(0).gameObject;
+                    GameObject dropped_gun_mag = gun_in_input_slot.transform.GetChild(0).gameObject;
 
-                    // Ставлю магазин из оружия в исходный слот инвентаря
-                    mag_in_gun.transform.SetParent(transmitted_picture.transform);
+                    // Убираю магазин в свободное плавание в иерархии проекта
+                    dropped_gun_mag.transform.SetParent(null);
 
                     // Стввлю магазин из инвентаря как дочерний объект оружия
-                    mag_in_pic.transform.SetParent(gun_in_slot.transform);
+                    mag_in_current_slot.transform.SetParent(gun_in_input_slot.transform);
 
                     // Устанавливаю магазины в инвентаре
-                    SetMagInInventoryWithReplace(transmitted_picture, image_slot, mag_in_pic, gun_in_slot, mag_in_gun);
+                    SetMagInInventoryWithReplace(input_slot, current_slot, dropped_gun_mag);
 
                 }
 
@@ -706,21 +678,21 @@ public class InventoryManager : MonoBehaviour
             else if (pistol != null)
             {
                 // Устанавливаю магазин в переменную оружия
-                gun_in_slot.GetComponent<Internal_pistol_mag>().LoadMagToGun(mag_in_pic, out is_loaded);
+                gun_in_input_slot.GetComponent<Internal_pistol_mag>().LoadMagToGun(mag_in_current_slot, out is_loaded);
 
                 if (is_loaded)
                 {
                     // Получаю магазин в объекте
-                    GameObject mag_in_gun = gun_in_slot.transform.GetChild(0).gameObject;
+                    GameObject dropped_gun_mag = gun_in_input_slot.transform.GetChild(0).gameObject;
 
-                    // Ставлю магазин из оружия в исходный слот инвентаря
-                    mag_in_gun.transform.SetParent(transmitted_picture.transform);
+                    // Убираю магазин в свободное плавание в иерархии проекта
+                    dropped_gun_mag.transform.SetParent(null);
 
                     // Стввлю магазин из инвентаря как дочерний объект оружия
-                    mag_in_pic.transform.SetParent(gun_in_slot.transform);
+                    mag_in_current_slot.transform.SetParent(gun_in_input_slot.transform);
 
                     // Устанавливаю магазины в инвентаре
-                    SetMagInInventoryWithReplace(transmitted_picture, image_slot, mag_in_pic, gun_in_slot, mag_in_gun);
+                    SetMagInInventoryWithReplace(input_slot, current_slot, dropped_gun_mag);
 
                 }
 
@@ -737,18 +709,18 @@ public class InventoryManager : MonoBehaviour
 
             bool is_loaded = false;
 
-            gun_rifle rifle = gun_in_slot.GetComponent<FloorItem>().getItem as gun_rifle;
-            gun_pistol pistol = gun_in_slot.GetComponent<FloorItem>().getItem as gun_pistol;
+            gun_rifle rifle = gun_in_input_slot.GetComponent<FloorItem>().getItem as gun_rifle;
+            gun_pistol pistol = gun_in_input_slot.GetComponent<FloorItem>().getItem as gun_pistol;
 
             if (rifle != null)
             {
                 // Устанавливаю магазин в переменную штурмовой винтовки
-                gun_in_slot.GetComponent<Internal_rifle_mag>().LoadMagToGun(mag_in_pic, out is_loaded);
+                gun_in_input_slot.GetComponent<Internal_rifle_mag>().LoadMagToGun(mag_in_current_slot, out is_loaded);
 
                 if (is_loaded) 
                 {
                     // Устанавливаю магазин в инвентаре
-                    SetMagInInventory(transmitted_picture, image_slot, mag_in_pic, gun_in_slot);
+                    SetMagInInventory(input_slot, current_slot);
                 }
 
                 successLoad = is_loaded;
@@ -757,12 +729,12 @@ public class InventoryManager : MonoBehaviour
             else if (pistol != null)
             {
                 // Устанавливаю магазин в переменную пистолета
-                gun_in_slot.GetComponent<Internal_pistol_mag>().LoadMagToGun(mag_in_pic, out is_loaded);
+                gun_in_input_slot.GetComponent<Internal_pistol_mag>().LoadMagToGun(mag_in_current_slot, out is_loaded);
 
                 if (is_loaded)
                 {
                     // Устанавливаю магазин в инвентаре
-                    SetMagInInventory(transmitted_picture, image_slot, mag_in_pic, gun_in_slot);
+                    SetMagInInventory(input_slot, current_slot);
                 }
                 
                 successLoad = is_loaded;
@@ -783,8 +755,24 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private void SetMagInInventory(GameObject transmitted_picture, GameObject image_slot, GameObject mag_in_pic, GameObject gun_in_slot)
+    private void SetMagInInventory(GameObject input_slot, GameObject current_slot)
     {
+
+        // Получаю магазин в текущей картинке
+        GameObject mag_in_pic = current_slot.GetComponent<Slot>().object_in_slot;
+
+        // Получаю оружие во входном слоте
+        GameObject gun_in_slot = input_slot.GetComponent<Slot>().object_in_slot;
+
+        // Получаю картинку оружия
+        Image gun_image = input_slot.transform.GetChild(1).gameObject.GetComponent<Image>();
+
+        // Получаю картинку текущего слота
+        Image transmitted_picture = current_slot.transform.GetChild(1).gameObject.GetComponent<Image>();
+
+
+
+
         // Устанавливаю магазин как дочерний объект оружия 
         mag_in_pic.transform.SetParent(gun_in_slot.transform);
 
@@ -795,16 +783,13 @@ public class InventoryManager : MonoBehaviour
         transmitted_picture.GetComponent<Image>().enabled = false;
 
         // Ставлю картинку на дефолтную позицию
-        transmitted_picture.transform.position = image_slot.GetComponent<Slot>().SlotDefaultPosition;
-
-        // Получаю картинку оружия
-        Image gun_image = gun_in_slot.transform.parent.gameObject.GetComponent<Image>();
+        transmitted_picture.transform.position = current_slot.GetComponent<Slot>().SlotDefaultPosition;
 
         // Ставлю спрайт заряженного оружия 
         gun_image.sprite = gun_in_slot.GetComponent<FloorItem>().getItem.GetInventoryIcon;
 
         // Отчищаю слот
-        image_slot.GetComponent<Slot>().ClearClot();
+        current_slot.GetComponent<Slot>().ClearClot();
 
 
     }
@@ -817,22 +802,32 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private void SetMagInInventoryWithReplace(GameObject transmitted_picture, GameObject image_slot, GameObject mag_in_pic, GameObject gun_in_slot, GameObject mag_in_gun)
+    private void SetMagInInventoryWithReplace(GameObject input_slot, GameObject current_slot, GameObject dropped_gun_mag)
     {
         // Получаю картинку оружия
-        Image gun_image = gun_in_slot.transform.parent.gameObject.GetComponent<Image>();
+        Image gun_image = input_slot.transform.GetChild(1).gameObject.GetComponent<Image>();
+
+        // Получаю оружие в слоте
+        GameObject gun_in_input_slot = input_slot.GetComponent<Slot>().object_in_slot;
+
+        // Получаю картинку текущего слота
+        GameObject current_image = current_slot.transform.GetChild(1).gameObject;
+
+
+
 
         // Ставлю спрайт заряженного оружия 
-        gun_image.sprite = gun_in_slot.GetComponent<FloorItem>().getItem.GetInventoryIcon;
+        gun_image.sprite = gun_in_input_slot.GetComponent<FloorItem>().getItem.GetInventoryIcon;
 
         // Обновляю картинку магазина
-        transmitted_picture.GetComponent<Image>().sprite = mag_in_gun.GetComponent<FloorItem>().getItem.GetInventoryIcon;
+        current_image.GetComponent<Image>().sprite = dropped_gun_mag.GetComponent<FloorItem>().getItem.GetInventoryIcon;
 
         // Ставлю картинку на дефолтную позицию
-        transmitted_picture.transform.position = image_slot.GetComponent<Slot>().SlotDefaultPosition;
+        current_image.transform.position = current_slot.GetComponent<Slot>().SlotDefaultPosition;
 
         // Обновляю слот инвентаря
-        image_slot.GetComponent<Slot>().SetItem(mag_in_gun.GetComponent<FloorItem>().getItem, mag_in_gun);
+        current_slot.GetComponent<Slot>().SetItem(dropped_gun_mag.GetComponent<FloorItem>().getItem, dropped_gun_mag);
+
     }
 
 
