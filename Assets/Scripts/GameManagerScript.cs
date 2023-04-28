@@ -86,9 +86,6 @@ public class GameManagerScript : MonoBehaviour
         playerParams = player.GetComponent<Player>();
         playerShooting = player.GetComponent<Shooting>();
 
-        pauseMenu = GetComponent<PauseMenu>();
-        inventoryMenu = GetComponent<InventoryMenu>();
-
         enemyReaper = GameObject.Find("EnemyReaper").GetComponent<EnemyManager>();
         gun = player.GetComponent<PlayerGun>();
 
@@ -120,6 +117,11 @@ public class GameManagerScript : MonoBehaviour
 
     private void Start()
     {
+
+        pauseMenu = GetComponent<PauseMenu>();
+
+        inventoryMenu = GetComponent<InventoryMenu>();
+
         // Получаю сцену, с которой мы изначально загрузились
         StartSceneIndex = SceneManager.GetActiveScene().buildIndex;
 

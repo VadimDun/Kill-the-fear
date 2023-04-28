@@ -114,7 +114,7 @@ public class Gun : MonoBehaviour
 
 
 
-    public void ChangeGun(int numberOfGun)
+    public virtual void ChangeGun(int numberOfGun)
     {
         switch (numberOfGun)
         {
