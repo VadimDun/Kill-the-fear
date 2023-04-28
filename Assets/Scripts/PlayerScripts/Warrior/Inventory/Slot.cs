@@ -89,7 +89,7 @@ public class Slot : MonoBehaviour
 
         IsEmpty = false;
 
-        //face_UI_manager.UpdatePic();
+        face_UI_manager.UpdatePic();
 
     }
 
@@ -101,7 +101,7 @@ public class Slot : MonoBehaviour
 
         IsEmpty = true;
 
-        //face_UI_manager.UpdatePic();
+        face_UI_manager.UpdatePic();
     }
 
 
@@ -131,9 +131,14 @@ public class Slot : MonoBehaviour
         }
 
 
-
-        face_UI_manager = GameObject.Find("GunBar").GetComponent<Face_UI_manager>();
-
-
     }
+
+
+
+    private void Awake()
+    {
+        face_UI_manager = GameObject.Find("FaceUI").GetComponent<Face_UI_manager>();
+    }
+
+
 }

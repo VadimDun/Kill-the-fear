@@ -39,14 +39,21 @@ public class Face_UI_manager : MonoBehaviour
         {
             GameObject slotBar = gunBarPics[i];
 
-            GameObject slotBar_picture = slotBar.transform.GetChild(1).gameObject;
+            Image slotBar_image = slotBar.transform.GetChild(1).gameObject.GetComponent<Image>();
 
             GameObject gun = gun_slots[i].object_in_slot;
 
+
             if (gun == null)
-                slotBar_picture.GetComponent<Image>().sprite = null;
+            {
+                slotBar_image.sprite = null;
+                slotBar_image.enabled = false;
+            }
             else
-                slotBar_picture.GetComponent<Image>().sprite = gun.GetComponent<FloorItem>().getItem.GetFloorIcon;
+            { 
+                slotBar_image.sprite = gun.GetComponent<FloorItem>().getItem.GetFloorIcon;
+                slotBar_image.enabled = true;
+            }
 
         }
     }
