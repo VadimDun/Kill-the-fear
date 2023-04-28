@@ -1,22 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class mag : bullets_capacity
+public class shotgun_capacity : bullets_capacity
 {
 
+    private const int shotgun_stack_capacity = 8;
 
     private void Start()
     {
-        // Получаю емкость магазина
-        Mag mag_item = GetComponent<FloorItem>().getItem as Mag;
-        capacity = mag_item.GetCapacity;
+        // Определяю емкость дробовика
+        capacity = shotgun_stack_capacity;
 
         // Инициализирую стек
         bullets = new Stack<GameObject>();
 
-        // Заполняю обойму пулями 
+        // Заполняю дробовик пулями 
         if (bulletPrefab != null)
         {
             for (int i = 0; i < capacity; i++)
@@ -24,7 +23,7 @@ public class mag : bullets_capacity
                 GameObject bulletInstance = Instantiate(bulletPrefab, transform);
                 bulletInstance.SetActive(false);
                 bullets.Push(bulletInstance);
-                
+
             }
 
 

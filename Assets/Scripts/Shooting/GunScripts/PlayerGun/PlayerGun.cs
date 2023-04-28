@@ -41,9 +41,13 @@ public class PlayerGun : Gun
 
 
 
+
     protected override void Shoot()
     {
-        if ((Time.time - lastShotTime < delayBetweenShots) || (rangeFinder.GetDistToTarget <= MinFireDist) || (gun_mag.get_current_bullet_count <= 0) ) { return; }
+
+        if ((Time.time - lastShotTime < delayBetweenShots) || (rangeFinder.GetDistToTarget <= MinFireDist) || (current_capacity.get_current_bullet_count <= 0)) { return; }
+
+
         lastShotTime = Time.time;
 
         //ќбновл€ю позицию CurrentPoint 
@@ -51,7 +55,7 @@ public class PlayerGun : Gun
 
         //bullet = Instantiate(bulletPrefab, firePointTransform.position, firePointTransform.rotation).GetComponent<PlayerBullet>();
         
-        GameObject bullet_obj = gun_mag.TakeBullet();
+        GameObject bullet_obj = current_capacity.TakeBullet();
         bullet_obj.transform.position = firePointTransform.position;
         bullet_obj.transform.rotation = firePointTransform.rotation;
         bullet_obj.SetActive(true);

@@ -100,9 +100,8 @@ public class Gun : MonoBehaviour
 
 
 
-
-    // Магазин оружия
-    protected mag gun_mag;
+    // Емкость оружия
+    protected bullets_capacity current_capacity;
 
     // Оружие
     protected GameObject gunObject;
@@ -135,7 +134,11 @@ public class Gun : MonoBehaviour
 
                         if (current_gun != Guns.shotgun)
                         {
-                            gun_mag = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                            current_capacity = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                        }
+                        else 
+                        {
+                            current_capacity = gunObject.GetComponent<shotgun_capacity>();
                         }
 
                     }
@@ -162,7 +165,11 @@ public class Gun : MonoBehaviour
 
                         if (current_gun != Guns.shotgun)
                         {
-                            gun_mag = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                            current_capacity = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                        }
+                        else
+                        {
+                            current_capacity = gunObject.GetComponent<shotgun_capacity>();
                         }
                     }
                 }
@@ -189,7 +196,11 @@ public class Gun : MonoBehaviour
 
                         if (current_gun != Guns.shotgun)
                         {
-                            gun_mag = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                            current_capacity = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+                        }
+                        else
+                        {
+                            current_capacity = gunObject.GetComponent<shotgun_capacity>();
                         }
                     }
                 }
