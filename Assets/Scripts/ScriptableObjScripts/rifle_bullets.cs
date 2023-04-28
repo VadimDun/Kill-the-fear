@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Mag;
-using static UnityEditor.Experimental.GraphView.Port;
 
 
 [CreateAssetMenu(fileName = "rifle_bullets", menuName = "ScriptableObject/Items/Bullets/rifle_bullets", order = 1)]

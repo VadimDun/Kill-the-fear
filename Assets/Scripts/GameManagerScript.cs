@@ -10,6 +10,8 @@ public class GameManagerScript : MonoBehaviour
     
     private GameObject player;
 
+    private GameObject Face_UI;
+
     private Player playerParams;
 
     private Shooting playerShooting;
@@ -43,6 +45,9 @@ public class GameManagerScript : MonoBehaviour
         {
             inventoryMenu.InventoryClose();
         }
+
+        // Выключаю лицевой UI
+        Face_UI.SetActive(false);
 
 
         //Устанавливаю курсор
@@ -123,6 +128,8 @@ public class GameManagerScript : MonoBehaviour
 
         // Получаю скипт анимаций перехода
         transition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
+
+        Face_UI = GameObject.Find("FaceUI");
     }
 
 
@@ -167,13 +174,18 @@ public class GameManagerScript : MonoBehaviour
         // Разрешаю ввод для инвентаря
         inventoryMenu.deathWindowIsActive = false;
 
+        // Включаю лицевой UI
+        Invoke("ActivateFaceUI", 0.3f);
+
         // Отчищаю список убитых у жнеца
         enemyReaper.SetOfDeadEdit.Clear();
 
-        
-        
-
     }
+
+
+
+
+    private void ActivateFaceUI() => Face_UI.SetActive(true);
 
 
 

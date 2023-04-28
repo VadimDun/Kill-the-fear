@@ -12,6 +12,8 @@ public class InventoryMenu : MonoBehaviour
 
     public GameObject GetInventoryWindow => inventoryWindow;
 
+    private GameObject Face_UI;
+
     private GameManagerScript gameManagerScript;
 
     private PauseMenu pauseMenu;
@@ -45,6 +47,8 @@ public class InventoryMenu : MonoBehaviour
         gameManagerScript = GetComponent<GameManagerScript>();
 
         pauseMenu = GetComponent<PauseMenu>();
+
+        Face_UI = GameObject.Find("FaceUI");
     }
 
     public void Inventory()
@@ -68,13 +72,18 @@ public class InventoryMenu : MonoBehaviour
 
             // Сохраняем текущую позицию курсора
             beforeOpeningPosition = Input.mousePosition;
+
+
+            // Убираю лицевой UI
+            Face_UI.SetActive(false);
         }
+
+
     }
 
     public void InventoryClose()
     {
         InventoryWindowIsNotActive = true;
-
 
         gameManagerScript.UnfreezePlayer();
         CursorManager.Instance.SetScopeCursor();
@@ -82,6 +91,9 @@ public class InventoryMenu : MonoBehaviour
 
         // Включаю ввод паузе
         Invoke("ActivatePauseInput", 0.2f);
+
+        // Включаю лицевой UI
+        Invoke("ActivateFaceUI", 0.3f);
 
         Mouse.current.WarpCursorPosition(beforeOpeningPosition);
 
@@ -91,6 +103,15 @@ public class InventoryMenu : MonoBehaviour
 
     // Включает ввод для паузы
     private void ActivatePauseInput() => pauseMenu.inventoryWindowIsActive = false;
+
+    private void ActivateFaceUI() => Face_UI.SetActive(true);
+
+
+
+
+
+
+
 
     private void Update()
     {

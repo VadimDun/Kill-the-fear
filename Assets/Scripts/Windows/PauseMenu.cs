@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
     public GameObject GetPauseMenu => pauseMenu;
 
+    private GameObject Face_UI;
+
     private InventoryMenu inventoryMenu;
 
     private GameManagerScript gameManagerScript;
@@ -61,6 +63,10 @@ public class PauseMenu : MonoBehaviour
 
             Time.timeScale = 0f;
 
+            // Выключаю лицевой UI
+            Face_UI.SetActive(false);
+
+
         }
     }
 
@@ -83,6 +89,8 @@ public class PauseMenu : MonoBehaviour
         InputState.Change(Mouse.current.position, beforeOpeningPosition);
 
         Time.timeScale = 1f;
+
+        Invoke("ActivateFaceUI", 0.3f);
     }
 
     public void Home(int sceneID)
@@ -102,11 +110,19 @@ public class PauseMenu : MonoBehaviour
     }
 
 
+
+
+    private void ActivateFaceUI() => Face_UI.SetActive(true);
+
+
+
     private void Start()
     {
         inventoryMenu = GetComponent<InventoryMenu>();
 
         gameManagerScript = GetComponent<GameManagerScript>();
+
+        Face_UI = GameObject.Find("FaceUI");
     }
 
 
