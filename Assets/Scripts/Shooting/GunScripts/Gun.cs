@@ -65,13 +65,11 @@ public class Gun : MonoBehaviour
 
     public void PullTheTrigger()
     {
-        if ((shootMode == ShootMode.semiAuto)) { playerGun.Kick(); }
-
         isTriggerPulled = !isTriggerPulled;
         if (isTriggerPulled)
         {
             //Для одииночной стрельбы
-            if ((shootMode == ShootMode.semiAuto) ) { Shoot(); }
+            if ((shootMode == ShootMode.semiAuto) ) { Shoot(); playerGun.Kick(); }
         }
     }
 

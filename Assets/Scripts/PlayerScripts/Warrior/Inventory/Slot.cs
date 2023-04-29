@@ -129,6 +129,10 @@ public class Slot : MonoBehaviour
         {
             defaultPosition = transform.GetChild(1).position;
         }
+        else if (transform.gameObject.tag == "EdgedWeaponSlot")
+        {
+            defaultPosition = transform.GetChild(1).position;
+        }
 
 
     }

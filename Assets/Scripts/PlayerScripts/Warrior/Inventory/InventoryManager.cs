@@ -76,8 +76,6 @@ public class InventoryManager : MonoBehaviour
     {
 
 
-        bool SuccessGunAddition = false;
-
 
 
         /*
@@ -89,17 +87,13 @@ public class InventoryManager : MonoBehaviour
         {
             foreach (AmmunitionGunSlot slot in am_gun_slots)
             {
-                
+
+                bool SuccessGunAddition = false;
+
                 GrabGunItem(item, itemObj, slot, out SuccessGunAddition);
 
 
-                if (SuccessGunAddition)
-                {
-                    // Возвращаю дефолтное состояние
-                    SuccessGunAddition = false;
-
-                    return;
-                }
+                if (SuccessGunAddition) return;
 
             }
         }
@@ -111,7 +105,7 @@ public class InventoryManager : MonoBehaviour
         */
 
 
-        if (item.itemType != ItemType.gun && item.itemType != ItemType.secondaty_arms && item.itemType != ItemType.armor)
+        if (item.itemType != ItemType.gun && item.itemType != ItemType.secondaty_arms && item.itemType != ItemType.armor && item.itemType != ItemType.edged_weapon) 
         {
             foreach (ItemSlot slot in itemSlots)
             {
@@ -120,17 +114,76 @@ public class InventoryManager : MonoBehaviour
                 GrabDefaultItem(item, itemObj, slot, out success);
 
 
-                if (success)
-                {
-                    // Возвращаю дефолтное состояние
-                    success = false;
-
-                    return;
-                }
+                if (success) return;
             }
         }
 
 
+
+
+        if (item.itemType == ItemType.edged_weapon)
+        {
+            GrabEdgedWeapon(item, itemObj);
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+    private void GrabEdgedWeapon(Item item, GameObject itemObj)
+    {
+
+        Slot slot = second_arm_slots[0];
+
+        if (slot.SlotIsEmpty)
+        {
+
+            // Получаю картинку предмета
+            Transform image = slot.transform.GetChild(1);
+
+
+
+
+            /*
+             *  Настраиваю подобранный предмет
+            */
+
+            // Убираю спрайт объекта на земле 
+            itemObj.GetComponent<SpriteRenderer>().sprite = null;
+
+            // Выключаю коллайдер пердмету на земле, чтобы его нельзя было подобрать дважды
+            itemObj.GetComponent<Collider2D>().enabled = false;
+
+
+
+
+            /*
+             *  Устанавливаю изображение предмета, которого передал в слот
+            */
+
+            image.GetComponent<Image>().sprite = item.GetInventoryIcon;
+
+            image.GetComponent<Image>().enabled = true;
+
+
+
+
+            /*
+             * Настраиваю скрипт слота
+            */
+
+            // Передаю в слот предмет и представляющий его объект 
+            slot.SetItem(item, itemObj);
+
+
+        }
     }
 
 
@@ -462,7 +515,7 @@ public class InventoryManager : MonoBehaviour
         ItemAdded = false;
 
 
-        if (item.itemType == ItemType.gun || item.itemType == ItemType.armor || item.itemType == ItemType.secondaty_arms)
+        if (item.itemType == ItemType.gun || item.itemType == ItemType.armor || item.itemType == ItemType.secondaty_arms || item.itemType == ItemType.edged_weapon)
         {
             // Добавление прошло не успешно 
             ItemAdded = false;

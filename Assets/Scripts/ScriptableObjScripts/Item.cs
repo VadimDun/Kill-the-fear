@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public enum ItemType { armor, secondaty_arms, gun, mag, bullet, usable, default_item }
+public enum ItemType { armor, secondaty_arms, edged_weapon,  gun, mag, bullet, usable, default_item }
 
 public class Item : ScriptableObject
 {

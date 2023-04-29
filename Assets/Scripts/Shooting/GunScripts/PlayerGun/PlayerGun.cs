@@ -93,14 +93,15 @@ public class PlayerGun : Gun
 
 
     private Collider2D hammer_range_collider;
-    private bool turnOnCollider = false; 
 
     public void Kick()
     {
-        turnOnCollider = !turnOnCollider;
-        hammer_range_collider.enabled = turnOnCollider;
+        hammer_range_collider.enabled = true;
+        Invoke("TurnOnCollider", 0.1f);
     }
-    
+
+    private void TurnOnCollider() => hammer_range_collider.enabled = false;
+
 
 
 
