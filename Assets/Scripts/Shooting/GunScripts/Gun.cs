@@ -51,6 +51,8 @@ public class Gun : MonoBehaviour
 
         shootingScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Shooting>();
 
+        playerGun = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerGun>();
+
     }
 
 
@@ -59,10 +61,12 @@ public class Gun : MonoBehaviour
 
 
 
-
+    private PlayerGun playerGun;
 
     public void PullTheTrigger()
     {
+        if ((shootMode == ShootMode.semiAuto)) { playerGun.Kick(); }
+
         isTriggerPulled = !isTriggerPulled;
         if (isTriggerPulled)
         {

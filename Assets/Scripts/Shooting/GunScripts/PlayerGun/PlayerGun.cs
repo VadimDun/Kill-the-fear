@@ -88,6 +88,28 @@ public class PlayerGun : Gun
 
 
 
+
+
+
+
+    private Collider2D hammer_range_collider;
+    private bool turnOnCollider = false; 
+
+    public void Kick()
+    {
+        turnOnCollider = !turnOnCollider;
+        hammer_range_collider.enabled = turnOnCollider;
+    }
+    
+
+
+
+
+
+
+
+
+
     void Start()
     {
         firePoints = GetComponent<FirePoint>();
@@ -97,5 +119,8 @@ public class PlayerGun : Gun
         correction = GetComponent<WarriorMovement>();
         player = GameObject.FindGameObjectWithTag("Player");
         bullet = player.GetComponent<PlayerBullet>();
+
+        hammer_range_collider = GameObject.Find("Warrior").transform.GetChild(0).gameObject.GetComponent<Collider2D>();
+
     }
 }
