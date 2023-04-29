@@ -331,7 +331,7 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                     {
                         bool succesLoad = false;
 
-                        Camera_main.GetComponent<InventoryManager>().SetMagToGun(current_slot, transform.gameObject, out succesLoad);
+                        Camera_main.GetComponent<InventoryManager>().SetMagToGun(current_slot, transform.parent.gameObject, out succesLoad);
 
                         if (succesLoad)
                         {

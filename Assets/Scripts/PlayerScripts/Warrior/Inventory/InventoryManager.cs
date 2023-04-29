@@ -59,15 +59,150 @@ public class InventoryManager : MonoBehaviour
                 itemSlots.Add(item_UI.GetChild(i).GetComponent<ItemSlot>());
             }
         }
-        
 
-        // Делаю неактивным 
-        GameObject.Find("Inventory").SetActive(false);
+        // Отключаю рендеринг картинке
+        second_arm_slots[0].transform.GetChild(1).GetComponent<Image>().enabled = false;
+
+        // Загрузка инвентаря (матрица позиций слотов)
+        Invoke("EndInventoryLoad", 0.1f);
 
         // Получаю скрипт оружия
         gun = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerGun>();
 
     }
+
+
+
+
+
+
+
+
+    private void EndInventoryLoad()
+    { 
+        GameObject.Find("Inventory").SetActive(false);
+        second_arm_slots[0].transform.GetChild(1).GetComponent<Image>().enabled = true;
+    }
+
+
+
+
+
+
+
+
+    private bool is_reloading = false;
+
+    private void Update() 
+    {
+        if (Input.GetKey(KeyCode.R) && !is_reloading)
+        {
+            // Получаю слот текущего оружия
+            GameObject current_gun_slot = gun.GetCurrentSlot();
+
+            // Получаю оружие в слоте 
+            GameObject gun_in_slot = current_gun_slot.GetComponent<Slot>().object_in_slot;
+
+            // Получаю время перезарядки
+            float reload_time = gun.get_current_reload_time;
+
+            Gun.Guns gun_type = gun.GetGunType();
+
+            // Ищу слот с непустым магазином
+            GameObject mag_slot = null;
+
+            if (gun_type == Gun.Guns.hammer || gun_type == Gun.Guns.none) { return; }
+
+            if (gun_type == Gun.Guns.shotgun) { mag_slot = SearchSlotWithBulletStack(); }
+            else { mag_slot = SearchSlotWithMag(gun_type); }
+
+            if (mag_slot != null && gun_in_slot != null) 
+            {
+                if (gun_type == Gun.Guns.shotgun)
+                {
+                }
+                else
+                {
+                    Debug.Log($"Дефолтная позиция слота обоймы = {mag_slot.GetComponent<Slot>().SlotDefaultPosition}");
+                    StartCoroutine(ReloadGun(current_gun_slot, mag_slot, reload_time));
+                }
+            }
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+    private GameObject SearchSlotWithMag(Gun.Guns gun_type)
+    {
+        foreach (Slot slot in itemSlots)
+        {
+
+            if (gun_type == Gun.Guns.assaultRifle)
+            {
+                // Получаю предмет в слоте
+                RifleMag mag_in_slot = slot.item_in_slot as RifleMag;
+                if (mag_in_slot != null && slot.object_in_slot.transform.childCount > 0)
+                    return slot.gameObject;
+            }
+            else
+            {
+                // Получаю предмет в слоте
+                PistolMag mag_in_slot = slot.item_in_slot as PistolMag;
+                if (mag_in_slot != null && slot.object_in_slot.transform.childCount > 0)
+                    return slot.gameObject;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+    private GameObject SearchSlotWithBulletStack()
+    {
+        foreach (Slot slot in itemSlots)
+        {
+            // Получаю предмет в слоте
+            BulletStack internal_bullet_stack = slot.item_in_slot as BulletStack;
+            if (internal_bullet_stack != null && slot.object_in_slot.transform.childCount > 0)
+                return slot.gameObject;
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+    IEnumerator ReloadGun(GameObject gun_slot, GameObject mag_slot, float reload_time)
+    {
+        is_reloading = true;
+        
+        yield return new WaitForSeconds(reload_time);
+
+        bool flag = false;
+        
+        SetMagToGun(gun_slot, mag_slot, out flag);
+
+        Debug.Log($"Замена прошла успешо, = {flag}");
+        
+        is_reloading = false;
+    }
+
 
 
 
@@ -690,7 +825,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    public void SetMagToGun(GameObject input_slot, GameObject transmitted_picture, out bool successLoad)
+    public void SetMagToGun(GameObject input_slot, GameObject current_slot, out bool successLoad)
     {
 
         successLoad = false;
@@ -700,9 +835,6 @@ public class InventoryManager : MonoBehaviour
 
         // Получаю оружие во входном слоте
         GameObject gun_in_input_slot = input_slot_data.object_in_slot;
-
-        // Получаю слот текущей картинки
-        GameObject current_slot = transmitted_picture.transform.parent.gameObject;
 
         // Получаю данные текущего слота
         Slot current_slot_data = current_slot.GetComponent<Slot>();
@@ -749,6 +881,9 @@ public class InventoryManager : MonoBehaviour
                     // Устанавливаю магазины в инвентаре
                     SetMagInInventoryWithReplace(input_slot, current_slot, dropped_gun_mag);
 
+                    // Обновляю ссылку на обойму
+                    gun.ChangeGun(gun.get_current_slot);
+
                 }
 
                 successLoad = is_loaded;
@@ -773,6 +908,9 @@ public class InventoryManager : MonoBehaviour
                     // Устанавливаю магазины в инвентаре
                     SetMagInInventoryWithReplace(input_slot, current_slot, dropped_gun_mag);
 
+                    // Обновляю ссылку на обойму
+                    gun.ChangeGun(gun.get_current_slot);
+
                 }
 
                 successLoad = is_loaded;
@@ -796,6 +934,9 @@ public class InventoryManager : MonoBehaviour
                 // Устанавливаю магазин в переменную штурмовой винтовки
                 gun_in_input_slot.GetComponent<Internal_rifle_mag>().LoadMagToGun(mag_in_current_slot, out is_loaded);
 
+                // Обновляю ссылку на обойму
+                gun.ChangeGun(gun.get_current_slot);
+
                 if (is_loaded) 
                 {
                     // Устанавливаю магазин в инвентаре
@@ -809,6 +950,9 @@ public class InventoryManager : MonoBehaviour
             {
                 // Устанавливаю магазин в переменную пистолета
                 gun_in_input_slot.GetComponent<Internal_pistol_mag>().LoadMagToGun(mag_in_current_slot, out is_loaded);
+
+                // Обновляю ссылку на обойму
+                gun.ChangeGun(gun.get_current_slot);
 
                 if (is_loaded)
                 {
@@ -903,6 +1047,7 @@ public class InventoryManager : MonoBehaviour
 
         // Ставлю картинку на дефолтную позицию
         current_image.transform.position = current_slot.GetComponent<Slot>().SlotDefaultPosition;
+        Debug.Log(current_image.transform.position);
 
         // Обновляю слот инвентаря
         current_slot.GetComponent<Slot>().SetItem(dropped_gun_mag.GetComponent<FloorItem>().getItem, dropped_gun_mag);
@@ -954,6 +1099,7 @@ public class InventoryManager : MonoBehaviour
         // Делаем картинку неактивной
         slot.transform.GetChild(1).GetComponent<Image>().enabled = false;
     }
+
 
 
 }

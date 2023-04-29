@@ -41,7 +41,7 @@ public class Items_UI_starter : MonoBehaviour
         }
 
 
-
+        Debug.Log("Матрица позиций была установлена");
     }
 
 

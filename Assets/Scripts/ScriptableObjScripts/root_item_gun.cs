@@ -32,7 +32,11 @@ public class root_item_gun : Item
     // Индекс разности направления ствола и спрайта
     protected int AD_index;
 
+    // CoolDown для оружия ближнего боя
     protected float coolDown;
+
+    // Время перезарядки
+    protected float reload_time;
 
 
 
@@ -61,6 +65,8 @@ public class root_item_gun : Item
     public int GetSecondDamage => second_damage;
 
     public float GetCooldown => coolDown;
+
+    public float GetReloadTime => reload_time;  
 
 
 }

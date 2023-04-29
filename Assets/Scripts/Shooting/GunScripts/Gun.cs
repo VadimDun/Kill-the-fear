@@ -134,6 +134,27 @@ public class Gun : MonoBehaviour
 
 
 
+    public GameObject GetCurrentSlot()
+    {
+        if (current_gun != Guns.hammer)
+        {
+            return gun_slots[current_slot - 1].gameObject;
+        }
+        else
+            return secondArmSlots[0].gameObject;
+    }
+
+    public Guns GetGunType() => current_gun;
+
+    private float current_reload_time;
+
+    public float get_current_reload_time => current_reload_time;
+
+
+
+
+
+
     public virtual void ChangeGun(int numberOfGun)
     {
         switch (numberOfGun)
@@ -153,10 +174,12 @@ public class Gun : MonoBehaviour
                         bulletSpeed = gun_data.GetBulletSpeed;
                         shootMode = gun_data.GetShootMode;
                         lastShotTime = gun_data.GetLastShotTime;
+                        current_reload_time = gun_data.GetReloadTime;
                         current_slot = 1;
 
-                        // Получаю оружие и магазин от него
+                        // Получаю оружие
                         gunObject = gun_slots[0].object_in_slot;
+
                         shootingScript.set_root_gun = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
 
                         if (current_gun != Guns.shotgun)
@@ -191,6 +214,7 @@ public class Gun : MonoBehaviour
                         bulletSpeed = gun_data.GetBulletSpeed;
                         shootMode = gun_data.GetShootMode;
                         lastShotTime = gun_data.GetLastShotTime;
+                        current_reload_time = gun_data.GetReloadTime;
                         current_slot = 2;
 
                         // Получаю оружие и магазин от него
@@ -229,6 +253,7 @@ public class Gun : MonoBehaviour
                         bulletSpeed = gun_data.GetBulletSpeed;
                         shootMode = gun_data.GetShootMode;
                         lastShotTime = gun_data.GetLastShotTime;
+                        current_reload_time = gun_data.GetReloadTime;
                         current_slot = 3;
 
                         // Получаю оружие и магазин от него

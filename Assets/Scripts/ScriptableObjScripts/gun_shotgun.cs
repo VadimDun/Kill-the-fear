@@ -36,5 +36,8 @@ public class gun_shotgun : root_item_gun
 
         AD_index = 3;
 
+        // Время перезарядки для одного патрона
+        reload_time = 0.7f;
+
     }
 }

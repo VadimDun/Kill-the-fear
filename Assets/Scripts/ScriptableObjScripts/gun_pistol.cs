@@ -35,5 +35,8 @@ public class gun_pistol : root_item_gun
         firePointIndex = 1;
 
         AD_index = 1;
+
+        // Две секунды
+        reload_time = 2;
     }
 }

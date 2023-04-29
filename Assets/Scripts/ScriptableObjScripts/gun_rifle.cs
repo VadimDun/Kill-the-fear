@@ -46,6 +46,9 @@ public class gun_rifle : root_item_gun
 
         AD_index = 2;
 
+        // Три секунды
+        reload_time = 3;
+
     }
 
 }
