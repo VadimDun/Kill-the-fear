@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class InventoryManager : MonoBehaviour
 {
 
     private List<AmmunitionGunSlot> am_gun_slots = new List<AmmunitionGunSlot>();
+
+    private List<SecondArmSlot> second_arm_slots = new List<SecondArmSlot>();
 
     public List<ItemSlot> itemSlots = new List<ItemSlot>();
 
@@ -28,12 +31,17 @@ public class InventoryManager : MonoBehaviour
 
         am_UI = GameObject.Find("AmmunitionUI").GetComponent<RectTransform>();
 
+
         // Получаем все слоты для огнестрельного оружия
         for (int i = 0; i < am_UI.childCount; i++)
         {
             if (am_UI.GetChild(i).GetComponent<AmmunitionGunSlot>() != null)
             {
                 am_gun_slots.Add(am_UI.GetChild(i).GetComponent<AmmunitionGunSlot>());
+            }
+            else if (am_UI.GetChild(i).GetComponent<SecondArmSlot>() != null)
+            {
+                second_arm_slots.Add(am_UI.GetChild(i).GetComponent<SecondArmSlot>());
             }
         }
 
@@ -830,6 +838,52 @@ public class InventoryManager : MonoBehaviour
         // Обновляю слот инвентаря
         current_slot.GetComponent<Slot>().SetItem(dropped_gun_mag.GetComponent<FloorItem>().getItem, dropped_gun_mag);
 
+    }
+
+
+
+
+
+
+
+
+
+    public void ResetInventory()
+    {
+        foreach (Slot slot in am_gun_slots)
+        {
+            ResetSlot(slot);
+        }
+
+        foreach (Slot slot in second_arm_slots)
+        {
+            ResetSlot(slot);
+        }
+
+        foreach (Slot slot in itemSlots)
+        {
+            ResetSlot(slot);
+        }
+    }
+
+
+
+
+
+
+
+
+
+    private void ResetSlot(Slot slot)
+    {
+        // Отчищаем слот
+        slot.ClearClot();
+
+        // Убираем картинку
+        slot.transform.GetChild(1).GetComponent<Image>().sprite = null;
+
+        // Делаем картинку неактивной
+        slot.transform.GetChild(1).GetComponent<Image>().enabled = false;
     }
 
 

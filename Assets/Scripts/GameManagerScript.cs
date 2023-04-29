@@ -20,6 +20,8 @@ public class GameManagerScript : MonoBehaviour
 
     private InventoryMenu inventoryMenu;
 
+    private InventoryManager inventoryManager;
+
     private int StartSceneIndex;
 
     private Vector3 SpawnPointPosition;
@@ -132,6 +134,8 @@ public class GameManagerScript : MonoBehaviour
         transition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
 
         Face_UI = GameObject.Find("FaceUI");
+
+        inventoryManager = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
     }
 
 
@@ -144,6 +148,9 @@ public class GameManagerScript : MonoBehaviour
 
         // Перезагружаю сцену
         SceneManager.LoadScene(StartSceneIndex);
+
+        // Перезагружаю инвентарь
+        inventoryManager.ResetInventory();
 
         //Включаю затемнение
         transition.StartDeathTransition();
@@ -177,7 +184,7 @@ public class GameManagerScript : MonoBehaviour
         inventoryMenu.deathWindowIsActive = false;
 
         // Включаю лицевой UI
-        Invoke("ActivateFaceUI", 0.3f);
+        Face_UI.SetActive(true);
 
         // Отчищаю список убитых у жнеца
         enemyReaper.SetOfDeadEdit.Clear();
@@ -186,8 +193,6 @@ public class GameManagerScript : MonoBehaviour
 
 
 
-
-    private void ActivateFaceUI() => Face_UI.SetActive(true);
 
 
 

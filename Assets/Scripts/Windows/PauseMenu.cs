@@ -90,8 +90,24 @@ public class PauseMenu : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        Invoke("ActivateFaceUI", 0.3f);
+        Face_UI.SetActive(true);
     }
+
+
+
+
+
+
+
+
+    private void ActivateInventoryInput() => inventoryMenu.pauseWindowIsActive = false;
+
+
+
+
+
+
+
 
     public void Home(int sceneID)
     {

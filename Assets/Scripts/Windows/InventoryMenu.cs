@@ -22,6 +22,8 @@ public class InventoryMenu : MonoBehaviour
 
     private bool InventoryWindowIsNotActive = true;
 
+    private bool InputIsBlocked = false;
+
     public bool inventoryWindowIsNotActive => InventoryWindowIsNotActive;
 
 
@@ -53,7 +55,6 @@ public class InventoryMenu : MonoBehaviour
 
     public void Inventory()
     {
-        
         
         InventoryWindowIsNotActive = !InventoryWindowIsNotActive;
         if (InventoryWindowIsNotActive)
@@ -92,8 +93,12 @@ public class InventoryMenu : MonoBehaviour
         // Включаю ввод паузе
         Invoke("ActivatePauseInput", 0.2f);
 
+        InputIsBlocked = true;
+
+        Invoke("TurnOnInventoery", 0.3f);
+
         // Включаю лицевой UI
-        Invoke("ActivateFaceUI", 0.3f);
+        Face_UI.SetActive(true);
 
         Mouse.current.WarpCursorPosition(beforeOpeningPosition);
 
@@ -104,8 +109,8 @@ public class InventoryMenu : MonoBehaviour
     // Включает ввод для паузы
     private void ActivatePauseInput() => pauseMenu.inventoryWindowIsActive = false;
 
-    private void ActivateFaceUI() => Face_UI.SetActive(true);
-
+    // Включает ввод инвентарю
+    private void TurnOnInventoery() => InputIsBlocked = false;
 
 
 
@@ -116,7 +121,7 @@ public class InventoryMenu : MonoBehaviour
     private void Update()
     {
         // Если персонаж умер - тогда окно инвентаря нельзя вызвать
-        if (DeathWindowIsActive || PauseWindowIsActive)
+        if (DeathWindowIsActive || PauseWindowIsActive || InputIsBlocked)
             return;
 
         // Вызов инвентаря на клавишу I
