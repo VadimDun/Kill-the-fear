@@ -11,7 +11,7 @@ public class Hammer_weapon : EdgedWeapon
     {
         damage = 35;
 
-        coolDown = 0.2f;
+        coolDown = 0.6f;
 
         itemType = ItemType.edged_weapon;
     }

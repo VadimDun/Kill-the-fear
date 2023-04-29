@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.Tilemaps;
@@ -42,16 +43,22 @@ public class Gun : MonoBehaviour
     // Массив слотов инвентаря (под оружие)
     private AmmunitionGunSlot[] gun_slots = new AmmunitionGunSlot[3];
 
+    private SecondArmSlot[] secondArmSlots = new SecondArmSlot[2];
+
     private void Awake()
     {
         gun_slots[0] = GameObject.Find("GunSlot(2)").GetComponent<AmmunitionGunSlot>();
         gun_slots[1] = GameObject.Find("GunSlot(3)").GetComponent<AmmunitionGunSlot>();
         gun_slots[2] = GameObject.Find("GunSlot(1)").GetComponent<AmmunitionGunSlot>();
+        
+        secondArmSlots[0] = GameObject.Find("SecondArmSlot(1)").GetComponent<SecondArmSlot>();
 
 
         shootingScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Shooting>();
 
         playerGun = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerGun>();
+
+        changingSprites = GetComponent<PlayerChangeSprites>();
 
     }
 
@@ -69,7 +76,8 @@ public class Gun : MonoBehaviour
         if (isTriggerPulled)
         {
             //Для одииночной стрельбы
-            if ((shootMode == ShootMode.semiAuto) ) { Shoot(); playerGun.Kick(); }
+            if ((shootMode == ShootMode.semiAuto) ) { Shoot(); }
+            if (SecondArmWeapon != null) { playerGun.Kick(); }
         }
     }
 
@@ -112,9 +120,12 @@ public class Gun : MonoBehaviour
     // Оружие
     protected GameObject gunObject;
 
+    // Оружие ближнего боя
+    protected EdgedWeapon SecondArmWeapon;
+
     private Shooting shootingScript;
 
-
+    PlayerChangeSprites changingSprites;
 
     public virtual void ChangeGun(int numberOfGun)
     {
@@ -149,6 +160,8 @@ public class Gun : MonoBehaviour
                         }
 
                     }
+                    else
+                        ResetGun();
                 }
                 
                 break;
@@ -180,6 +193,8 @@ public class Gun : MonoBehaviour
                             current_capacity = gunObject.GetComponent<shotgun_capacity>();
                         }
                     }
+                    else
+                        ResetGun();
                 }
 
                 
@@ -212,9 +227,39 @@ public class Gun : MonoBehaviour
                             current_capacity = gunObject.GetComponent<shotgun_capacity>();
                         }
                     }
+                    else
+                        ResetGun();
+                }
+                break;
+            case 0:
+                if (secondArmSlots[0] != null)
+                {
+                    ResetGun();
+                    GameObject second_arm_weapon = secondArmSlots[0].object_in_slot;
+                    if (second_arm_weapon != null)
+                    {
+                        Hammer_weapon ew = second_arm_weapon.GetComponent<FloorItem>().getItem as Hammer_weapon;
+
+                        if (ew != null)
+                        {
+                            SecondArmWeapon = ew;
+
+                            changingSprites.changeSprite(0);
+                        }
+                    }
                 }
                 break;
         }
     }
+
+
+
+
+
+
+
+
+    private void ResetGun() => shootMode = ShootMode.off;
+
 
 }

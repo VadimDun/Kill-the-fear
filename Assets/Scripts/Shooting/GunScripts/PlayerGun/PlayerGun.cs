@@ -94,10 +94,15 @@ public class PlayerGun : Gun
 
     private Collider2D hammer_range_collider;
 
+    private float last_kick_time;
+
     public void Kick()
     {
-        hammer_range_collider.enabled = true;
-        Invoke("TurnOnCollider", 0.1f);
+        if (Time.time - last_kick_time < SecondArmWeapon.GetCoolDown) { return; }
+            last_kick_time = Time.time;
+            hammer_range_collider.enabled = true;
+            Invoke("TurnOnCollider", 0.1f);
+        
     }
 
     private void TurnOnCollider() => hammer_range_collider.enabled = false;

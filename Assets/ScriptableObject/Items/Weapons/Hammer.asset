@@ -15,5 +15,5 @@ MonoBehaviour:
   ItemName: Hammer
   InventoryIcon: {fileID: 21300000, guid: 9f7162b3700cb4847a54461969ea8dd7, type: 3}
   OnFloorIcon: {fileID: 21300000, guid: d2f854b3846064145b1e2f6d397c50d0, type: 3}
-  itemType: 0
-  scriptableGameObject: {fileID: 0}
+  itemType: 2
+  scriptableGameObject: {fileID: 3916902496521189743, guid: 48c485da59a14f14ca57ab98582cacdb, type: 3}

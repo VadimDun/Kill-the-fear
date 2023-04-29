@@ -45,7 +45,6 @@ public class EnemyGun : Gun
 
     protected override void Shoot()
     {
-        Debug.Log("Террорист стреляет");
 
         if (Time.time - lastShotTime < delayBetweenShots) { return; }
 

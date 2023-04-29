@@ -78,6 +78,7 @@ public class Shooting : MonoBehaviour
         if (Input.GetKey("1"))      { playerGun.ChangeGun(1); playerSounds.ChangePlayerSound(soundIndex); firePoints.ChoosePoint(firePointIndex); wm.SwitchAD(AD_Index); changingSprites.changeSprite(spriteIndex);  }
         else if (Input.GetKey("2")) { playerGun.ChangeGun(2); playerSounds.ChangePlayerSound(soundIndex); firePoints.ChoosePoint(firePointIndex); wm.SwitchAD(AD_Index); changingSprites.changeSprite(spriteIndex);  }
         else if (Input.GetKey("3")) { playerGun.ChangeGun(3); playerSounds.ChangePlayerSound(soundIndex); firePoints.ChoosePoint(firePointIndex); wm.SwitchAD(AD_Index); changingSprites.changeSprite(spriteIndex);  }
+        else if (Input.GetKey("0")) { playerGun.ChangeGun(0); }
         if (Input.GetButtonDown("Fire1")) { playerGun.PullTheTrigger(); }
         if (Input.GetButtonUp("Fire1")) { playerGun.PullTheTrigger(); }
 
