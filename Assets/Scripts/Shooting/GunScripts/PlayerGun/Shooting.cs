@@ -48,15 +48,14 @@ public class Shooting : MonoBehaviour
         wm = GetComponent<WarriorMovement>();
 
         wm.SwitchAD(StartGun);
+
+        playerGun.ChangeGun(1);
     }
 
     void Awake()
     {
 
         firePoints = GetComponent<FirePoint>();
-
-        
-        playerGun.ChangeGun(StartGun);
 
         firePoints.ChoosePoint(StartGun);
 
@@ -65,13 +64,12 @@ public class Shooting : MonoBehaviour
 
         changingSprites = GetComponent<PlayerChangeSprites>();
 
-        changingSprites.changeSprite(StartGun);
+        changingSprites.changeSprite(0);
 
     }
 
     void Update()
     {
-
 
 
         //Выбор ствола

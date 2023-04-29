@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class root_item_gun : Item
@@ -16,6 +17,8 @@ public class root_item_gun : Item
 
     protected float lastShotTime = Mathf.NegativeInfinity;
 
+    protected int second_damage;
+
 
     // Индекс спрайта персонажа
     protected int spriteIndex;
@@ -28,6 +31,8 @@ public class root_item_gun : Item
 
     // Индекс разности направления ствола и спрайта
     protected int AD_index;
+
+    protected float coolDown;
 
 
 
@@ -52,6 +57,10 @@ public class root_item_gun : Item
     public int GetFirePointIndex => firePointIndex;
 
     public int get_AD_index => AD_index;
+
+    public int GetSecondDamage => second_damage;
+
+    public float GetCooldown => coolDown;
 
 
 }

@@ -98,14 +98,14 @@ public class PlayerGun : Gun
 
     public void Kick()
     {
-        if (Time.time - last_kick_time < SecondArmWeapon.GetCoolDown) { return; }
+        if (Time.time - last_kick_time < root_weapon.GetCooldown) { return; }
             last_kick_time = Time.time;
             hammer_range_collider.enabled = true;
-            Invoke("TurnOnCollider", 0.1f);
+            Invoke("TurnOffCollider", 0.1f);
         
     }
 
-    private void TurnOnCollider() => hammer_range_collider.enabled = false;
+    private void TurnOffCollider() => hammer_range_collider.enabled = false;
 
 
 

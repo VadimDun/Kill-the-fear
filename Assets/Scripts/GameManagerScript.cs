@@ -143,6 +143,9 @@ public class GameManagerScript : MonoBehaviour
     public void Restart()
     {
 
+        // Ставлю дефолтный слот, чтобы обновить данные
+        gun.ChangeGun(0);
+
         //Устанавливаю курсор
         CursorManager.Instance.SetScopeCursor();
 

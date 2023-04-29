@@ -20,6 +20,9 @@ public class InventoryManager : MonoBehaviour
 
     private RectTransform item_UI;
 
+    private Gun gun;
+
+
 
 
 
@@ -61,6 +64,8 @@ public class InventoryManager : MonoBehaviour
         // Делаю неактивным 
         GameObject.Find("Inventory").SetActive(false);
 
+        // Получаю скрипт оружия
+        gun = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerGun>();
 
     }
 
@@ -632,6 +637,14 @@ public class InventoryManager : MonoBehaviour
 
 
             /*
+             * Вызываю текущий слот, чтобы обновить данные текущего оружия 
+            */
+
+            gun.ChangeGun(gun.get_current_slot); 
+
+
+
+            /*
              * Выбрасываем предмет из инвентаря 
             */
 
@@ -655,6 +668,9 @@ public class InventoryManager : MonoBehaviour
 
             // Включаю коллайдер обратно, чтобы его можно было подобрать
             currentObject.GetComponent<Collider2D>().enabled = true;
+
+
+
 
             /*
              * Успешное завершение

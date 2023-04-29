@@ -9,8 +9,8 @@ public class HammerRange : MonoBehaviour
 
     private void Start()
     {
-        Hammer_weapon hw = GameObject.Find("Hammer").GetComponent<FloorItem>().getItem as Hammer_weapon;
-        hammer_damage = hw.GetDamage;
+        Hammer_weapon hw = GameObject.Find("SecondArmSlot(1)").GetComponent<SecondArmSlot>().internal_object.GetComponent<FloorItem>().getItem as Hammer_weapon;
+        hammer_damage = hw.GetSecondDamage;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

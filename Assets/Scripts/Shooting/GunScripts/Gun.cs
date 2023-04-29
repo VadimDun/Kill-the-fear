@@ -8,7 +8,7 @@ using UnityEngine.U2D;
 public class Gun : MonoBehaviour
 {
     //Стволы
-    public enum Guns { pistol, shotgun, assaultRifle, none };
+    public enum Guns { pistol, shotgun, assaultRifle, hammer, none };
 
     //Режимы огня
     public enum ShootMode { auto, semiAuto, off };
@@ -77,7 +77,7 @@ public class Gun : MonoBehaviour
         {
             //Для одииночной стрельбы
             if ((shootMode == ShootMode.semiAuto) ) { Shoot(); }
-            if (SecondArmWeapon != null) { playerGun.Kick(); }
+            if (current_gun == Guns.hammer) { playerGun.Kick(); }
         }
     }
 
@@ -120,12 +120,19 @@ public class Gun : MonoBehaviour
     // Оружие
     protected GameObject gunObject;
 
-    // Оружие ближнего боя
-    protected EdgedWeapon SecondArmWeapon;
-
     private Shooting shootingScript;
 
-    PlayerChangeSprites changingSprites;
+    protected root_item_gun root_weapon;
+
+    public root_item_gun get_root_weapon => root_weapon;
+
+    private int current_slot;
+    public int get_current_slot => current_slot;
+
+    private PlayerChangeSprites changingSprites;
+
+
+
 
     public virtual void ChangeGun(int numberOfGun)
     {
@@ -134,6 +141,7 @@ public class Gun : MonoBehaviour
             case 1:
                 if (gun_slots[0] != null)
                 {
+                    // Пистолет
                     if (gun_slots[0].object_in_slot != null)
                     {
                         // Получаю информацию об оружии в этом слоте
@@ -145,6 +153,7 @@ public class Gun : MonoBehaviour
                         bulletSpeed = gun_data.GetBulletSpeed;
                         shootMode = gun_data.GetShootMode;
                         lastShotTime = gun_data.GetLastShotTime;
+                        current_slot = 1;
 
                         // Получаю оружие и магазин от него
                         gunObject = gun_slots[0].object_in_slot;
@@ -154,20 +163,23 @@ public class Gun : MonoBehaviour
                         {
                             current_capacity = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
                         }
-                        else 
+                        else
                         {
                             current_capacity = gunObject.GetComponent<shotgun_capacity>();
                         }
 
                     }
                     else
-                        ResetGun();
+                    { 
+                        ChangeGun(0);
+                    }
                 }
                 
                 break;
             case 2:
                 if (gun_slots[1] != null)
                 {
+                    // Штурмовая винтовка
                     if (gun_slots[1].object_in_slot != null)
                     {
                         // Получаю информацию об оружии в этом слоте
@@ -179,6 +191,7 @@ public class Gun : MonoBehaviour
                         bulletSpeed = gun_data.GetBulletSpeed;
                         shootMode = gun_data.GetShootMode;
                         lastShotTime = gun_data.GetLastShotTime;
+                        current_slot = 2;
 
                         // Получаю оружие и магазин от него
                         gunObject = gun_slots[1].object_in_slot;
@@ -194,7 +207,9 @@ public class Gun : MonoBehaviour
                         }
                     }
                     else
-                        ResetGun();
+                    {
+                        ChangeGun(0);
+                    }
                 }
 
                 
@@ -202,6 +217,7 @@ public class Gun : MonoBehaviour
             case 3:
                 if (gun_slots[2] != null)
                 {
+                    // Дробовик
                     if (gun_slots[2].object_in_slot != null)
                     {
                         // Получаю информацию об оружии в этом слоте
@@ -213,6 +229,7 @@ public class Gun : MonoBehaviour
                         bulletSpeed = gun_data.GetBulletSpeed;
                         shootMode = gun_data.GetShootMode;
                         lastShotTime = gun_data.GetLastShotTime;
+                        current_slot = 3;
 
                         // Получаю оружие и магазин от него
                         gunObject = gun_slots[2].object_in_slot;
@@ -228,24 +245,33 @@ public class Gun : MonoBehaviour
                         }
                     }
                     else
-                        ResetGun();
+                    {
+                        ChangeGun(0);
+                    }
                 }
                 break;
             case 0:
                 if (secondArmSlots[0] != null)
                 {
-                    ResetGun();
-                    GameObject second_arm_weapon = secondArmSlots[0].object_in_slot;
-                    if (second_arm_weapon != null)
+                    // Кувалда
+                    if (secondArmSlots[0].object_in_slot != null)
                     {
-                        Hammer_weapon ew = second_arm_weapon.GetComponent<FloorItem>().getItem as Hammer_weapon;
+                        // Получаю информацию об оружии в этом слоте
+                        root_item_gun gun_data = secondArmSlots[0].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
 
-                        if (ew != null)
-                        {
-                            SecondArmWeapon = ew;
+                        current_gun = gun_data.GetGunType;
+                        delayBetweenShots = gun_data.GetDelayBetweenShots;
+                        damage = gun_data.GetDamage;
+                        bulletSpeed = gun_data.GetBulletSpeed;
+                        shootMode = gun_data.GetShootMode;
+                        lastShotTime = gun_data.GetLastShotTime;
+                        current_slot = 0;
 
-                            changingSprites.changeSprite(0);
-                        }
+                        // Получаю оружие и магазин от него
+                        gunObject = secondArmSlots[0].object_in_slot;
+                        root_weapon = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
+                        shootingScript.set_root_gun = root_weapon;
+                        changingSprites.changeSprite(0);
                     }
                 }
                 break;
@@ -253,13 +279,6 @@ public class Gun : MonoBehaviour
     }
 
 
-
-
-
-
-
-
-    private void ResetGun() => shootMode = ShootMode.off;
 
 
 }
