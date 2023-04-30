@@ -89,7 +89,7 @@ public class Shooting : MonoBehaviour
 
 
 
-    KeyCode[] keys = new KeyCode[] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha0 };
+    KeyCode[] keys = new KeyCode[] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha0, KeyCode.I };
 
     void Update()
     {
@@ -117,7 +117,7 @@ public class Shooting : MonoBehaviour
 
         
 
-        if (!playerGun.TriggerIsPulled)
+        if (!playerGun.TriggerIsPulled && !(is_reloading && playerGun.GetGunType() == Gun.Guns.shotgun))
         {
 
             //Выбор слота

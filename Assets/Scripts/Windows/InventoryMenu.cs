@@ -16,6 +16,8 @@ public class InventoryMenu : MonoBehaviour
 
     private GameManagerScript gameManagerScript;
 
+    private InventoryManager inventoryManager;
+
     private PauseMenu pauseMenu;
 
     private Vector3 beforeOpeningPosition;
@@ -23,6 +25,10 @@ public class InventoryMenu : MonoBehaviour
     private bool InventoryWindowIsNotActive = true;
 
     private bool InputIsBlocked = false;
+
+    private bool is_reloading = false;
+
+    public bool set_reloading_status { set { is_reloading = value; }  }
 
     public bool inventoryWindowIsNotActive => InventoryWindowIsNotActive;
 
@@ -51,6 +57,8 @@ public class InventoryMenu : MonoBehaviour
         pauseMenu = GetComponent<PauseMenu>();
 
         Face_UI = GameObject.Find("FaceUI");
+
+        inventoryManager = GetComponent<InventoryManager>();
     }
 
     public void Inventory()
@@ -63,6 +71,17 @@ public class InventoryMenu : MonoBehaviour
         }
         else
         {
+
+            /*
+             * Открываю инвентарь 
+            */
+
+            // Блокирую перезарядку на R во время открытого инвентаря 
+            inventoryManager.set_input_block_status = true;
+
+            // Блокирую процесс перезарядки
+            inventoryManager.block_current_reload = true;
+
             gameManagerScript.FreezePlayer();
             CursorManager.Instance.SetMenuCursor();
             inventoryWindow.SetActive(true);
@@ -84,6 +103,13 @@ public class InventoryMenu : MonoBehaviour
 
     public void InventoryClose()
     {
+
+        // Убираю блокировку перезарядки оружия на R во время открытого инвентаря
+        inventoryManager.set_input_block_status = false;
+
+        // Деблокирую процесс перезарядки
+        inventoryManager.block_current_reload = false;
+
         InventoryWindowIsNotActive = true;
 
         gameManagerScript.UnfreezePlayer();
@@ -121,7 +147,7 @@ public class InventoryMenu : MonoBehaviour
     private void Update()
     {
         // Если персонаж умер - тогда окно инвентаря нельзя вызвать
-        if (DeathWindowIsActive || PauseWindowIsActive || InputIsBlocked)
+        if (DeathWindowIsActive || PauseWindowIsActive || InputIsBlocked || is_reloading)
             return;
 
         // Вызов инвентаря на клавишу I

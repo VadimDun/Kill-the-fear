@@ -26,6 +26,10 @@ public class InventoryManager : MonoBehaviour
 
     private Shooting shooting;
 
+    private InventoryMenu inventoryMenu;
+
+    private PauseMenu pauseMenu;
+
 
 
 
@@ -75,6 +79,7 @@ public class InventoryManager : MonoBehaviour
 
         shooting = GameObject.FindGameObjectWithTag("Player").GetComponent<Shooting>();
 
+        inventoryMenu = GetComponent<InventoryMenu>();
 
     }
 
@@ -100,9 +105,22 @@ public class InventoryManager : MonoBehaviour
 
     private bool is_reloading = false;
 
+
+
+    private bool block_input = false;
+
+    public bool set_input_block_status { set { block_input = value; } }
+
+
+
+
+
+
+
+
     private void Update() 
     {
-        if (Input.GetKey(KeyCode.R) && !is_reloading)
+        if (Input.GetKey(KeyCode.R) && !is_reloading && !block_input)
         {
             // Получаю слот текущего оружия
             GameObject current_gun_slot = gun.GetCurrentSlot();
@@ -116,7 +134,7 @@ public class InventoryManager : MonoBehaviour
             Gun.Guns gun_type = gun.GetGunType();
 
             // Ищу слот с непустым магазином
-            GameObject mag_slot = null;
+            List<Slot> mag_slots = null;
 
             if (gun_type == Gun.Guns.hammer || gun_type == Gun.Guns.none) { return; }
 
@@ -135,11 +153,11 @@ public class InventoryManager : MonoBehaviour
             }
             else
             {
-                mag_slot = SearchSlotWithMag(gun_type);
+                mag_slots = SearchSlotWithMag(gun_type);
 
-                if (mag_slot != null && gun_in_slot != null)
+                if (mag_slots != null && gun_in_slot != null)
                 {
-                    StartCoroutine(ReloadGun(current_gun_slot, mag_slot, reload_time));
+                    StartCoroutine(ReloadGun(current_gun_slot, mag_slots, reload_time));
                 }
 
             }
@@ -153,10 +171,12 @@ public class InventoryManager : MonoBehaviour
 
 
 
+    public List<Slot> debug_slots = new List<Slot>();
 
-
-    private GameObject SearchSlotWithMag(Gun.Guns gun_type)
+    private List<Slot> SearchSlotWithMag(Gun.Guns gun_type)
     {
+        List <Slot> slots_with_mags = new List<Slot>();
+
         foreach (Slot slot in itemSlots)
         {
 
@@ -165,15 +185,24 @@ public class InventoryManager : MonoBehaviour
                 // Получаю предмет в слоте
                 RifleMag mag_in_slot = slot.item_in_slot as RifleMag;
                 if (mag_in_slot != null && slot.object_in_slot.transform.childCount > 0)
-                    return slot.gameObject;
+                    slots_with_mags.Add(slot);
             }
             else
             {
                 // Получаю предмет в слоте
                 PistolMag mag_in_slot = slot.item_in_slot as PistolMag;
                 if (mag_in_slot != null && slot.object_in_slot.transform.childCount > 0)
-                    return slot.gameObject;
+                    slots_with_mags.Add(slot);
             }
+        }
+
+        if (slots_with_mags.Count > 0) 
+        {
+            // Сортирую список найденных магазинов
+            slots_with_mags = slots_with_mags.OrderByDescending(slot => slot.object_in_slot.transform.childCount).ToList();
+
+            debug_slots = slots_with_mags;
+            return slots_with_mags;
         }
         return null;
     }
@@ -209,11 +238,14 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    IEnumerator ReloadGun(GameObject gun_slot, GameObject mag_slot, float reload_time)
+    IEnumerator ReloadGun(GameObject gun_slot, List<Slot> mag_slots, float reload_time)
     {
         is_reloading = true;
 
         shooting.set_reload_status = true;
+
+        inventoryMenu.set_reloading_status = true;
+
         
         yield return new WaitForSeconds(reload_time);
 
@@ -223,18 +255,20 @@ public class InventoryManager : MonoBehaviour
             block_reload = false;
             is_reloading = false;
             shooting.set_reload_status = false;
+            inventoryMenu.set_reloading_status = false;
             yield break;
         }
 
         bool flag = false;
         
-        SetMagToGun(gun_slot, mag_slot, out flag);
+        SetMagToGun(gun_slot, mag_slots.First().gameObject, out flag);
 
         Debug.Log($"Замена прошла успешо, = {flag}");
         
         is_reloading = false;
 
         shooting.set_reload_status = false;
+        inventoryMenu.set_reloading_status = false;
     }
 
 
@@ -313,7 +347,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private bool block_reload = false;
+    public bool block_reload = false;
 
     public bool block_current_reload { set { block_reload = value; } }
 
@@ -322,6 +356,7 @@ public class InventoryManager : MonoBehaviour
         is_reloading = true;
 
         shooting.set_reload_status = true;
+        inventoryMenu.set_reloading_status = true;
 
 
         // Заряжаю патрон в дробовик
@@ -357,6 +392,8 @@ public class InventoryManager : MonoBehaviour
         is_reloading = false;
 
         shooting.set_reload_status = false;
+
+        inventoryMenu.set_reloading_status = false;
 
         // Возвращаю дефолтное значение
         block_reload = false;

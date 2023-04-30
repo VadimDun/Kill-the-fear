@@ -48,6 +48,12 @@ public class GameManagerScript : MonoBehaviour
             inventoryMenu.InventoryClose();
         }
 
+        // Выключаю ввод для перезарядки на R
+        inventoryManager.set_input_block_status = true;
+
+        // Выключаю возможность перезарядки на R
+        inventoryManager.block_current_reload = true;
+
         // Выключаю лицевой UI
         Face_UI.SetActive(false);
 
@@ -142,6 +148,12 @@ public class GameManagerScript : MonoBehaviour
 
     public void Restart()
     {
+
+        // Выключаю ввод для перезарядки на R
+        inventoryManager.set_input_block_status = true;
+
+        // Выключаю возможность перезарядки на R
+        inventoryManager.block_current_reload = true;
 
         // Ставлю дефолтный слот, чтобы обновить данные
         gun.ChangeGun(0);

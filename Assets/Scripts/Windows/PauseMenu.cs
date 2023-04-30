@@ -14,6 +14,8 @@ public class PauseMenu : MonoBehaviour
 
     private InventoryMenu inventoryMenu;
 
+    private InventoryManager inventoryManager;
+
     private GameManagerScript gameManagerScript;
 
     private Vector3 beforeOpeningPosition;
@@ -23,6 +25,10 @@ public class PauseMenu : MonoBehaviour
     private bool pauseWindowIsNotActive = true;
 
     public bool PauseWindowIsNotActive => pauseWindowIsNotActive;
+
+    private bool is_reloading = false;
+
+    public bool set_reload_status { set { is_reloading = value; } } 
 
 
 
@@ -49,6 +55,19 @@ public class PauseMenu : MonoBehaviour
             Resume();
         else
         {
+
+            /*
+             * Открываю окно паузы 
+            */
+
+
+            // Выключаю ввод для перезарядки на R
+            inventoryManager.set_input_block_status = true;
+
+            // Выключаю возможность перезарядки на R
+            inventoryManager.block_current_reload = true;
+
+
             // Замораживаю игрока
             gameManagerScript.FreezePlayer();
             CursorManager.Instance.SetMenuCursor();
@@ -72,6 +91,12 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        // Включаю ввод для перезарядки на R
+        inventoryManager.set_input_block_status = false;
+
+        // Включаю возможность перезарядки на R
+        inventoryManager.block_current_reload = false;
+
         pauseWindowIsNotActive = true;
 
         // Размораживаю игрока
@@ -139,6 +164,8 @@ public class PauseMenu : MonoBehaviour
         gameManagerScript = GetComponent<GameManagerScript>();
 
         Face_UI = GameObject.Find("FaceUI");
+
+        inventoryManager = GetComponent<InventoryManager>();
     }
 
 
