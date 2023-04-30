@@ -87,6 +87,8 @@ public class Slot : MonoBehaviour
 
         internal_object = itemObj;
 
+        DontDestroyOnLoad(itemObj);
+
         IsEmpty = false;
 
         face_UI_manager.UpdatePic();

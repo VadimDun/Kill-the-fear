@@ -15,16 +15,35 @@ public class TriggerScript : MonoBehaviour
 
     private CanvasTransition canvasTransition;
 
+    private GameObject faceUI;
+
+    private const float switch_on_time = 1.2f;
+
+    private static bool hasGameStarted = false;
+
+
     private void Start()
     {
         canvasTransition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
 
+        Invoke("GetFaceUI", 0.2f);
+    }
+
+    public void Awake()
+    {
+        if (!hasGameStarted)
+        { 
+            Invoke("GetFaceUI", 1f);
+            hasGameStarted = true;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+            faceUI.SetActive(false);
+
             canvasTransition.SceneName = this.sceneName;
 
             playerPosition = collision.transform.position;
@@ -36,4 +55,9 @@ public class TriggerScript : MonoBehaviour
 
         }
     }
+
+    private void GetFaceUI() => faceUI = GameObject.Find("FaceUI");
+
+
+    
 }

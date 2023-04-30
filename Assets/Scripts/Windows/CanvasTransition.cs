@@ -8,6 +8,7 @@ public class CanvasTransition : MonoBehaviour
 
     private Animator animator;
 
+    private InventoryManager inventoryManager;
 
     private string sceneName;
     public string SceneName
@@ -19,6 +20,8 @@ public class CanvasTransition : MonoBehaviour
     private void Start()
     {
         animator = GameObject.Find("LevelChanger").GetComponent<Animator>();
+
+        inventoryManager = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
     }
 
     public void StartTransitionFadein()
@@ -44,6 +47,8 @@ public class CanvasTransition : MonoBehaviour
     //После завершения эффекта затемнения (на 60-м кадре анимации вызывается этот метод)
     public void OnFadeComplite()
     {
+        inventoryManager.LoadInventoryOnFade();
+        
         StartTransitionFade();
 
         StartCoroutine(LoadSceneAsync());

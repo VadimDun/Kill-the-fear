@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -8676811354811026361}
   - component: {fileID: 8126252881514541265}
   - component: {fileID: 669926173109121149}
+  - component: {fileID: 1816509175}
   m_Layer: 0
   m_Name: Shotgun
   m_TagString: Item
@@ -34,7 +35,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -179,3 +180,17 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1816509175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3817218404033357394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9694618dad68b0645930b1fbe66e4c31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  current_bullet_count: 0
+  bulletPrefab: {fileID: 2563289282412000716, guid: c5a96d8f67e60dc428f7f57f31f37f13, type: 3}

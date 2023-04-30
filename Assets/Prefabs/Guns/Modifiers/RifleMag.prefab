@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2840477939368661988
 MonoBehaviour:
@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a200be32849f0e428a3fff668f31c6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_bullet_count: 0
   bulletPrefab: {fileID: 2563289282412000716, guid: c5a96d8f67e60dc428f7f57f31f37f13, type: 3}
 --- !u!222 &8808181615400786326
 CanvasRenderer:

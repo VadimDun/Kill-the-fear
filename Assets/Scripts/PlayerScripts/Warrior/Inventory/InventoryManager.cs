@@ -30,6 +30,12 @@ public class InventoryManager : MonoBehaviour
 
     private PauseMenu pauseMenu;
 
+    private GameObject inventory;
+
+    [SerializeField] private GameObject fadeUI;
+
+    [SerializeField] private GameObject onFadeScreen;
+
 
 
 
@@ -81,6 +87,8 @@ public class InventoryManager : MonoBehaviour
 
         inventoryMenu = GetComponent<InventoryMenu>();
 
+        inventory = GameObject.Find("Inventory");
+
     }
 
 
@@ -91,9 +99,30 @@ public class InventoryManager : MonoBehaviour
 
 
     private void EndInventoryLoad()
-    { 
-        GameObject.Find("Inventory").SetActive(false);
+    {
+        inventory.SetActive(false);
         second_arm_slots[0].transform.GetChild(1).GetComponent<Image>().enabled = true;
+    }
+
+
+    private void TurnOffFadeScreen() => onFadeScreen.SetActive(false);
+
+    private void ActivateFadeUI() => fadeUI.SetActive(true);
+
+
+
+
+    public void LoadInventoryOnFade()
+    {
+        inventory.SetActive(true);
+
+        onFadeScreen.SetActive(true);
+
+        Invoke("ActivateFadeUI", 0.1f);
+
+        Invoke("TurnOffFadeScreen", 0.1f);
+
+        Invoke("EndInventoryLoad", 0.1f);
     }
 
 

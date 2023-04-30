@@ -8259,56 +8259,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 837955205, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
   m_PrefabInstance: {fileID: 1830646704628665712}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &841981644 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6012711760487723608, guid: 3a1cffbd353bbba449a5e416b3b9f652, type: 3}
-  m_PrefabInstance: {fileID: 1192236620}
-  m_PrefabAsset: {fileID: 0}
---- !u!60 &841981647
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 841981644}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.22696742, y: -0.08621438}
-      - {x: 0.26785392, y: 0.025168095}
-      - {x: 0.26306432, y: 0.16997975}
-      - {x: 0.05413374, y: 0.075920895}
-      - {x: 0.06340009, y: 0.025850616}
-      - {x: 0.03231882, y: -0.0036829775}
-      - {x: 0.15813158, y: -0.2013975}
-  m_UseDelaunayMesh: 0
---- !u!114 &841981648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 841981644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0202f5e9088278c4e9a63f7698a1136a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &861393526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77746,14 +77696,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6012711759975465563, guid: 3a1cffbd353bbba449a5e416b3b9f652, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6012711759975465567, guid: 3a1cffbd353bbba449a5e416b3b9f652, type: 3}
-      propertyPath: gameManager
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6012711759975465612, guid: 3a1cffbd353bbba449a5e416b3b9f652, type: 3}
       propertyPath: spriteWithHammer
       value: 
@@ -77809,23 +77751,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a1cffbd353bbba449a5e416b3b9f652, type: 3}
---- !u!1 &1192236621 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6012711759975465565, guid: 3a1cffbd353bbba449a5e416b3b9f652, type: 3}
-  m_PrefabInstance: {fileID: 1192236620}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1192236622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192236621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31cc46043f43a284eac202104507837c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1260226031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78470,25 +78395,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 27fa1cb00b8fb4a4eaf0b9959bbd8bf6, type: 3}
---- !u!1 &1816509174 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3817218404033357394, guid: bdbeed09b4d9d5949a05cbe14352cd66, type: 3}
-  m_PrefabInstance: {fileID: 3817218403269883181}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1816509175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1816509174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9694618dad68b0645930b1fbe66e4c31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  current_bullet_count: 0
-  bulletPrefab: {fileID: 2563289282412000716, guid: c5a96d8f67e60dc428f7f57f31f37f13, type: 3}
 --- !u!1 &1858234714
 GameObject:
   m_ObjectHideFlags: 0
@@ -79530,14 +79436,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 473002034, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 9f7162b3700cb4847a54461969ea8dd7, type: 3}
-    - target: {fileID: 473002034, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 643839022, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -79654,10 +79552,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1830646704628665717, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
-      propertyPath: internal_object
-      value: 
-      objectReference: {fileID: 3916902496521189743, guid: 48c485da59a14f14ca57ab98582cacdb, type: 3}
     - target: {fileID: 1830646704744540654, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -80114,10 +80008,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -8676811354811026361, guid: bdbeed09b4d9d5949a05cbe14352cd66, type: 3}
-      propertyPath: itemObject
-      value: 
-      objectReference: {fileID: 1816509174}
     - target: {fileID: 3817218404033357394, guid: bdbeed09b4d9d5949a05cbe14352cd66, type: 3}
       propertyPath: m_Name
       value: Shotgun
@@ -80279,10 +80169,6 @@ PrefabInstance:
     - target: {fileID: 4498226770193358667, guid: d1db9b899d0a7d243ba0f92ace023bb1, type: 3}
       propertyPath: m_Name
       value: Rifle
-      objectReference: {fileID: 0}
-    - target: {fileID: 4498226770193358667, guid: d1db9b899d0a7d243ba0f92ace023bb1, type: 3}
-      propertyPath: m_TagString
-      value: Item
       objectReference: {fileID: 0}
     - target: {fileID: 4498226770193358676, guid: d1db9b899d0a7d243ba0f92ace023bb1, type: 3}
       propertyPath: m_Pivot.x

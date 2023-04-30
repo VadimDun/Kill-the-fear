@@ -10,7 +10,7 @@ public class GameManagerScript : MonoBehaviour
     
     private GameObject player;
 
-    private GameObject Face_UI;
+    [SerializeField] private GameObject Face_UI;
 
     private Player playerParams;
 
@@ -139,9 +139,24 @@ public class GameManagerScript : MonoBehaviour
         // Получаю скипт анимаций перехода
         transition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
 
-        Face_UI = GameObject.Find("FaceUI");
-
         inventoryManager = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
+    }
+
+
+
+
+    private void ActivateFaceUI() => Face_UI.SetActive(true);
+
+    private static bool hasGameStarted = false;
+
+    private void Awake()
+    {
+        if (!hasGameStarted)
+        {
+            Face_UI.SetActive(false);
+            hasGameStarted = true;
+            Invoke("ActivateFaceUI", 0.3f);
+        }
     }
 
 
@@ -150,10 +165,10 @@ public class GameManagerScript : MonoBehaviour
     {
 
         // Выключаю ввод для перезарядки на R
-        inventoryManager.set_input_block_status = true;
+        inventoryManager.set_input_block_status = false;
 
         // Выключаю возможность перезарядки на R
-        inventoryManager.block_current_reload = true;
+        inventoryManager.block_current_reload = false;
 
         // Ставлю дефолтный слот, чтобы обновить данные
         gun.ChangeGun(0);

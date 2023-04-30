@@ -165,3 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82457daf6bba8ec448933d6894633022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemSlots: []
+  debug_slots: []
+  block_reload: 0
