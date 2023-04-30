@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +23,8 @@ public class InventoryManager : MonoBehaviour
     private RectTransform item_UI;
 
     private Gun gun;
+
+    private Shooting shooting;
 
 
 
@@ -69,6 +73,9 @@ public class InventoryManager : MonoBehaviour
         // Получаю скрипт оружия
         gun = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerGun>();
 
+        shooting = GameObject.FindGameObjectWithTag("Player").GetComponent<Shooting>();
+
+
     }
 
 
@@ -113,19 +120,28 @@ public class InventoryManager : MonoBehaviour
 
             if (gun_type == Gun.Guns.hammer || gun_type == Gun.Guns.none) { return; }
 
-            if (gun_type == Gun.Guns.shotgun) { mag_slot = SearchSlotWithBulletStack(); }
-            else { mag_slot = SearchSlotWithMag(gun_type); }
-
-            if (mag_slot != null && gun_in_slot != null) 
+            if (gun_type == Gun.Guns.shotgun)
             {
-                if (gun_type == Gun.Guns.shotgun)
+                // Получаю слоты с пулями для дробовика
+                List<Slot> slots_with_shotgun_bullets = SearchSlotWithBulletStack();
+
+                // Получаю данные дробовика
+                gun_shotgun shotgun_data = gun_in_slot.GetComponent<FloorItem>().getItem as gun_shotgun;
+
+                // Получаю недостающее количество патрон
+                int missing_bullets_count = shotgun_data.GetCapasity - gun_in_slot.transform.childCount;
+
+                StartCoroutine(ReloadShotgun(current_gun_slot.GetComponent<Slot>(), slots_with_shotgun_bullets, missing_bullets_count, shotgun_data.GetBulletGrabTime, shotgun_data.GetBulletLoadTime));
+            }
+            else
+            {
+                mag_slot = SearchSlotWithMag(gun_type);
+
+                if (mag_slot != null && gun_in_slot != null)
                 {
-                }
-                else
-                {
-                    Debug.Log($"Дефолтная позиция слота обоймы = {mag_slot.GetComponent<Slot>().SlotDefaultPosition}");
                     StartCoroutine(ReloadGun(current_gun_slot, mag_slot, reload_time));
                 }
+
             }
 
         }
@@ -169,16 +185,21 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    private GameObject SearchSlotWithBulletStack()
+    private List<Slot> SearchSlotWithBulletStack()
     {
+        List<Slot> found_slots = new List<Slot>();
+
         foreach (Slot slot in itemSlots)
         {
             // Получаю предмет в слоте
-            BulletStack internal_bullet_stack = slot.item_in_slot as BulletStack;
+            shotgun_bullets internal_bullet_stack = slot.item_in_slot as shotgun_bullets;
             if (internal_bullet_stack != null && slot.object_in_slot.transform.childCount > 0)
-                return slot.gameObject;
+            { 
+                found_slots.Add(slot);
+            }
         }
-        return null;
+        
+        return found_slots;
     }
 
 
@@ -191,8 +212,19 @@ public class InventoryManager : MonoBehaviour
     IEnumerator ReloadGun(GameObject gun_slot, GameObject mag_slot, float reload_time)
     {
         is_reloading = true;
+
+        shooting.set_reload_status = true;
         
         yield return new WaitForSeconds(reload_time);
+
+        if (block_reload)
+        {
+            Debug.Log("Перезарядка была остановлена");
+            block_reload = false;
+            is_reloading = false;
+            shooting.set_reload_status = false;
+            yield break;
+        }
 
         bool flag = false;
         
@@ -201,7 +233,138 @@ public class InventoryManager : MonoBehaviour
         Debug.Log($"Замена прошла успешо, = {flag}");
         
         is_reloading = false;
+
+        shooting.set_reload_status = false;
     }
+
+
+
+
+
+
+
+
+    private void LoadBulletToShotgun(Slot gun_slot, List<Slot> slots_with_bullets, out bool bullet_is_loadad)
+    {
+
+        bullet_is_loadad = false;
+
+        if (gun_slot != null && slots_with_bullets.Count > 0)
+        {
+            // Получаю оружие в слоте
+            GameObject shotgun = gun_slot.object_in_slot;
+
+            // Получаю данные дробовика
+            gun_shotgun shotgun_data = shotgun.GetComponent<FloorItem>().getItem as gun_shotgun;
+
+            // Если патронов в дробовике меньше чем его запас
+            if (shotgun.transform.childCount < shotgun_data.GetCapasity)
+            {
+                foreach (Slot slot in slots_with_bullets)
+                {
+                    // Получаю стек пуль из слота
+                    GameObject bullets = slot.object_in_slot;
+
+                    // Получаю данные стека
+                    bullet_stack_data stack_data = bullets.GetComponent<bullet_stack_data>();
+
+                    // Получаю пулю из стека
+                    GameObject bullet = stack_data.TakeBullet();
+
+                    shotgun_capacity ShotgunCapacity = shotgun.GetComponent<shotgun_capacity>();
+
+                    if (bullet != null) 
+                    {
+                        GameObject returned_bullet = null;
+
+                        // Обновляю данные стека пуль из инвентаря и стека пуль дробовика
+                        ShotgunCapacity.LoadBullet(bullet, out returned_bullet);
+
+                        if (returned_bullet != null)
+                        {
+                            Debug.Log("Пуля не была добавлена в дробовик");
+                            stack_data.LoadBullet(returned_bullet, out returned_bullet);
+                            Debug.Log($"Пуля была возвращена обратно в стек? = {returned_bullet == null}");
+                            return;
+                        }
+
+                        // Добавляю пулю в дробавик
+                        bullet.transform.SetParent(shotgun.transform);
+
+                        int slot_current_index = gun.get_current_slot - 1;
+                        
+                        // Обновляю данные в текущем слоте
+                        gun.UpdateGun(slot_current_index);
+
+                        bullet_is_loadad = true;
+
+                        return; 
+                    }
+                }
+            }
+
+        }
+    }
+
+
+
+
+
+
+
+
+    private bool block_reload = false;
+
+    public bool block_current_reload { set { block_reload = value; } }
+
+    IEnumerator ReloadShotgun(Slot gun_slot, List<Slot> slots_with_bullets, int missing_num_of_bullets, float grab_time, float load_time)
+    {
+        is_reloading = true;
+
+        shooting.set_reload_status = true;
+
+
+        // Заряжаю патрон в дробовик
+        for (int i = 0; i < missing_num_of_bullets; i++)
+        {
+
+            // Проверка на необходимость прервать перезарядку
+            if (block_reload) break;
+
+            // Достаю патрон из инвентаря 
+            yield return new WaitForSeconds(grab_time);
+
+            // Задержка перед зарядкой одного патрона
+            yield return new WaitForSeconds(load_time);
+            
+            bool bullet_was_loaded = false;
+            
+            // Зарядка одного патрона
+            LoadBulletToShotgun(gun_slot, slots_with_bullets, out bullet_was_loaded);
+
+
+
+
+            /*
+             * Проверяю добавился ли патрон
+            */
+
+            // Если пуля не была заряжена в дробовик - завершаю перезарядку
+            if (!bullet_was_loaded) break;
+
+        }
+
+        is_reloading = false;
+
+        shooting.set_reload_status = false;
+
+        // Возвращаю дефолтное значение
+        block_reload = false;
+
+
+    }
+
+
 
 
 
@@ -533,6 +696,12 @@ public class InventoryManager : MonoBehaviour
 
 
 
+            int slot_current_index = gun.get_current_slot - 1;
+
+            // Обновляю данные в текущем слоте
+            gun.UpdateGun(slot_current_index);
+
+
 
             /*
              * Успешная передача предмета
@@ -626,6 +795,14 @@ public class InventoryManager : MonoBehaviour
 
         // Устанавливаю их в новый слот 
         current_slot.SetItem(item_input, input_obj);
+
+
+
+
+        int slot_current_index = gun.get_current_slot - 1;
+
+        // Обновляю данные в текущем слоте
+        gun.UpdateGun(slot_current_index);
 
 
 
@@ -775,7 +952,10 @@ public class InventoryManager : MonoBehaviour
              * Вызываю текущий слот, чтобы обновить данные текущего оружия 
             */
 
-            gun.ChangeGun(gun.get_current_slot); 
+            int slot_current_index = gun.get_current_slot - 1;
+
+            // Обновляю данные в текущем слоте
+            gun.UpdateGun(slot_current_index);
 
 
 
@@ -881,8 +1061,10 @@ public class InventoryManager : MonoBehaviour
                     // Устанавливаю магазины в инвентаре
                     SetMagInInventoryWithReplace(input_slot, current_slot, dropped_gun_mag);
 
-                    // Обновляю ссылку на обойму
-                    gun.ChangeGun(gun.get_current_slot);
+                    int slot_current_index = gun.get_current_slot - 1;
+
+                    // Обновляю данные в текущем слоте
+                    gun.UpdateGun(slot_current_index);
 
                 }
 
@@ -908,8 +1090,10 @@ public class InventoryManager : MonoBehaviour
                     // Устанавливаю магазины в инвентаре
                     SetMagInInventoryWithReplace(input_slot, current_slot, dropped_gun_mag);
 
-                    // Обновляю ссылку на обойму
-                    gun.ChangeGun(gun.get_current_slot);
+                    int slot_current_index = gun.get_current_slot - 1;
+
+                    // Обновляю данные в текущем слоте
+                    gun.UpdateGun(slot_current_index);
 
                 }
 
@@ -934,8 +1118,10 @@ public class InventoryManager : MonoBehaviour
                 // Устанавливаю магазин в переменную штурмовой винтовки
                 gun_in_input_slot.GetComponent<Internal_rifle_mag>().LoadMagToGun(mag_in_current_slot, out is_loaded);
 
-                // Обновляю ссылку на обойму
-                gun.ChangeGun(gun.get_current_slot);
+                int slot_current_index = gun.get_current_slot - 1;
+
+                // Обновляю данные в текущем слоте
+                gun.UpdateGun(slot_current_index);
 
                 if (is_loaded) 
                 {
@@ -951,8 +1137,10 @@ public class InventoryManager : MonoBehaviour
                 // Устанавливаю магазин в переменную пистолета
                 gun_in_input_slot.GetComponent<Internal_pistol_mag>().LoadMagToGun(mag_in_current_slot, out is_loaded);
 
-                // Обновляю ссылку на обойму
-                gun.ChangeGun(gun.get_current_slot);
+                int slot_current_index = gun.get_current_slot - 1;
+
+                // Обновляю данные в текущем слоте
+                gun.UpdateGun(slot_current_index);
 
                 if (is_loaded)
                 {
@@ -1047,7 +1235,6 @@ public class InventoryManager : MonoBehaviour
 
         // Ставлю картинку на дефолтную позицию
         current_image.transform.position = current_slot.GetComponent<Slot>().SlotDefaultPosition;
-        Debug.Log(current_image.transform.position);
 
         // Обновляю слот инвентаря
         current_slot.GetComponent<Slot>().SetItem(dropped_gun_mag.GetComponent<FloorItem>().getItem, dropped_gun_mag);

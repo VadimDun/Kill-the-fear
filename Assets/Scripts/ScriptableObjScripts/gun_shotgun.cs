@@ -8,7 +8,22 @@ public class gun_shotgun : root_item_gun
 
     private int Capasity = 8;
 
+    private float BulletLoadTime = 0.25f;
+
+    private float BulletGrabTime = 1f;
+
+
+
     public int GetCapasity => Capasity;
+
+    public float GetBulletLoadTime => BulletLoadTime;
+
+    public float GetBulletGrabTime => BulletGrabTime;
+
+
+
+
+
 
 
 

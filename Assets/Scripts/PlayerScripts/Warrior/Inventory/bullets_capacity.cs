@@ -9,7 +9,7 @@ public class bullets_capacity : MonoBehaviour
     protected int capacity;
 
     // Текущее количество патрон в магазине
-    protected int current_bullet_count;
+    public int current_bullet_count;
 
     // Стек патронов
     protected Stack<GameObject> bullets;
@@ -60,6 +60,8 @@ public class bullets_capacity : MonoBehaviour
         if (current_bullet_count < capacity)
         {
             bullets.Push(bullet);
+
+            current_bullet_count++;
 
             // Если добавление прошло успешно, то подаем на выход null
             load_result = null;

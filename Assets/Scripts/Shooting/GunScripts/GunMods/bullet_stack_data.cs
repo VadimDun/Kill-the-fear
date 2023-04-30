@@ -80,6 +80,8 @@ public class bullet_stack_data : MonoBehaviour
         {
             bullets.Push(bullet);
 
+            current_bullet_count++;
+
             // ≈сли добавление прошло успешно, то подаем на выход null
             load_result = null;
         }

@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -45,6 +46,15 @@ public class Gun : MonoBehaviour
 
     private SecondArmSlot[] secondArmSlots = new SecondArmSlot[2];
 
+    private PlayerGunSounds playerSounds;
+
+    private PlayerChangeSprites changingSprites;
+
+    private FirePoint firePoints;
+
+    private WarriorMovement wm;
+
+
     private void Awake()
     {
         gun_slots[0] = GameObject.Find("GunSlot(2)").GetComponent<AmmunitionGunSlot>();
@@ -58,7 +68,16 @@ public class Gun : MonoBehaviour
 
         playerGun = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerGun>();
 
+
+
         changingSprites = GetComponent<PlayerChangeSprites>();
+
+        playerSounds = GetComponent<PlayerGunSounds>();
+
+        firePoints = GetComponent<FirePoint>();
+
+        wm = GetComponent<WarriorMovement>();
+
 
     }
 
@@ -114,6 +133,14 @@ public class Gun : MonoBehaviour
 
 
 
+
+
+
+
+
+
+
+
     // Емкость оружия
     protected bullets_capacity current_capacity;
 
@@ -129,7 +156,6 @@ public class Gun : MonoBehaviour
     private int current_slot;
     public int get_current_slot => current_slot;
 
-    private PlayerChangeSprites changingSprites;
 
 
 
@@ -155,6 +181,90 @@ public class Gun : MonoBehaviour
 
 
 
+
+
+    private int[] gun_indexes = { 0, 1, 2 };
+    public void UpdateGun(int index)
+    {
+
+        if (!gun_indexes.Contains(index)) { UpdateHummer(); return; }
+
+        if (gun_slots[index].object_in_slot != null)
+        {
+            // Получаю информацию об оружии в этом слоте
+            root_item_gun gun_data = gun_slots[index].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
+
+            isTriggerPulled = false;
+            current_gun = gun_data.GetGunType;
+            delayBetweenShots = gun_data.GetDelayBetweenShots;
+            damage = gun_data.GetDamage;
+            bulletSpeed = gun_data.GetBulletSpeed;
+            shootMode = gun_data.GetShootMode;
+            lastShotTime = gun_data.GetLastShotTime;
+            current_reload_time = gun_data.GetReloadTime;
+            current_slot = index + 1;
+
+            // Получаю оружие и магазин от него
+            gunObject = gun_slots[index].object_in_slot;
+            shootingScript.set_root_gun = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
+
+
+            changingSprites.changeSprite(gun_data.GetSpriteIndex);
+            playerSounds.ChangePlayerSound(gun_data.GetSoundIndex);
+            firePoints.ChoosePoint(gun_data.GetFirePointIndex);
+            wm.SwitchAD(gun_data.get_AD_index);
+
+
+            if (current_gun != Guns.shotgun)
+            {
+                current_capacity = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
+            }
+            else
+            {
+                current_capacity = gunObject.GetComponent<shotgun_capacity>();
+            }
+        }
+        else
+        {
+            UpdateHummer();
+        }
+    }
+
+
+
+
+
+
+
+
+    private void UpdateHummer()
+    {
+        // Получаю информацию об оружии в этом слоте
+        root_item_gun gun_data = secondArmSlots[0].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
+
+        isTriggerPulled = false;
+        current_gun = gun_data.GetGunType;
+        delayBetweenShots = gun_data.GetDelayBetweenShots;
+        damage = gun_data.GetDamage;
+        bulletSpeed = gun_data.GetBulletSpeed;
+        shootMode = gun_data.GetShootMode;
+        lastShotTime = gun_data.GetLastShotTime;
+        current_slot = 0;
+
+        // Получаю оружие и магазин от него
+        gunObject = secondArmSlots[0].object_in_slot;
+        root_weapon = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
+        shootingScript.set_root_gun = root_weapon;
+        changingSprites.changeSprite(0);
+    }
+
+
+
+
+
+
+
+
     public virtual void ChangeGun(int numberOfGun)
     {
         switch (numberOfGun)
@@ -162,117 +272,19 @@ public class Gun : MonoBehaviour
             case 1:
                 if (gun_slots[0] != null)
                 {
-                    // Пистолет
-                    if (gun_slots[0].object_in_slot != null)
-                    {
-                        // Получаю информацию об оружии в этом слоте
-                        root_item_gun gun_data = gun_slots[0].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
-
-                        current_gun = gun_data.GetGunType;
-                        delayBetweenShots = gun_data.GetDelayBetweenShots;
-                        damage = gun_data.GetDamage;
-                        bulletSpeed = gun_data.GetBulletSpeed;
-                        shootMode = gun_data.GetShootMode;
-                        lastShotTime = gun_data.GetLastShotTime;
-                        current_reload_time = gun_data.GetReloadTime;
-                        current_slot = 1;
-
-                        // Получаю оружие
-                        gunObject = gun_slots[0].object_in_slot;
-
-                        shootingScript.set_root_gun = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
-
-                        if (current_gun != Guns.shotgun)
-                        {
-                            current_capacity = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
-                        }
-                        else
-                        {
-                            current_capacity = gunObject.GetComponent<shotgun_capacity>();
-                        }
-
-                    }
-                    else
-                    { 
-                        ChangeGun(0);
-                    }
+                    UpdateGun(0);
                 }
-                
                 break;
             case 2:
                 if (gun_slots[1] != null)
                 {
-                    // Штурмовая винтовка
-                    if (gun_slots[1].object_in_slot != null)
-                    {
-                        // Получаю информацию об оружии в этом слоте
-                        root_item_gun gun_data = gun_slots[1].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
-
-                        current_gun = gun_data.GetGunType;
-                        delayBetweenShots = gun_data.GetDelayBetweenShots;
-                        damage = gun_data.GetDamage;
-                        bulletSpeed = gun_data.GetBulletSpeed;
-                        shootMode = gun_data.GetShootMode;
-                        lastShotTime = gun_data.GetLastShotTime;
-                        current_reload_time = gun_data.GetReloadTime;
-                        current_slot = 2;
-
-                        // Получаю оружие и магазин от него
-                        gunObject = gun_slots[1].object_in_slot;
-                        shootingScript.set_root_gun = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
-
-                        if (current_gun != Guns.shotgun)
-                        {
-                            current_capacity = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
-                        }
-                        else
-                        {
-                            current_capacity = gunObject.GetComponent<shotgun_capacity>();
-                        }
-                    }
-                    else
-                    {
-                        ChangeGun(0);
-                    }
+                    UpdateGun(1);
                 }
-
-                
                 break;
             case 3:
                 if (gun_slots[2] != null)
                 {
-                    // Дробовик
-                    if (gun_slots[2].object_in_slot != null)
-                    {
-                        // Получаю информацию об оружии в этом слоте
-                        root_item_gun gun_data = gun_slots[2].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
-
-                        current_gun = gun_data.GetGunType;
-                        delayBetweenShots = gun_data.GetDelayBetweenShots;
-                        damage = gun_data.GetDamage;
-                        bulletSpeed = gun_data.GetBulletSpeed;
-                        shootMode = gun_data.GetShootMode;
-                        lastShotTime = gun_data.GetLastShotTime;
-                        current_reload_time = gun_data.GetReloadTime;
-                        current_slot = 3;
-
-                        // Получаю оружие и магазин от него
-                        gunObject = gun_slots[2].object_in_slot;
-                        shootingScript.set_root_gun = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
-
-                        if (current_gun != Guns.shotgun)
-                        {
-                            current_capacity = gunObject.GetComponent<GunMag>().GetMagInGun.GetComponent<mag>();
-                        }
-                        else
-                        {
-                            current_capacity = gunObject.GetComponent<shotgun_capacity>();
-                        }
-                    }
-                    else
-                    {
-                        ChangeGun(0);
-                    }
+                    UpdateGun(2);
                 }
                 break;
             case 0:
@@ -281,22 +293,7 @@ public class Gun : MonoBehaviour
                     // Кувалда
                     if (secondArmSlots[0].object_in_slot != null)
                     {
-                        // Получаю информацию об оружии в этом слоте
-                        root_item_gun gun_data = secondArmSlots[0].object_in_slot.GetComponent<FloorItem>().getItem as root_item_gun;
-
-                        current_gun = gun_data.GetGunType;
-                        delayBetweenShots = gun_data.GetDelayBetweenShots;
-                        damage = gun_data.GetDamage;
-                        bulletSpeed = gun_data.GetBulletSpeed;
-                        shootMode = gun_data.GetShootMode;
-                        lastShotTime = gun_data.GetLastShotTime;
-                        current_slot = 0;
-
-                        // Получаю оружие и магазин от него
-                        gunObject = secondArmSlots[0].object_in_slot;
-                        root_weapon = gunObject.GetComponent<FloorItem>().getItem as root_item_gun;
-                        shootingScript.set_root_gun = root_weapon;
-                        changingSprites.changeSprite(0);
+                        UpdateHummer();
                     }
                 }
                 break;
