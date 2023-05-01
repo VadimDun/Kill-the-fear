@@ -15,7 +15,7 @@ public class Slot : MonoBehaviour
 
     protected bool IsSetted = false;
 
-    [SerializeField] private GameObject face_UI;
+    private GameObject face_UI;
 
     private InventoryMenu inventoryMenu; 
 

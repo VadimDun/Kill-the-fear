@@ -163,9 +163,9 @@ public class PauseMenu : MonoBehaviour
 
         gameManagerScript = GetComponent<GameManagerScript>();
 
-        Face_UI = GameObject.Find("FaceUI");
-
         inventoryManager = GetComponent<InventoryManager>();
+
+        Face_UI = inventoryManager.getFaceUI;
     }
 
 

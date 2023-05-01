@@ -301,7 +301,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // Устанавливаю в качестве родительского объекта тот, который был родительским до нажатия (для объекта, который перетаскиваем)
         transform.SetParent(parentTransform);
 
+        int lastIndexInParent = transform.parent.childCount - 1;
 
+        transform.SetSiblingIndex(lastIndexInParent - 1);
 
 
         /*

@@ -12,6 +12,10 @@ public class GameManagerScript : MonoBehaviour
 
     [SerializeField] private GameObject Face_UI;
 
+    [SerializeField] private GameObject E_image;
+
+    public GameObject GetE_image => E_image;
+
     private Player playerParams;
 
     private Shooting playerShooting;

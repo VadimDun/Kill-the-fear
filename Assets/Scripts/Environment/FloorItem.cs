@@ -9,7 +9,7 @@ public class FloorItem : MonoBehaviour
 {
     [SerializeField] private Item item;
 
-    [SerializeField] private GameObject GrabImage;
+    private GameObject GrabImage;
 
     public Item getItem => item;
 
@@ -31,6 +31,8 @@ public class FloorItem : MonoBehaviour
     private void Start()
     {
         am = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
+
+        GrabImage = GameObject.Find("Main Camera").GetComponent<GameManagerScript>().GetE_image;
     }
 
 
@@ -59,7 +61,6 @@ public class FloorItem : MonoBehaviour
     {
         if (collision.GetComponent<Collider2D>().CompareTag("Player"))
         {
-            Debug.Log($"Collider object = {transform.gameObject.name}");
             // Даю кнопке новую позицию рядом с предметом, и делаю её активной
             SetGrabImage();
             GrabImage.SetActive(true);

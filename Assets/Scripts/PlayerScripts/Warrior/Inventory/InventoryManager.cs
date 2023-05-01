@@ -32,7 +32,9 @@ public class InventoryManager : MonoBehaviour
 
     private GameObject inventory;
 
-    [SerializeField] private GameObject fadeUI;
+    [SerializeField] private GameObject faсеUI;
+
+    public GameObject getFaceUI => faсеUI;
 
     [SerializeField] private GameObject onFadeScreen;
 
@@ -107,7 +109,7 @@ public class InventoryManager : MonoBehaviour
 
     private void TurnOffFadeScreen() => onFadeScreen.SetActive(false);
 
-    private void ActivateFadeUI() => fadeUI.SetActive(true);
+    private void ActivateFadeUI() => faсеUI.SetActive(true);
 
 
 
@@ -750,7 +752,7 @@ public class InventoryManager : MonoBehaviour
              * Ќастраиваю картинку слота, из которой передавали предмет  
             */
 
-
+            Debug.Log($"»м€ текущей картинки = {currentImageTransform.gameObject.name}");
             // ”дал€ю изображение предмета, который передавали
             currentImageTransform.GetComponent<Image>().sprite = null;
 
@@ -815,15 +817,17 @@ public class InventoryManager : MonoBehaviour
 
 
         /*
-         * ћен€ю местами картинки (в иерархии)
+         * ћен€ю местами картинки (в иерархии) и ставлю их на индекс под номером 1
         */
 
 
         InputImageTransform.SetParent(current_slot.transform);
 
+        InputImageTransform.SetSiblingIndex((current_slot.transform.childCount - 1) - 1);
+
         currentImageTransform.SetParent(slot.transform);
 
-
+        currentImageTransform.SetSiblingIndex((slot.transform.childCount - 1) - 1);
 
 
         /*
