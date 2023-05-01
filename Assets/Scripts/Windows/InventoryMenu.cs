@@ -80,8 +80,6 @@ public class InventoryMenu : MonoBehaviour
     {
         InventoryWindowIsNotActive = true;
 
-        Debug.Log("Я закрыл инвентарь на Escape");
-
         gameManagerScript.UnfreezePlayer();
         CursorManager.Instance.SetScopeCursor();
         inventoryWindow.SetActive(false);

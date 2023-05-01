@@ -22,7 +22,7 @@ public class Inventory : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Count of elem = " + InventoryItems.Count);
+
     }
 
 }
