@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -40,6 +41,7 @@ public class FloorItem : MonoBehaviour
             OnPlayerTarget = true;
             
         }
+
     }
 
 
@@ -54,15 +56,39 @@ public class FloorItem : MonoBehaviour
 
 
 
+
+
+
+
+
+
+
+    private const float AddingCooldown = 0.1f;
+
+
+    // Разрешает подбирать предметы по истечению определенного времени
+    IEnumerator StartAllowAdding() 
+    {
+        yield return new WaitForSeconds(AddingCooldown);
+        FloorItem.is_added_now = false;
+    }
+
+
+
+
+
+
+
+
+
+    public static bool is_added_now = false;
     
     private void Update()
     {
-
         
         if (Input.GetKeyDown(KeyCode.E) && OnPlayerTarget)
         {
-
-            am.MainInventoryManager(item, itemObject);
+            if (!is_added_now) { am.MainInventoryManager(item, itemObject); is_added_now = true; StartCoroutine(StartAllowAdding()); }
                 
         }
     }
