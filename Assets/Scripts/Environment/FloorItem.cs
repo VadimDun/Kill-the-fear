@@ -9,6 +9,8 @@ public class FloorItem : MonoBehaviour
 {
     [SerializeField] private Item item;
 
+    [SerializeField] private GameObject GrabImage;
+
     public Item getItem => item;
 
     [SerializeField] private GameObject itemObject;
@@ -19,6 +21,8 @@ public class FloorItem : MonoBehaviour
     private bool OnPlayerTarget = false;
 
     private InventoryManager am;
+
+    private Vector3 offset = new Vector3 (0.1f, 0.1f, 0);
 
 
 
@@ -37,22 +41,72 @@ public class FloorItem : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponent<Collider2D>().CompareTag("Player"))
-        { 
+        {
             OnPlayerTarget = true;
-            
         }
 
     }
+
+
+
+
+
+
+
+
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.GetComponent<Collider2D>().CompareTag("Player"))
+        {
+            Debug.Log($"Collider object = {transform.gameObject.name}");
+            // Даю кнопке новую позицию рядом с предметом, и делаю её активной
+            SetGrabImage();
+            GrabImage.SetActive(true);
+
+        }
+    }
+
+
+
+
+
+
 
 
     private void OnTriggerExit2D(Collider2D collider)
     {
+
         if (collider.GetComponent<Collider2D>().CompareTag("Player"))
         {
-           OnPlayerTarget = false;
+            // Делаю кнопку неактивной
+            GrabImage.SetActive(false);
+
+            OnPlayerTarget = false;
         }
     }
 
+
+
+
+
+
+
+
+
+    // Подбирает тот объект, на котором активна кнопка (спрайт) E
+    private static Item target_item;
+
+    private static GameObject target_object;
+    private void SetGrabImage()
+    {
+        GrabImage.transform.position = transform.position + offset;
+
+        target_item = item;
+
+        target_object = itemObject;
+
+    }
 
 
 
@@ -88,7 +142,7 @@ public class FloorItem : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.E) && OnPlayerTarget)
         {
-            if (!is_added_now) { am.MainInventoryManager(item, itemObject); is_added_now = true; StartCoroutine(StartAllowAdding()); }
+            if (!is_added_now) { am.MainInventoryManager(target_item, target_object); is_added_now = true; StartCoroutine(StartAllowAdding()); }
                 
         }
     }
