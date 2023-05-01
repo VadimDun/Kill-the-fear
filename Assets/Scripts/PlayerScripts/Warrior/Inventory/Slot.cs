@@ -15,6 +15,10 @@ public class Slot : MonoBehaviour
 
     protected bool IsSetted = false;
 
+    [SerializeField] private GameObject face_UI;
+
+    private InventoryMenu inventoryMenu; 
+
     public bool SlotIsEmpty
     { 
         get { return IsEmpty; }
@@ -143,7 +147,12 @@ public class Slot : MonoBehaviour
 
     private void Awake()
     {
-        face_UI_manager = GameObject.Find("FaceUI").GetComponent<Face_UI_manager>();
+
+        inventoryMenu = GameObject.Find("Main Camera").GetComponent<InventoryMenu>();
+
+        face_UI = inventoryMenu.GetFaceUI;
+
+        face_UI_manager = face_UI.GetComponent<Face_UI_manager>();
     }
 
 

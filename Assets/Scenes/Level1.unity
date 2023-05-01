@@ -79355,9 +79355,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1799806354, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+      propertyPath: faceUI
+      value: 
+      objectReference: {fileID: 1830646704628665715}
+    - target: {fileID: 1799806354, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
       propertyPath: inventoryWindow
       value: 
       objectReference: {fileID: 1830646704628665713}
+    - target: {fileID: 1436847617790489335, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+      propertyPath: Face_UI
+      value: 
+      objectReference: {fileID: 1830646704628665715}
     - target: {fileID: 1436847617790489335, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
       propertyPath: gameOverUi
       value: 
@@ -79414,6 +79422,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 4947536787062875348, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+      propertyPath: fadeUI
+      value: 
+      objectReference: {fileID: 1830646704628665715}
+    - target: {fileID: 4947536787062875348, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+      propertyPath: onFadeScreen
+      value: 
+      objectReference: {fileID: 1830646704628665714}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
@@ -79998,6 +80014,16 @@ PrefabInstance:
 --- !u!1 &1830646704628665713 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1958406445, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+  m_PrefabInstance: {fileID: 1830646704628665712}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1830646704628665714 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 926225010, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
+  m_PrefabInstance: {fileID: 1830646704628665712}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1830646704628665715 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 257534784, guid: c0d6f479503ec254da527b47e0e37930, type: 3}
   m_PrefabInstance: {fileID: 1830646704628665712}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3817218403269883181

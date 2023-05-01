@@ -10,9 +10,11 @@ public class InventoryMenu : MonoBehaviour
 
     [SerializeField] private GameObject inventoryWindow;
 
-    public GameObject GetInventoryWindow => inventoryWindow;
+    [SerializeField] private GameObject faceUI;
 
-    private GameObject Face_UI;
+    public GameObject GetFaceUI => faceUI;
+
+    public GameObject GetInventoryWindow => inventoryWindow;
 
     private GameManagerScript gameManagerScript;
 
@@ -56,8 +58,6 @@ public class InventoryMenu : MonoBehaviour
 
         pauseMenu = GetComponent<PauseMenu>();
 
-        Face_UI = GameObject.Find("FaceUI");
-
         inventoryManager = GetComponent<InventoryManager>();
     }
 
@@ -95,7 +95,7 @@ public class InventoryMenu : MonoBehaviour
 
 
             // ”бираю лицевой UI
-            Face_UI.SetActive(false);
+            faceUI.SetActive(false);
         }
 
 
@@ -124,7 +124,7 @@ public class InventoryMenu : MonoBehaviour
         Invoke("TurnOnInventoery", 0.3f);
 
         // ¬ключаю лицевой UI
-        Face_UI.SetActive(true);
+        faceUI.SetActive(true);
 
         Mouse.current.WarpCursorPosition(beforeOpeningPosition);
 

@@ -37,7 +37,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1436847617814366858
 Camera:
@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverUi: {fileID: 0}
+  Face_UI: {fileID: 0}
 --- !u!114 &1799806354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryWindow: {fileID: 0}
+  faceUI: {fileID: 0}
 --- !u!114 &4947536787062875348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,5 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemSlots: []
+  fadeUI: {fileID: 0}
+  onFadeScreen: {fileID: 0}
   debug_slots: []
   block_reload: 0
