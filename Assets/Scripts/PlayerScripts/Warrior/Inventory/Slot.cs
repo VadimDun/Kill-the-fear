@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,10 +18,10 @@ public class Slot : MonoBehaviour
 
     private GameObject face_UI;
 
-    private InventoryMenu inventoryMenu; 
+    private InventoryMenu inventoryMenu;
 
     public bool SlotIsEmpty
-    { 
+    {
         get { return IsEmpty; }
         set { IsEmpty = value; }
     }
@@ -70,6 +71,12 @@ public class Slot : MonoBehaviour
 
     private Face_UI_manager face_UI_manager;
 
+    private TextMeshProUGUI text_in_slot;
+
+    private InventoryManager inventoryManager;
+
+
+    public TextMeshProUGUI get_text_in_slot => text_in_slot;
 
 
 
@@ -87,6 +94,9 @@ public class Slot : MonoBehaviour
 
     public virtual void SetItem(Item item, GameObject itemObj)
     {
+        // ќбновл€ю текст слота 
+        text_in_slot.text = inventoryManager.GetAmmoData(item, itemObj);
+
         this.item = item;
 
         internal_object = itemObj;
@@ -99,8 +109,17 @@ public class Slot : MonoBehaviour
 
     }
 
+
+
+
+
+
+
+
     public void ClearClot()
     {
+        text_in_slot.text = "";
+
         item = null;
 
         internal_object = null;
@@ -116,9 +135,24 @@ public class Slot : MonoBehaviour
 
 
 
+    public void UpdateSlotTextData() 
+    {
+        if (item != null && object_in_slot != null)
+            text_in_slot.text = inventoryManager.GetAmmoData(item, object_in_slot);
+        else
+            text_in_slot.text = "";
+    }
+
+
+
+
+
+
+
     private void Start()
     {
 
+        inventoryManager = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
 
         if (transform.gameObject.tag == "ItemSlot")
         {
@@ -147,6 +181,7 @@ public class Slot : MonoBehaviour
 
     private void Awake()
     {
+        text_in_slot = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
 
         inventoryMenu = GameObject.Find("Main Camera").GetComponent<InventoryMenu>();
 
@@ -154,6 +189,7 @@ public class Slot : MonoBehaviour
 
         face_UI_manager = face_UI.GetComponent<Face_UI_manager>();
     }
+
 
 
 }

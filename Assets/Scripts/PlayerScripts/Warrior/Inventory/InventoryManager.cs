@@ -39,6 +39,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject onFadeScreen;
 
 
+    
 
 
 
@@ -1128,6 +1129,9 @@ public class InventoryManager : MonoBehaviour
                     // Стввлю магазин из инвентаря как дочерний объект оружия
                     mag_in_current_slot.transform.SetParent(gun_in_input_slot.transform);
 
+                    // Обновляю текст слота, который является индикатором патрон 
+                    input_slot_data.UpdateSlotTextData();
+
                     // Устанавливаю магазины в инвентаре
                     SetMagInInventoryWithReplace(input_slot, current_slot, dropped_gun_mag);
 
@@ -1156,6 +1160,9 @@ public class InventoryManager : MonoBehaviour
 
                     // Стввлю магазин из инвентаря как дочерний объект оружия
                     mag_in_current_slot.transform.SetParent(gun_in_input_slot.transform);
+
+                    // Обновляю текст слота, который является индикатором патрон 
+                    input_slot_data.UpdateSlotTextData();
 
                     // Устанавливаю магазины в инвентаре
                     SetMagInInventoryWithReplace(input_slot, current_slot, dropped_gun_mag);
@@ -1355,6 +1362,102 @@ public class InventoryManager : MonoBehaviour
 
         // Делаем картинку неактивной
         slot.transform.GetChild(1).GetComponent<Image>().enabled = false;
+    }
+
+
+
+
+
+
+
+
+
+    public string GetAmmoData(Item item, GameObject Object)
+    {
+        if (item.itemType == ItemType.gun)
+        {
+            switch (item.GetName)
+            {
+                case "Rifle":
+                    if (Object.transform.childCount > 0)
+                    {
+                        // Получаю количество пуль в магазине
+                        int bullets_amount = Object.transform.GetChild(0).GetComponent<mag>().current_bullet_count;
+
+                        return $"{bullets_amount}/30";
+                    }
+                    else { return ""; }
+                    break;
+                case "Pistol":
+                    if (Object.transform.childCount > 0)
+                    {
+                        // Получаю количество пуль в магазине
+                        int bullets_count = Object.transform.GetChild(0).GetComponent<mag>().current_bullet_count;
+
+                        return $"{bullets_count}/7";
+                    }
+                    else { return ""; }
+                    break;
+                case "Shotgun":
+                    // Получаю количество пуль в магазине
+                    int slug_count = Object.GetComponent<shotgun_capacity>().current_bullet_count;
+
+                    return $"{slug_count}/8";
+                    break;
+            }
+        }
+        else if (item.itemType == ItemType.mag)
+        {
+            // Получаю текущее количество пуль
+            mag mag_data = Object.GetComponent<mag>();
+
+            int current_count = 0;
+
+            if (mag_data != null) { current_count = mag_data.get_current_bullet_count; }
+
+            int capacity = mag_data.get_capacity;
+
+            return $"{current_count}/{capacity}";
+        }
+        else if (item.itemType == ItemType.bullet)
+        {
+            bullet_stack_data bsd = Object.GetComponent<bullet_stack_data>();
+
+
+            // Получаю текущее количество пуль
+            int current_count = 0;
+
+            if (bsd != null) { current_count = bsd.get_current_bullet_count; } else { return ""; }
+
+            // Получаю Capacity
+            int capacity = bsd.get_capacity;
+
+            return $"{current_count}/{capacity}";
+
+
+        }
+        return "";
+    }
+
+
+
+
+
+
+
+
+
+    public void UpdateAllSlots() 
+    {
+        foreach (Slot slot in am_gun_slots)
+        { 
+            slot.UpdateSlotTextData();
+        }
+
+        foreach (Slot slot in itemSlots)
+        {
+            slot.UpdateSlotTextData();
+        }
     }
 
 

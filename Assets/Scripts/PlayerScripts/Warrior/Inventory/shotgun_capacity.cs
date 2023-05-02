@@ -7,6 +7,8 @@ public class shotgun_capacity : bullets_capacity
 
     private const int shotgun_stack_capacity = 8;
 
+
+
     private void Start()
     {
         // ќпредел€ю емкость дробовика

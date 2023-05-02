@@ -144,6 +144,14 @@ public class GameManagerScript : MonoBehaviour
         transition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
 
         inventoryManager = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
+
+
+        if (!hasGameStarted)
+        {
+            Face_UI.SetActive(false);
+            hasGameStarted = true;
+            Invoke("ActivateFaceUI", 0.3f);
+        }
     }
 
 
@@ -153,15 +161,7 @@ public class GameManagerScript : MonoBehaviour
 
     private static bool hasGameStarted = false;
 
-    private void Awake()
-    {
-        if (!hasGameStarted)
-        {
-            Face_UI.SetActive(false);
-            hasGameStarted = true;
-            Invoke("ActivateFaceUI", 0.3f);
-        }
-    }
+
 
 
 

@@ -6,6 +6,13 @@ public class Internal_rifle_mag : GunMag
 {
 
 
+
+
+
+
+
+
+
     public void LoadMagToGun(GameObject mag, out bool success_addition)
     {
         success_addition = false;

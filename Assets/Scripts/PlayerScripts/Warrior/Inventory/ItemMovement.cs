@@ -36,12 +36,16 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private Rigidbody2D image_rb;
 
-    //bool target_on_slot;
+    private InventoryMenu inventoryMenu;
+
+    private Slot transmitted_slot;
+
 
 
     private void Start()
     {
 
+        inventoryMenu = GameObject.Find("Main Camera").GetComponent<InventoryMenu>();
 
         // Получаю объект камеры на старте
         Camera_main = GameObject.Find("Main Camera");
@@ -75,10 +79,21 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
 
 
-
+    private string text_on_begin_drag;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        // Получаю слот предмета, который перетаскиваем
+        transmitted_slot = transform.parent.GetComponent<Slot>();
+
+        // Запоминаю текст, чтобы потом его включить, на случай если предмет не будет перемещен в другой слот
+        text_on_begin_drag = transmitted_slot.get_text_in_slot.text;
+
+        // Убираю текст на время перетаскивания
+        transmitted_slot.get_text_in_slot.text = string.Empty;
+
+        // Выключаю ввод инвентарю во время перетаскивания
+        inventoryMenu.Set_blocking_status = true;
 
         ItemEventData = eventData;
 
@@ -291,6 +306,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         is_dragging = false;
 
+        // Включаю ввод инвентарю
+        inventoryMenu.Set_blocking_status = false;
+
 
         // Включаю Graphics Raycaster
         transform.gameObject.GetComponent<GraphicRaycaster>().enabled = true;
@@ -434,6 +452,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         if (in_inventory_range == true)
         {
+            // Включаю текст обратно
+             transmitted_slot.get_text_in_slot.text = text_on_begin_drag;
+
             // Устанавливаю картинку на исходную позицию
             transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
         }

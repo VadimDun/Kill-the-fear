@@ -24,7 +24,6 @@ public class Face_UI_manager : MonoBehaviour
         gun_slots[2] = GameObject.Find("GunSlot(1)").GetComponent<AmmunitionGunSlot>();
 
         second_arm_slots[0] = GameObject.Find("SecondArmSlot(1)").GetComponent<SecondArmSlot>();
-        second_arm_slots[1] = GameObject.Find("SecondArmSlot(2)").GetComponent<SecondArmSlot>();
 
 
 

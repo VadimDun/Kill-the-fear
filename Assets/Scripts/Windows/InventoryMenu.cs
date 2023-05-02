@@ -51,6 +51,8 @@ public class InventoryMenu : MonoBehaviour
         set { PauseWindowIsActive = value; }
     }
 
+    public bool Set_blocking_status { set { InputIsBlocked = value; } }
+
 
     private void Start()
     {
@@ -75,6 +77,9 @@ public class InventoryMenu : MonoBehaviour
             /*
              * ќткрываю инвентарь 
             */
+
+            // ќбновл€ю текст слотов инвентар€
+            inventoryManager.UpdateAllSlots();
 
             // Ѕлокирую перезар€дку на R во врем€ открытого инвентар€ 
             inventoryManager.set_input_block_status = true;
