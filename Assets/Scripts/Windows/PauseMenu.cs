@@ -141,6 +141,7 @@ public class PauseMenu : MonoBehaviour
         CursorManager.Instance.SetMenuCursor();
 
         //Уничтожаю то что не уничтожается при переходе, в меню оно не нужно
+        inventoryManager.ResetInventory();
         Destroy(gameManagerScript.GetE_image);
         PlayerManager.Instance.DestroyPlayer();
         CameraManager.Instance.DestroyCamera();

@@ -1337,11 +1337,6 @@ public class InventoryManager : MonoBehaviour
             ResetSlot(slot);
         }
 
-        foreach (Slot slot in second_arm_slots)
-        {
-            ResetSlot(slot);
-        }
-
         foreach (Slot slot in itemSlots)
         {
             ResetSlot(slot);

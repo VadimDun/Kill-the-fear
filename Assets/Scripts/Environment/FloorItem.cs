@@ -26,14 +26,35 @@ public class FloorItem : MonoBehaviour
 
 
 
-
-
     private void Start()
     {
         am = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
 
         GrabImage = GameObject.Find("Main Camera").GetComponent<GameManagerScript>().GetE_image;
+
     }
+
+
+
+
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "MainMenu") { Destroy(transform.gameObject); }
+    }
+
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
 
 
 
@@ -143,7 +164,7 @@ public class FloorItem : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.E) && OnPlayerTarget)
         {
-            if (!is_added_now) { am.MainInventoryManager(target_item, target_object); is_added_now = true; StartCoroutine(StartAllowAdding()); }
+            if (!is_added_now) { is_added_now = true; am.MainInventoryManager(target_item, target_object); StartCoroutine(StartAllowAdding()); }
                 
         }
     }

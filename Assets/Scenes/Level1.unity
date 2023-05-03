@@ -79464,6 +79464,10 @@ PrefabInstance:
       value: Main Camera
       objectReference: {fileID: 0}
     - target: {fileID: 4947536787062875348, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
+      propertyPath: faceUI
+      value: 
+      objectReference: {fileID: 1830646704628665715}
+    - target: {fileID: 4947536787062875348, guid: 8a38f4e72e014664fb30b686814b3479, type: 3}
       propertyPath: "fa\u0441\u0435UI"
       value: 
       objectReference: {fileID: 1830646704628665715}
