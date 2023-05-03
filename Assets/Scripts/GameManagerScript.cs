@@ -129,6 +129,8 @@ public class GameManagerScript : MonoBehaviour
 
     private void Start()
     {
+        // ƒелаю кнопку подбора не разрушаемой при переходе на другой этаж
+        DontDestroyOnLoad(E_image);
 
         pauseMenu = GetComponent<PauseMenu>();
 
@@ -239,6 +241,7 @@ public class GameManagerScript : MonoBehaviour
         CursorManager.Instance.SetMenuCursor();
 
         //”ничтожаю то что не уничтожаетс€ при переходе, в меню оно не нужно
+        Destroy(E_image);
         PlayerManager.Instance.DestroyPlayer();
         CameraManager.Instance.DestroyCamera();
         CanvasManager.Instance.DestroyCanvas();

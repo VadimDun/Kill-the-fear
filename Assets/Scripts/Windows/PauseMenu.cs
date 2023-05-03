@@ -139,8 +139,9 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         //”станавливаю курсор
         CursorManager.Instance.SetMenuCursor();
-        
+
         //”ничтожаю то что не уничтожаетс€ при переходе, в меню оно не нужно
+        Destroy(gameManagerScript.GetE_image);
         PlayerManager.Instance.DestroyPlayer();
         CameraManager.Instance.DestroyCamera();
         CanvasManager.Instance.DestroyCanvas();

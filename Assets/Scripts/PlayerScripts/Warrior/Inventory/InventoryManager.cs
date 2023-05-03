@@ -32,9 +32,9 @@ public class InventoryManager : MonoBehaviour
 
     private GameObject inventory;
 
-    [SerializeField] private GameObject faсеUI;
+    [SerializeField] private GameObject faceUI;
 
-    public GameObject getFaceUI => faсеUI;
+    public GameObject getFaceUI => faceUI;
 
     [SerializeField] private GameObject onFadeScreen;
 
@@ -92,6 +92,11 @@ public class InventoryManager : MonoBehaviour
 
         inventory = GameObject.Find("Inventory");
 
+        // Выключаю на старте FaceUI, и включаю после того как затемнение пройдет 
+        onFadeScreen.SetActive(true);
+
+        Invoke("TurnOffFadeScreen", 0.1f);
+
     }
 
 
@@ -110,7 +115,7 @@ public class InventoryManager : MonoBehaviour
 
     private void TurnOffFadeScreen() => onFadeScreen.SetActive(false);
 
-    private void ActivateFadeUI() => faсеUI.SetActive(true);
+    private void ActivateFaceUI() => faceUI.SetActive(true);
 
 
 
@@ -121,7 +126,7 @@ public class InventoryManager : MonoBehaviour
 
         onFadeScreen.SetActive(true);
 
-        Invoke("ActivateFadeUI", 0.1f);
+        Invoke("ActivateFaceUI", 0.1f);
 
         Invoke("TurnOffFadeScreen", 0.1f);
 
@@ -753,7 +758,6 @@ public class InventoryManager : MonoBehaviour
              * Настраиваю картинку слота, из которой передавали предмет  
             */
 
-            Debug.Log($"Имя текущей картинки = {currentImageTransform.gameObject.name}");
             // Удаляю изображение предмета, который передавали
             currentImageTransform.GetComponent<Image>().sprite = null;
 
@@ -1354,6 +1358,9 @@ public class InventoryManager : MonoBehaviour
 
     private void ResetSlot(Slot slot)
     {
+        // Уничтожаю объект в слоте
+        Destroy(slot.object_in_slot);
+
         // Отчищаем слот
         slot.ClearClot();
 
