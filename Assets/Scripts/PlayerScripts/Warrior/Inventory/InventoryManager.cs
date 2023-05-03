@@ -1039,8 +1039,8 @@ public class InventoryManager : MonoBehaviour
             */
 
 
-            // Устанавливаю выброшенному объекту позицию игрока
-            currentObject.transform.position = GameObject.FindGameObjectWithTag("Player").transform.position;
+            // Устанавливаю выброшенному объекту рандомную позицию
+            DropItemToRandomPoint(currentObject);
 
 
 
@@ -1460,6 +1460,98 @@ public class InventoryManager : MonoBehaviour
         {
             slot.UpdateSlotTextData();
         }
+    }
+
+
+
+
+
+
+
+
+
+    public int maxTries = 20;
+    public float minDistance = 0.2f;
+    public float maxDistance = 0.4f;
+    public float rayLength = 0.08f;
+    public float raySpread = 20f;
+    public int rayCount = 8;
+
+    private List<Vector2> positions = new List<Vector2>();
+
+    private void DropItemToRandomPoint(GameObject itemObject)
+    {
+        positions.Clear();
+
+        int tries = 0;
+        Vector2 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
+        
+        while (tries < maxTries)
+        {
+            float distance = Random.Range(minDistance, maxDistance);
+            float angle = Random.Range(0f, 360f);
+            Vector2 direction = Quaternion.Euler(0f, 0f, angle) * Vector2.right;
+
+            if (!IsDirectionBlocked(direction, distance))
+            {
+                Vector2 position = playerPosition + direction * distance;
+                if (!IsPositionBlocked(position))
+                {
+                    itemObject.transform.position = position;
+                    return;
+                }
+            }
+
+            tries++;
+        }
+
+        // Если все попытки окакзались неудачными, тогда выбрасываю на позицию игрока
+        itemObject.transform.position = playerPosition;
+    }
+
+
+
+
+
+
+
+
+
+    private bool IsDirectionBlocked(Vector2 direction, float dist)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, dist, LayerMask.GetMask("Environment"));
+        return hit.collider != null;
+    }
+
+
+
+
+
+
+
+
+
+    private bool IsPositionBlocked(Vector2 position)
+    {
+        if (positions.Contains(position))
+        {
+            return true;
+        }
+
+        float angleStep = 360f / rayCount;
+        for (int i = 0; i < rayCount; i++)
+        {
+            float angle = angleStep * i;
+            Vector2 direction = Quaternion.Euler(0f, 0f, angle) * Vector2.right;
+            RaycastHit2D hit = Physics2D.Raycast(position, direction, rayLength, LayerMask.GetMask("Environment"));
+            if (hit.collider != null)
+            {
+                positions.Add(position);
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
