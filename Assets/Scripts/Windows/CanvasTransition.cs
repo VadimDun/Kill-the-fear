@@ -65,5 +65,7 @@ public class CanvasTransition : MonoBehaviour
         }
 
         EnemyManager.Instance.ToHell();
+
+        EnemyManager.Instance.KillAllNecessaryItems();
     }
 }

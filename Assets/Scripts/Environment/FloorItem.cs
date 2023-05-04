@@ -22,7 +22,37 @@ public class FloorItem : MonoBehaviour
 
     private InventoryManager am;
 
-    private Vector3 offset = new Vector3 (0.1f, 0.1f, 0);
+    private Vector3 offset = new Vector3(0.1f, 0.1f, 0);
+
+
+
+    private static HashSet<int> items_id = new HashSet<int>();
+
+
+
+
+    private bool id_has_been_placed = false;
+
+
+    private int id = -1;
+
+    public int getId => id;
+
+
+
+
+    private int scene = -1;
+
+    public int GetCurrentSceneIndex => scene;
+
+
+
+
+    private bool in_inventory = false;
+
+    public bool set_in_inventory_status { set { in_inventory = value; } }
+
+    public bool get_in_inventory_status => in_inventory;
 
 
 
@@ -31,7 +61,6 @@ public class FloorItem : MonoBehaviour
         am = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
 
         GrabImage = GameObject.Find("Main Camera").GetComponent<GameManagerScript>().GetE_image;
-
     }
 
 
@@ -41,7 +70,29 @@ public class FloorItem : MonoBehaviour
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // Сработает всего один раз на создании объекта
+        if (!id_has_been_placed)
+        {
+
+            // Устанавливаю уникальный ID предмету
+            SetId();
+
+            // Устанавливаю индекс текущей сцены предмету
+            SetCurrentSceneIndex();
+
+            id_has_been_placed = true;
+
+            DontDestroyOnLoad(transform.gameObject);
+
+            Debug.Log("Предмет был создан и инициализирован");
+
+        }
     }
+
+
+
+
 
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -139,14 +190,18 @@ public class FloorItem : MonoBehaviour
 
 
 
-    private const float AddingCooldown = 0.1f;
-
-
-    // Разрешает подбирать предметы по истечению определенного времени
-    IEnumerator StartAllowAdding() 
+    public void SetId()
     {
-        yield return new WaitForSeconds(AddingCooldown);
-        FloorItem.is_added_now = false;
+        // Генерирую уникальный ID от 1 до 1000
+        while (id == -1)
+        {
+            int new_random_id = Random.Range(0, 1000);
+
+            // Если ID получился действительно уникальный - тогда присваиваем его в поле экземпляра 
+            id = items_id.Contains(new_random_id) ? -1 : new_random_id;
+        }
+        items_id.Add(id);
+
     }
 
 
@@ -157,15 +212,48 @@ public class FloorItem : MonoBehaviour
 
 
 
+    public void SetCurrentSceneIndex()
+    {
+        // Получаю индекс сцены
+        while (scene == -1)
+        {
+            scene = SceneManager.GetActiveScene().buildIndex;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private const float AddingCooldown = 0.2f;
+
+    // Разрешает подбирать предметы по истечению определенного времени
+    IEnumerator StartAllowAdding()
+    {
+        yield return new WaitForSeconds(AddingCooldown);
+        FloorItem.is_added_now = false;
+    }
+
+
+
+
+
+
     public static bool is_added_now = false;
-    
+
     private void Update()
     {
-        
+
         if (Input.GetKeyDown(KeyCode.E) && OnPlayerTarget)
         {
             if (!is_added_now) { is_added_now = true; am.MainInventoryManager(target_item, target_object); StartCoroutine(StartAllowAdding()); }
-                
+
         }
     }
 

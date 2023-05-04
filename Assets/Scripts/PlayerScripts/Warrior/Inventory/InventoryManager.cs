@@ -453,7 +453,7 @@ public class InventoryManager : MonoBehaviour
     {
 
 
-
+        if (item == null || itemObj == null) { return; }
 
         /*
          * Если передаваемый объект является оружием 
@@ -462,8 +462,11 @@ public class InventoryManager : MonoBehaviour
 
         if (item.itemType == ItemType.gun)
         {
+
             foreach (AmmunitionGunSlot slot in am_gun_slots)
             {
+
+                if (slot.object_in_slot == itemObj) { return; }
 
                 bool SuccessGunAddition = false;
 
@@ -484,8 +487,12 @@ public class InventoryManager : MonoBehaviour
 
         if (item.itemType != ItemType.gun && item.itemType != ItemType.secondaty_arms && item.itemType != ItemType.armor && item.itemType != ItemType.edged_weapon) 
         {
+
             foreach (ItemSlot slot in itemSlots)
             {
+
+                if (slot.object_in_slot == itemObj) { return; }
+
                 bool success = false;
 
                 GrabDefaultItem(item, itemObj, slot, out success);
@@ -576,12 +583,18 @@ public class InventoryManager : MonoBehaviour
         success = false;
 
 
+
         if (item != null && TransmittedObject != null && slot != null)
         {
             
             // Получаю картинку предмета
             Transform item_image_transform = slot.transform.GetChild(1);
 
+            // Получаю данные предмета 
+            FloorItem item_data = TransmittedObject.GetComponent<FloorItem>();
+
+            // Устанавливаю фалаг, что предмет находится в инвентаре
+            item_data.set_in_inventory_status = true;
 
 
 
@@ -1042,7 +1055,11 @@ public class InventoryManager : MonoBehaviour
             // Устанавливаю выброшенному объекту рандомную позицию
             DropItemToRandomPoint(currentObject);
 
+            // Получаю данные предмета
+            FloorItem item_data = currentObject.GetComponent<FloorItem>();
 
+            // Устанавливаю флаг, что предмет находится не в инвентаре
+            item_data.set_in_inventory_status = false;
 
 
             /*
