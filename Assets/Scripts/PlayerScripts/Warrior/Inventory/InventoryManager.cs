@@ -1470,12 +1470,12 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    public int maxTries = 20;
-    public float minDistance = 0.2f;
-    public float maxDistance = 0.4f;
-    public float rayLength = 0.08f;
-    public float raySpread = 20f;
-    public int rayCount = 8;
+    private int maxTries = 200;
+    private float minDistance = 0.1f;
+    private float maxDistance = 0.3f;
+    private float rayLength = 0.08f;
+    private int rayCount = 8;
+    private Vector2 playerPosition;
 
     private List<Vector2> positions = new List<Vector2>();
 
@@ -1484,8 +1484,8 @@ public class InventoryManager : MonoBehaviour
         positions.Clear();
 
         int tries = 0;
-        Vector2 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
-        
+        playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
+
         while (tries < maxTries)
         {
             float distance = Random.Range(minDistance, maxDistance);
@@ -1495,6 +1495,7 @@ public class InventoryManager : MonoBehaviour
             if (!IsDirectionBlocked(direction, distance))
             {
                 Vector2 position = playerPosition + direction * distance;
+
                 if (!IsPositionBlocked(position))
                 {
                     itemObject.transform.position = position;
@@ -1519,7 +1520,7 @@ public class InventoryManager : MonoBehaviour
 
     private bool IsDirectionBlocked(Vector2 direction, float dist)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, dist, LayerMask.GetMask("Environment"));
+        RaycastHit2D hit = Physics2D.Raycast(playerPosition, direction, dist, LayerMask.GetMask("Environment"));
         return hit.collider != null;
     }
 
@@ -1533,10 +1534,12 @@ public class InventoryManager : MonoBehaviour
 
     private bool IsPositionBlocked(Vector2 position)
     {
+        
         if (positions.Contains(position))
         {
             return true;
         }
+        
 
         float angleStep = 360f / rayCount;
         for (int i = 0; i < rayCount; i++)
