@@ -126,11 +126,11 @@ public class InventoryManager : MonoBehaviour
 
         onFadeScreen.SetActive(true);
 
-        Invoke("ActivateFaceUI", 0.1f);
+        Invoke("ActivateFaceUI", 0.2f);
 
-        Invoke("TurnOffFadeScreen", 0.1f);
+        Invoke("TurnOffFadeScreen", 0.2f);
 
-        Invoke("EndInventoryLoad", 0.1f);
+        Invoke("EndInventoryLoad", 0.2f);
     }
 
 
