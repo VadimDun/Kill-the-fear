@@ -9,7 +9,9 @@ public class TriggerScript : MonoBehaviour
     // Имя сцены на которую будем переходить
     [SerializeField] private string sceneName;
 
-    InventoryManager inventoryManager;
+    private InventoryManager inventoryManager;
+
+    private InventoryMenu inventoryMenu;
 
     public string GetSceneName => sceneName;
 
@@ -31,6 +33,8 @@ public class TriggerScript : MonoBehaviour
 
         inventoryManager = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
 
+        inventoryMenu = GameObject.Find("Main Camera").GetComponent<InventoryMenu>();
+
         faceUI = inventoryManager.getFaceUI;
     }
 
@@ -39,6 +43,8 @@ public class TriggerScript : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            inventoryMenu.Set_blocking_status = true;
+
             faceUI.SetActive(false);
 
             canvasTransition.SceneName = this.sceneName;

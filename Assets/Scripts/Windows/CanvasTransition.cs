@@ -8,6 +8,8 @@ public class CanvasTransition : MonoBehaviour
 
     private Animator animator;
 
+    private InventoryMenu inventoryMenu;
+
     private InventoryManager inventoryManager;
 
     private string sceneName;
@@ -22,6 +24,8 @@ public class CanvasTransition : MonoBehaviour
         animator = GameObject.Find("LevelChanger").GetComponent<Animator>();
 
         inventoryManager = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
+
+        inventoryMenu = GameObject.Find("Main Camera").GetComponent<InventoryMenu>();
     }
 
     public void StartTransitionFadein()
@@ -44,15 +48,40 @@ public class CanvasTransition : MonoBehaviour
         animator.Play("DeathFade", -1 ,0f);
     }
 
+
+
+
+
+
+
+
+
+
     //После завершения эффекта затемнения (на 60-м кадре анимации вызывается этот метод)
     public void OnFadeComplite()
     {
         inventoryManager.LoadInventoryOnFade();
+
+        Invoke("TurnOnInventoryInput", 0.2f);
         
         StartTransitionFade();
 
         StartCoroutine(LoadSceneAsync());
     }
+
+
+    private void TurnOnInventoryInput() => inventoryMenu.Set_blocking_status = false;
+
+
+
+
+
+
+
+
+
+
+    
 
     // Загружаем сцену асинхронкой, метод ToHell гарантированно будет вызван в новой сцене
     private IEnumerator LoadSceneAsync()

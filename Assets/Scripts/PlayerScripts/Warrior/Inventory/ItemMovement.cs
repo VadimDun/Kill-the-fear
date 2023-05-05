@@ -360,6 +360,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                         else
                         {
                             transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
+
+                            // ¬ключаю текст обратно
+                            transmitted_slot.get_text_in_slot.text = text_on_begin_drag;
                         }
                     }
 
@@ -396,6 +399,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
                 // ”станавливаю картинку на исходную позицию
                 transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
+
+                // ¬ключаю текст обратно
+                transmitted_slot.get_text_in_slot.text = text_on_begin_drag;
 
             }
 
@@ -436,6 +442,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             {
                 // ”станавливаю картинку на исходную позицию
                 transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
+
+                // ¬ключаю текст обратно
+                transmitted_slot.get_text_in_slot.text = text_on_begin_drag;
             }
 
 
@@ -484,6 +493,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 {
                     // ”станавливаю картинку на исходную позицию
                     transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
+
+                    // ¬ключаю текст обратно
+                    transmitted_slot.get_text_in_slot.text = text_on_begin_drag;
                 }
 
             }
@@ -491,6 +503,9 @@ public class ItemMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             {
                 // ”станавливаю картинку на исходную позицию
                 transform.position = transform.parent.GetComponent<Slot>().SlotDefaultPosition;
+
+                // ¬ключаю текст обратно
+                transmitted_slot.get_text_in_slot.text = text_on_begin_drag;
             }
 
         }
