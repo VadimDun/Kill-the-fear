@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class TriggerScript : MonoBehaviour
 {
     // Имя сцены на которую будем переходить
     [SerializeField] private string sceneName;
+
+    InventoryManager inventoryManager;
 
     public string GetSceneName => sceneName;
 
@@ -26,17 +29,11 @@ public class TriggerScript : MonoBehaviour
     {
         canvasTransition = GameObject.Find("LevelChanger").GetComponent<CanvasTransition>();
 
-        Invoke("GetFaceUI", 0.2f);
+        inventoryManager = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
+
+        faceUI = inventoryManager.getFaceUI;
     }
 
-    public void Awake()
-    {
-        if (!hasGameStarted)
-        { 
-            Invoke("GetFaceUI", 1f);
-            hasGameStarted = true;
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

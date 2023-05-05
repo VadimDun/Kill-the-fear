@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Progress;
 
 public class EnemyManager : MonoBehaviour
 {
@@ -76,6 +74,12 @@ public class EnemyManager : MonoBehaviour
         SetOfItems.Add((id, sceneId));
     }
 
+    // Удаляет предмет по Id
+    public void RemoveFromItemList(int id, int scene_id)
+    {
+        SetOfItems.Remove((id, scene_id)); 
+    }
+
 
     // Отправляем прямиком в ад
     public void ToHell()
@@ -99,20 +103,14 @@ public class EnemyManager : MonoBehaviour
     public void KillAllNecessaryItems()
     {
 
-        Invoke("KillItemsAfterSceneIndexLoaded", 1f);
-
-    }
-
-
-
-
+        // Включаю все выключенные в прошлой сцене объекты
+        foreach (GameObject enabled_item in DisabledItems)
+        {
+            enabled_item.SetActive(true);
+        }
 
 
-    private void KillItemsAfterSceneIndexLoaded()
-    {
         current_scene_index = SceneManager.GetActiveScene().buildIndex;
-
-        Debug.Log(current_scene_index);
 
         GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
 
@@ -126,17 +124,60 @@ public class EnemyManager : MonoBehaviour
 
             bool item_in_inventory = item_data.get_in_inventory_status;
 
-            Debug.Log($"имя предмета = {item.name} сцена предмета = {item_scene}");
-
             if (!item_in_inventory)
             {
                 if (!SetOfItems.Contains((item_id, item_scene))) { Destroy(item); }
-                else if (item_scene == current_scene_index) { Debug.Log($"Предмет {item.name} был активирован"); item.SetActive(true); }
-                else item.SetActive(false);
+                else if (item_scene != current_scene_index) { item.SetActive(false); DisabledItems.Add(item); }
+
             }
         }
+
     }
 
+
+    private List<GameObject> DisabledItems = new List<GameObject>();
+
+
+
+
+
+
+
+    public void DestroyAllItemsOnGround()
+    {
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+
+        foreach (GameObject item in items)
+        {
+            FloorItem item_data = item.GetComponent<FloorItem>();
+
+            int item_id = item_data.getId;
+
+            int item_scene = item_data.GetCurrentSceneIndex;
+
+            bool item_in_inventory = item_data.get_in_inventory_status;
+
+            if (!item_in_inventory)
+            {
+                RemoveFromItemList(item_id, item_scene);
+                Destroy(item);
+            }
+        }
+
+        foreach (GameObject enabled_item in DisabledItems)
+        {
+
+            FloorItem item_data = enabled_item.GetComponent<FloorItem>();
+
+            int item_id = item_data.getId;
+
+            int item_scene = item_data.GetCurrentSceneIndex;
+
+            RemoveFromItemList(item_id, item_scene);
+        }
+
+
+    }
 
 
 

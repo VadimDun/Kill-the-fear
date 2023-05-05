@@ -188,6 +188,9 @@ public class GameManagerScript : MonoBehaviour
         // Перезагружаю инвентарь
         inventoryManager.ResetInventory();
 
+        // Убираю все лишние предметы
+        EnemyManager.Instance.DestroyAllItemsOnGround();
+
         //Включаю затемнение
         transition.StartDeathTransition();
 

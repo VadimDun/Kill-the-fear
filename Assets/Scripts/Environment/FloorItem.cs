@@ -28,6 +28,12 @@ public class FloorItem : MonoBehaviour
 
     private static HashSet<int> items_id = new HashSet<int>();
 
+    // Для дебага
+    public static void ShowMeSetOfId()
+    { 
+        foreach (int id in items_id) { Debug.Log(id); }
+    }
+
 
 
 
@@ -61,6 +67,7 @@ public class FloorItem : MonoBehaviour
         am = GameObject.Find("Main Camera").GetComponent<InventoryManager>();
 
         GrabImage = GameObject.Find("Main Camera").GetComponent<GameManagerScript>().GetE_image;
+
     }
 
 
@@ -84,8 +91,6 @@ public class FloorItem : MonoBehaviour
             id_has_been_placed = true;
 
             DontDestroyOnLoad(transform.gameObject);
-
-            Debug.Log("Предмет был создан и инициализирован");
 
         }
     }
@@ -219,6 +224,18 @@ public class FloorItem : MonoBehaviour
         {
             scene = SceneManager.GetActiveScene().buildIndex;
         }
+    }
+
+
+
+
+
+
+
+
+    public void UpdateSceneIndex()
+    {
+        scene = SceneManager.GetActiveScene().buildIndex;
     }
 
 

@@ -1058,6 +1058,15 @@ public class InventoryManager : MonoBehaviour
             // Получаю данные предмета
             FloorItem item_data = currentObject.GetComponent<FloorItem>();
 
+            // Удаляю старую информацию об этом предмете
+            EnemyManager.Instance.RemoveFromItemList(item_data.getId, item_data.GetCurrentSceneIndex);
+
+            // Устанавливаю новый индекс сцены
+            item_data.UpdateSceneIndex();
+
+            // Добавляю новую информацию 
+            EnemyManager.Instance.AddToItemsList(item_data.getId, item_data.GetCurrentSceneIndex);
+
             // Устанавливаю флаг, что предмет находится не в инвентаре
             item_data.set_in_inventory_status = false;
 
