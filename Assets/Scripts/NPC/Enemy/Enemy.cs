@@ -28,5 +28,6 @@ public class Enemy : MonoBehaviour
         GetComponent<Visibility>().spriteRenderer.sprite = DeadEnemySprite;
         IsDead = true;
         GetComponent<CircleCollider2D>().enabled = false;
+        this.transform.Rotate(0, 0, 60f);
     }
 }
