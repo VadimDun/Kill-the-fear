@@ -1558,10 +1558,6 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4891192965569012823, guid: 830a18e28e42b6943854bcf47ad1ce64, type: 3}
-      propertyPath: GrabImage
-      value: 
-      objectReference: {fileID: 2005204071}
     - target: {fileID: 7843541055941969067, guid: 830a18e28e42b6943854bcf47ad1ce64, type: 3}
       propertyPath: m_Name
       value: PistolMag
@@ -136353,10 +136349,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2840477939368661988, guid: ecf06ed77c9bc3348ab44af8cc71a4eb, type: 3}
-      propertyPath: GrabImage
-      value: 
-      objectReference: {fileID: 2005204071}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: ecf06ed77c9bc3348ab44af8cc71a4eb, type: 3}
