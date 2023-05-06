@@ -26,7 +26,8 @@ public class Visibility : MonoBehaviour
         LayerMask mask = LayerMask.GetMask("Enemy", "Player", "Bullet");
         if (Physics2D.Raycast(position, direction, direction.magnitude, ~mask.value) &&
              Physics2D.Raycast(position + spreadOnSides, direction - spreadOnSides, (direction - spreadOnSides).magnitude, ~mask.value) &&
-             Physics2D.Raycast(position - spreadOnSides, direction + spreadOnSides, (direction + spreadOnSides).magnitude, ~mask.value))
+             Physics2D.Raycast(position - spreadOnSides, direction + spreadOnSides, (direction + spreadOnSides).magnitude, ~mask.value) &&
+             !GetComponent<Enemy>().IsDead)
         {
             isVisible = false;
             spriteRenderer.enabled = false;
