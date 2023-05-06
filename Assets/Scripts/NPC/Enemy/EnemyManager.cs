@@ -127,7 +127,7 @@ public class EnemyManager : MonoBehaviour
             if (!item_in_inventory)
             {
                 if (!SetOfItems.Contains((item_id, item_scene))) { Destroy(item); }
-                else if (item_scene != current_scene_index) { item.SetActive(false); DisabledItems.Add(item); }
+                else if (item_scene != current_scene_index && item.transform.parent == null) { item.SetActive(false); DisabledItems.Add(item); }
 
             }
         }
